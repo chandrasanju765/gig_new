@@ -1,16 +1,13 @@
 import { useInView } from "./helpers";
 
-const IMAGES = ["speed.png", "scale.png", "trust.png"];
+const IMAGES = ["speed-Photoroom.png", "speed-Photoroom.png", "speed-Photoroom.png"];
 const SWAYS = ["hang-0", "hang-0", "hang-2"];
 
 function PillarCard({ title, index, visible }) {
   return (
-    /* Outer wrapper: overflow visible so shadow + top of card shows */
     <div style={{
       flex: "1 1 280px", maxWidth: 360,
       transformOrigin: "50% 0%",
-      /* padding-top so the rotated top edge & shadow aren't clipped */
-      // paddingTop: 16,
       opacity: visible ? 1 : 0,
       marginTop: visible ? 0 : -40,
       transition: `opacity 0.65s ${0.18 * index}s cubic-bezier(0.4,1.56,0.64,1),
@@ -18,26 +15,40 @@ function PillarCard({ title, index, visible }) {
       animation: visible
         ? `${SWAYS[index]} ${3.5 + index * 0.4}s ease-in-out ${0.18 * index}s infinite`
         : "none",
+      borderRadius: 18,
+      boxShadow: "8px 12px 28px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.1)",
     }}>
-      {/* White card: NO overflow hidden here — let shadow render fully */}
       <div style={{
         background: "white",
         borderRadius: 18,
-        boxShadow: "0 20px 60px rgba(0,0,0,0.20), 0 6px 20px rgba(0,0,0,0.10)",
         border: "1px solid rgba(0,0,0,0.06)",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}>
-        {/* Image container: overflow hidden only on the image crop */}
-        <div style={{
-          width: "100%", height: 300,
-          borderRadius: 18,
-          overflow: "hidden",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          background: "#f8f8f8",
-        }}>
+        <div style={{ paddingTop: 20, paddingBottom: 12, textAlign: "center" }}>
+          <div style={{
+            width: 10, height: 10, borderRadius: "50%",
+            background: "#CE1010", margin: "0 auto 12px",
+          }} />
+          <span style={{
+            fontFamily: "'Inter','system-ui',sans-serif",
+            fontWeight: 800, fontSize: 28,
+            letterSpacing: 1,
+            color: "#1a1a1a",
+          }}>
+            {title}
+          </span>
+        </div>
+
+        <div style={{ width: "85%", height: 1, background: "rgba(0,0,0,0.08)", marginBottom: 12 }} />
+
+        <div style={{ width: "80%", height: 180, overflow: "hidden", marginBottom: 16 }}>
           <img
             src={`/assets/${IMAGES[index]}`}
             alt={title}
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
           />
         </div>
       </div>

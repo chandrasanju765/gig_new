@@ -131,7 +131,7 @@ export default function ReferralRingSection() {
         }}>
           <p style={{ 
             fontFamily: "'Inter',sans-serif", 
-            fontSize: isMobile ? "17px" : "18px", 
+            fontSize: isMobile ? "17px" : "28px", 
             color: "#fff", 
             lineHeight: 1.75, 
             marginBottom: 32 
@@ -151,7 +151,7 @@ export default function ReferralRingSection() {
           </div>
           <p style={{ 
             fontFamily: "'Inter',sans-serif", 
-            fontSize: isMobile ? "17px" : "18px", 
+            fontSize: isMobile ? "17px" : "28px", 
             marginTop: 23, 
             color: "#fff" 
           }}>
@@ -167,7 +167,7 @@ export default function ReferralRingSection() {
         }}>
           <p style={{ 
             fontFamily: "'Inter',sans-serif", 
-            fontSize: isMobile ? "17px" : "18px", 
+            fontSize: isMobile ? "17px" : "28px", 
             color: "#fff", 
             fontWeight: 300, 
             lineHeight: 1.75, 
@@ -178,7 +178,7 @@ export default function ReferralRingSection() {
           </p>
           <p style={{ 
             fontFamily: "'Inter',sans-serif", 
-            fontSize: isMobile ? "17px" : "18px", 
+            fontSize: isMobile ? "17px" : "28px", 
             color: "#fff", 
             fontWeight: 300, 
             lineHeight: 1.75 

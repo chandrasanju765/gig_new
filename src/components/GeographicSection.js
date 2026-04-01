@@ -1,74 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 import { lerp, clamp, ease } from "./helpers";
 
-const HOTSPOTS = [
-  {
-    label: "Gujarat",
-    pct: "6.63%",
-    top: "28%",
-    left: "22%",
-    dotTop: "33%",
-    dotLeft: "30%",
-    anchor: "right",
-  },
-  {
-    label: "Haryana",
-    pct: "4.92%",
-    top: "18%",
-    left: "68%",
-    dotTop: "22%",
-    dotLeft: "58%",
-    anchor: "left",
-  },
-  {
-    label: "Maharashtra",
-    pct: "7.75%",
-    top: "52%",
-    left: "16%",
-    dotTop: "55%",
-    dotLeft: "35%",
-    anchor: "right",
-  },
-  {
-    label: "Karnataka",
-    pct: "3.33%",
-    top: "62%",
-    left: "72%",
-    dotTop: "64%",
-    dotLeft: "52%",
-    anchor: "left",
-  },
-  {
-    label: "Kerala",
-    pct: "8.42%",
-    top: "78%",
-    left: "38%",
-    dotTop: "76%",
-    dotLeft: "44%",
-    anchor: "right",
-  },
-];
-
 const SEGMENTS = [
   {
     title: "Truck Drivers",
+    mapSrc: "/assets/truck driver.svg",
     content:
       "Truck drivers face elevated risk due to long-haul travel, extended driving hours, highway exposure, and fatigue-related incidents across inter‑state routes.",
   },
   {
     title: "Dark Store Workers",
+    mapSrc: "/assets/dark store .svg",
     content:
       "Dark store workers experience localized operational risk driven by dense urban locations, late‑night activity, inventory movement, and limited on‑ground supervision.",
   },
   {
     title: "Delivery Partners",
+    mapSrc: "/assets/delivery partners .svg",
     content:
       "Delivery partners encounter frequent risk events due to high trip volumes, time‑bound deliveries, traffic violations, and continuous exposure to congested city roads.",
   },
 ];
 
 export default function GeographicSection() {
-  const [openIndex, setOpenIndex] = useState(false);
+  const [openIndex, setOpenIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const sectionRef = useRef(null);
 
@@ -86,9 +41,11 @@ export default function GeographicSection() {
   }, []);
 
   const titleP = ease(clamp(progress / 0.2, 0, 1));
-  const leftP = ease(clamp((progress - 0.2) / 0.25, 0, 1));
-  const mapP = ease(clamp((progress - 0.2) / 0.3, 0, 1));
-  const dotsP = ease(clamp((progress - 0.4) / 0.35, 0, 1));
+  const leftP  = ease(clamp((progress - 0.2) / 0.25, 0, 1));
+  const mapP   = ease(clamp((progress - 0.2) / 0.3, 0, 1));
+
+  const activeIndex = openIndex === null ? 0 : openIndex;
+  const activeMap   = SEGMENTS[activeIndex].mapSrc;
 
   return (
     <div ref={sectionRef} style={{ height: "350vh", position: "relative" }}>
@@ -98,9 +55,7 @@ export default function GeographicSection() {
           top: 0,
           height: "135vh",
           overflow: "hidden",
-          background: `
-          black
-        `,
+          background: "black",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -120,8 +75,8 @@ export default function GeographicSection() {
             alt="ellipse"
             style={{
               width: "900px",
-              height: "900px", // adjust size
-              opacity: 1, // optional
+              height: "900px",
+              opacity: 1,
             }}
           />
         </div>
@@ -133,10 +88,12 @@ export default function GeographicSection() {
             marginBottom: 8,
             opacity: titleP,
             transform: `translateY(${lerp(24, 0, titleP)}px)`,
+            position: "relative",
+            zIndex: 1,
           }}
         >
           <h2
-           className="sm:text-[105px] text-[40px]"
+            className="sm:text-[105px] text-[40px]"
             style={{
               fontFamily: "'Inter','Helvetica Neue',sans-serif",
               fontWeight: 700,
@@ -146,7 +103,7 @@ export default function GeographicSection() {
             }}
           >
             Geographic Risk
-            <br  className="sm:flex hidden"/>
+            <br className="sm:flex hidden" />
             Concentration
           </h2>
           <p
@@ -161,9 +118,10 @@ export default function GeographicSection() {
           </p>
         </div>
 
-        {/* Body (Now using Tailwind Grid for Layout/Responsiveness while keeping spacing identical) */}
+        {/* Body */}
         <div
           className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-12 w-full max-w-[1200px] flex-1 mt-6"
+          style={{ position: "relative", zIndex: 1 }}
         >
           {/* Left panel */}
           <div
@@ -179,7 +137,7 @@ export default function GeographicSection() {
             <p
               style={{
                 color: "white",
-                fontSize: 16,
+                fontSize: 20,
                 lineHeight: 1.7,
                 fontFamily: "'Inter',sans-serif",
                 margin: 0,
@@ -193,7 +151,7 @@ export default function GeographicSection() {
             <p
               style={{
                 color: "white",
-                fontSize: 16,
+                fontSize: 20,
                 lineHeight: 1.7,
                 fontFamily: "'Inter',sans-serif",
                 margin: 0,
@@ -206,7 +164,7 @@ export default function GeographicSection() {
               through AI-enabled monitoring cameras at traffic junctions.
             </p>
 
-            {/* Segment list (Accordion) */}
+            {/* Segment Accordion */}
             <div
               style={{
                 marginTop: 8,
@@ -220,7 +178,6 @@ export default function GeographicSection() {
 
                 return (
                   <div key={i}>
-                    {/* Header */}
                     <div
                       onClick={() => setOpenIndex(isOpen ? null : i)}
                       style={{
@@ -228,11 +185,12 @@ export default function GeographicSection() {
                         alignItems: "center",
                         gap: 10,
                         cursor: "pointer",
-                        color: "white",
+                        color: isOpen ? "#e53e3e" : "white",
                         fontSize: 17,
                         fontWeight: 600,
                         fontFamily: "'Inter',sans-serif",
                         userSelect: "none",
+                        transition: "color 0.2s ease",
                       }}
                     >
                       <span
@@ -247,7 +205,6 @@ export default function GeographicSection() {
                       {item.title}
                     </div>
 
-                    {/* Content */}
                     {isOpen && (
                       <div
                         style={{
@@ -268,42 +225,36 @@ export default function GeographicSection() {
             </div>
           </div>
 
-          {/* Map */}
+          {/* Map — increased size */}
           <div
             style={{
               position: "relative",
               opacity: mapP,
               transform: `scale(${lerp(0.94, 1, mapP)})`,
               height: "100%",
-              maxHeight: 520,
+              maxHeight: 680,
+              minHeight: 420,
+              transition: "opacity 0.35s ease",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            {/* Blue border box */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                borderRadius: 4,
-                zIndex: 1,
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* India map image */}
             <img
-              src="/assets/india.png"
-              alt="India map"
+              key={activeMap}
+              src={activeMap}
+              alt={SEGMENTS[activeIndex].title + " map"}
               style={{
-                width: "100%",
+                width: "115%",
+                maxWidth: "115%",
                 height: "100%",
                 objectFit: "contain",
                 objectPosition: "center",
                 display: "block",
                 filter: "brightness(0.9)",
+                transition: "opacity 0.3s ease",
               }}
             />
-
-            {/* Hotspot dots + labels (These will go here based on your HOTSPOTS array) */}
           </div>
         </div>
       </div>

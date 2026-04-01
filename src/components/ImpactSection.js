@@ -46,7 +46,7 @@ export default function ImpactSection() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "flex-end",
-            padding: "72px 80px 48px",
+            padding: "72px 80px 300px",
             textAlign: "center",
           }}
         >
@@ -87,7 +87,7 @@ export default function ImpactSection() {
               position: "relative",
               zIndex: 1,
               width: "100%",
-              maxWidth: 900,
+              maxWidth: 1200,
             }}
           >
             {/* Title */}
@@ -110,10 +110,10 @@ export default function ImpactSection() {
             <p
               style={{
                 color: "rgba(255,255,255,0.78)",
-                fontSize: "19px",
+                fontSize: "24px",
                 lineHeight: 1.4,
                 margin: "0 auto 40px",
-                maxWidth: 820,
+                maxWidth: 920,
                 fontFamily: "'Inter',sans-serif",
                 opacity: text1P,
                 transform: `translateY(${lerp(16, 0, text1P)}px)`,
@@ -163,7 +163,7 @@ export default function ImpactSection() {
             <p
               style={{
                 color: "rgba(255,255,255,0.92)",
-                fontSize: "clamp(14px,1.15vw,19px)",
+                fontSize: "clamp(14px,1.15vw,28px)",
                 lineHeight: 1.8,
                 margin: "0 auto 24px",
                 maxWidth: 820,
@@ -188,16 +188,21 @@ export default function ImpactSection() {
                 fontStyle: "italic",
                 margin: 0,
                 opacity: sourceP,
+                position: "relative",   // ← add this
+                zIndex: 2,
               }}
             >
               Source:{" "}
               <a
-                href="https://www.logisticsinsider.in"
+                href="https://www.logisticsinsider.in/%E2%82%B91-21-crore-worth-of-iphones-stolen-from-flipkart-truck-in-punjab/"
                 target="_blank"
                 rel="noreferrer"
                 style={{
                   color: "rgba(255,255,255,0.65)",
                   textDecoration: "underline",
+                  cursor: "pointer",
+                  pointerEvents: "auto",
+
                 }}
               >
                 Logistics Insider

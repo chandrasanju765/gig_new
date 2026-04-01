@@ -5,7 +5,6 @@ import StatsSection from "./components/StatsSection";
 import PillarsSection from "./components/PillarsSection";
 import TrustSection from "./components/TrustSection";
 import WhyReportSection from "./components/WhyReportSection";
-import WorkforceSection from "./components/WorkforceSection";
 import PeopleSection from './components/PeopleSection';
 import FraudSection from './components/FraudSection';
 import Question from './components/Question';
@@ -19,6 +18,7 @@ import CaseFilesSection from './components/CaseFile';
 import ReferralRingSection from './components/RefferalRing';
 import GpsSpoofer from './components/GpsSpoofer';
 import WhyForward from './components/whyForward'
+import Footer from './components/Footer';
 export default function App() {
   return (
     <div>
@@ -28,20 +28,20 @@ export default function App() {
       <PillarsSection />
       <TrustSection />
       <WhyReportSection />
-      <WorkforceSection />
       <PeopleSection />
       <FraudSection/>
       <Question />
       <GeographicSection/>
       <Risk />
       <SpikesSection />
-      <StoryDataSection />
+      {/* <StoryDataSection /> */}
       <ImpactSection />
       <FraudImpact/>
       <CaseFilesSection />
       <ReferralRingSection />
             <GpsSpoofer/>
 <WhyForward/>
+<Footer/>
     </div>
   );
 }

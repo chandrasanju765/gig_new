@@ -11,8 +11,8 @@ export default function CaseFilesSection() {
     }}>
 
       {/* "Case Files" big heading */}
-      <h1 className="sm:text-[105px] text-[50px]" style={{
-                fontFamily: "'Inter','Helvetica Neue',sans-serif",
+      <h1 className="sm:text-[140px] text-[60px]" style={{
+        fontFamily: "'Inter','Helvetica Neue',sans-serif",
         fontWeight: 700,
         background: "linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(180,180,200,0.55) 100%)",
         WebkitBackgroundClip: "text",
@@ -62,7 +62,7 @@ export default function CaseFilesSection() {
         }}>
           <p style={{
             fontFamily: "'Inter',sans-serif",
-            fontSize: 15, fontWeight: 700,
+            fontSize: 24, fontWeight: 700,
             color: "#CE1010", marginBottom: 28,
             letterSpacing: 0.2,
           }}>Suspect 1</p>
@@ -78,31 +78,43 @@ export default function CaseFilesSection() {
                 <div key={row.label} style={{ marginBottom: 20 }}>
                   <p style={{
                     fontFamily: "'Inter',sans-serif",
-                    fontSize: 13, color: "rgba(255,255,255,0.45)",
-                    margin: "0 0 3px",
+                    fontSize: 14, color: "rgba(255,255,255,0.45)",
+                    margin: "0 0 4px",
                   }}>{row.label}</p>
                   <p style={{
                     fontFamily: "'Inter',sans-serif",
-                    fontSize: 18, fontWeight: 700, color: "white",
+                    fontSize: 22, fontWeight: 700, color: "white",
                     margin: 0,
                   }}>{row.value}</p>
                 </div>
               ))}
             </div>
-            {/* Photo placeholder */}
+
+            {/* Suspect 1 Photo */}
             <div style={{
-              width: 130, height: 155, flexShrink: 0,
-              background: "rgba(255,255,255,0.10)",
-              border: "1px solid rgba(255,255,255,0.15)",
+              width: 140, height: 168, flexShrink: 0,
               borderRadius: 8,
-            }} />
+              overflow: "hidden",
+              border: "1px solid rgba(255,255,255,0.15)",
+            }}>
+              <img
+                src="/assets/suspect1.png"
+                alt="Vishal Taleja"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "top",
+                }}
+              />
+            </div>
           </div>
         </div>
 
         {/* Accomplices */}
         <div style={{
           background: "rgba(255,255,255,0.05)",
-          border: "1px solid rgba(255,255,255,0.12)",
+          // border: "1px solid rgba(255,255,255,0.12)",
           borderRadius: 16,
           padding: "32px 28px",
           textAlign: "left",
@@ -112,7 +124,7 @@ export default function CaseFilesSection() {
         }}>
           <p style={{
             fontFamily: "'Inter',sans-serif",
-            fontSize: 16, fontWeight: 700,
+            fontSize: 24, fontWeight: 700,
             color: "#CE1010", marginBottom: 28,
           }}>The Accomplice Vishal's friends</p>
 
@@ -123,37 +135,70 @@ export default function CaseFilesSection() {
                 <div key={name} style={{ marginBottom: 22 }}>
                   <p style={{
                     fontFamily: "'Inter',sans-serif",
-                    fontSize: 13, color: "rgba(255,255,255,0.45)",
-                    margin: "0 0 3px",
+                    fontSize: 14, color: "rgba(255,255,255,0.45)",
+                    margin: "0 0 4px",
                   }}>Friend {i + 1}</p>
                   <p style={{
                     fontFamily: "'Inter',sans-serif",
-                    fontSize: 18, fontWeight: 700, color: "white",
+                    fontSize: 22, fontWeight: 700, color: "white",
                     margin: 0,
                   }}>{name}</p>
                 </div>
               ))}
             </div>
-            {/* Stacked photo placeholders */}
-            <div style={{ position: "relative", width: 160, height: 180, flexShrink: 0 }}>
-              {[
-                { top: 0, left: 20, rotate: -4 },
-                { top: 10, left: 50, rotate: 3 },
-                { top: 40, left: 30, rotate: -2 },
-              ].map((pos, i) => (
-                <div key={i} style={{
-                  position: "absolute",
-                  top: pos.top, left: pos.left,
-                  width: 100, height: 120,
-                  background: "rgba(255,255,255,0.12)",
-                  border: "1px solid rgba(255,255,255,0.20)",
-                  borderRadius: 6,
-                  transform: `rotate(${pos.rotate}deg)`,
-                }} />
-              ))}
+
+            {/* Stacked friend photos — 2 on top, 1 bottom center */}
+            <div style={{ position: "relative", width: 200, height: 210, flexShrink: 0 }}>
+
+              {/* Rahul — top left */}
+              <div style={{
+                position: "absolute",
+                top: 0, left: 0,
+                width: 92, height: 110,
+                borderRadius: 6,
+                overflow: "hidden",
+                // border: "2px solid rgba(255,255,255,0.25)",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+                zIndex: 1,
+              }}>
+                <img src="/assets/rahul.png" alt="Rahul"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+              </div>
+
+              {/* Chavan — top right */}
+              <div style={{
+                position: "absolute",
+                top: 0, left: 104,
+                width: 92, height: 110,
+                borderRadius: 6,
+                overflow: "hidden",
+                // border: "2px solid rgba(255,255,255,0.25)",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+                zIndex: 1,
+              }}>
+                <img src="/assets/chavam.png" alt="Chavan"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+              </div>
+
+              {/* Trivam — bottom center */}
+              <div style={{
+                position: "absolute",
+                top: 118, left: 52,
+                width: 92, height: 110,
+                borderRadius: 6,
+                overflow: "hidden",
+                // border: "2px solid rgba(255,255,255,0.25)",
+                // boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+                zIndex: 2,
+              }}>
+                <img src="/assets/trivam.png" alt="Trivam"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+              </div>
+
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );

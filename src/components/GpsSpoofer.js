@@ -35,6 +35,7 @@ useEffect(() => {
         textAlign: "center",
         marginBottom: "70px",
         lineHeight: "1.05",
+      
       }}>
         The GPS Spoofer
       </h1>
@@ -65,7 +66,7 @@ useEffect(() => {
           }}>
             <p style={{
               color: "#CE1010",
-              fontSize: "15px",
+              fontSize: "24px",
               fontWeight: 700,
               marginBottom: "20px",
             }}>Suspect 1</p>
@@ -111,12 +112,12 @@ useEffect(() => {
           <div>
             <p style={{
               color: "white",
-              fontSize: "18px",
-              fontWeight: 700,
+              fontSize: "28px",
+              fontWeight: 800,
               marginBottom: "18px",
             }}>Timeline of events</p>
 
-            <div style={{ lineHeight: "1.85", fontSize: "16.8px" }}>
+            <div style={{ lineHeight: "1.85", fontSize: "22px", fontWeight: 800, color: "#e0e0e0" }}>
               <strong>Day 1:</strong> Rohan’s application was submitted<br /><br />
               
               <strong>Day 2:</strong> During the Digital Address Verification call:<br />
@@ -131,7 +132,7 @@ useEffect(() => {
         <div style={{ paddingTop: "10px" }}>
           <h2 style={{
             fontFamily: "'Inter',sans-serif", 
-            fontSize: "27.5px",
+            fontSize: "59px",
             lineHeight: "1.35",
             marginBottom: "26px",
             fontWeight: 600,
@@ -143,17 +144,17 @@ useEffect(() => {
             ...and the address verification revealed something even bigger.
           </p>
 
-          <p style={{ fontSize: "18px", lineHeight: "1.78", fontWeight:300, marginBottom: "20px", color: "white" }}>
+          <p style={{ fontSize: "20px", lineHeight: "1.78", fontWeight:300, marginBottom: "20px", color: "white" }}>
             He was also flagged with two active FIRs linked to high-value cargo robbery, 
             both filed by his previous employers.
           </p>
 
-          <p style={{ fontSize: "17.2px", lineHeight: "1.78",fontWeight:300, color: "#e0e0e0" }}>
+          <p style={{ fontSize: "20px", lineHeight: "1.78",fontWeight:300, color: "#e0e0e0" }}>
             Rohan was aware of MPK’s high-value laptop inventory. His plan was simple: 
             steal the cargo, disappear, and leave no trace behind.
           </p>
 
-          <p style={{ fontSize: "17.2px", lineHeight: "1.78",fontWeight:300, marginTop: "24px", color: "#e0e0e0" }}>
+          <p style={{ fontSize: "20px", lineHeight: "1.78",fontWeight:300, marginTop: "24px", color: "#e0e0e0" }}>
             The catch saved MPK Shipments Ltd. Several lakhs in potential cargo theft and 
             exposed how sophisticated address fraud has become with GPS spoofing and VPN usage.
           </p>

@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { lerp, clamp, ease } from "./helpers";
 
-const DATA = [
-  2.52, 2.61, 2.75, 2.88, 2.95, 3.10, 3.28, 3.45, 3.62, 3.85,
-  4.10, 4.38, 4.70, 5.05, 5.45, 5.90, 6.40, 6.95, 7.55, 8.20,
-  8.90, 9.30, 9.62, 9.85, 10.0
-];
-
 export default function FraudSection() {
   const [progress, setProgress] = useState(0);
   const sectionRef = useRef(null);
@@ -28,29 +22,11 @@ export default function FraudSection() {
   const bottomP = ease(clamp((progress - 0.50) / 0.25, 0, 1));
   const footerP = ease(clamp((progress - 0.70) / 0.20, 0, 1));
 
-  const W = 900, H = 260;
-  const pad = { top: 10, right: 10, bottom: 10, left: 10 };
-  const innerW = W - pad.left - pad.right;
-  const innerH = H - pad.top - pad.bottom;
-  const minV = Math.min(...DATA), maxV = Math.max(...DATA);
-
-  const pts = DATA.map((v, i) => ({
-    x: pad.left + (i / (DATA.length - 1)) * innerW,
-    y: pad.top + (1 - (v - minV) / (maxV - minV)) * innerH,
-  }));
-
-  const barBaseY = pad.top + innerH;
-  const visibleCount = Math.max(2, Math.round(chartP * DATA.length));
-  const visiblePts = pts.slice(0, visibleCount);
-  const polyline = visiblePts.map(p => `${p.x},${p.y}`).join(" ");
-
   return (
-    <div ref={sectionRef} style={{ height: "280vh", position: "relative" }}>
+    <div ref={sectionRef} style={{ height: "200vh", position: "relative" }}>
       <div style={{
         position: "sticky", top: 90, height: "100vh", overflow: "hidden",
-        background: `
-          black
-        `,
+        background: "black",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
         padding: "60px 64px 36px",
@@ -65,82 +41,36 @@ export default function FraudSection() {
             fontFamily: "'Inter','Helvetica Neue',sans-serif",
             fontWeight: 700, color: "white", margin: 0, lineHeight: 1.05,
           }}>
-            The Fraud Behind <br  className="sm:flex hidden"/>the Workforce
+            The Fraud Behind <br className="sm:flex hidden"/>the Workforce
           </h2>
-         
         </div>
 
         {/* Subtitle */}
         <p style={{
           color: "white", fontSize: "clamp(14px,1.1vw,19px)",
-          fontWeight: 600, margin: "0 0 28px", textAlign: "center" ,
+          fontWeight: 600, margin: "0 0 28px", textAlign: "center",
           opacity: titleP, transform: `translateY(${lerp(20, 0, titleP)}px)`,
         }}>
           India's gig workforce has grown from
         </p>
 
-        {/* Chart */}
+        {/* Chart — replaced with GIF */}
         <div style={{
           width: "100%", maxWidth: 980,
           opacity: chartP, transform: `translateY(${lerp(20, 0, chartP)}px)`,
         }}>
-          <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", overflow: "visible" }}>
-            <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="2" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
-            {/* Thin vertical white lines from baseline up to each data point */}
-            {pts.slice(0, visibleCount).map((p, i) => (
-              <line
-                key={`bar-${i}`}
-                x1={p.x} y1={p.y}
-                x2={p.x} y2={barBaseY}
-                stroke="rgba(255,255,255,0.35)"
-                strokeWidth="1.2"
-              />
-            ))}
-
-            {/* Dashed baseline */}
-            <line
-              x1={pad.left} y1={barBaseY}
-              x2={pad.left + innerW} y2={barBaseY}
-              stroke="rgba(255,255,255,0.3)"
-              strokeWidth="1"
-              strokeDasharray="5 4"
-            />
-
-            {/* White line chart */}
-            {visiblePts.length > 1 && (
-              <polyline
-                points={polyline}
-                fill="none"
-                stroke="white"
-                strokeWidth="2.8"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                filter="url(#glow)"
-              />
-            )}
-
-            {/* Red dot on every visible data point */}
-            {visiblePts.map((p, i) => (
-              <circle
-                key={`dot-${i}`}
-                cx={p.x} cy={p.y}
-                r={i === visiblePts.length - 1 ? 6 : 4}
-                fill="#e53e3e"
-              />
-            ))}
-          </svg>
+          <img
+            src="/assets/graph.gif"
+            alt="Gig workforce growth chart"
+            style={{
+              width: "100%",
+              display: "block",
+              borderRadius: 4,
+            }}
+          />
 
           {/* Labels row */}
-          <div style={{
+          {/* <div style={{
             display: "flex", alignItems: "flex-start", justifyContent: "space-between",
             marginTop: 8,
             opacity: bottomP, transform: `translateY(${lerp(16, 0, bottomP)}px)`,
@@ -177,10 +107,10 @@ export default function FraudSection() {
               }}>1 crore</div>
               <div style={{ color: "white", fontSize: 13, marginTop: 2 }}>in 2025</div>
             </div>
-          </div>
+          </div> */}
 
           {/* Source */}
-          <div style={{ textAlign: "center", marginTop: 10, marginBottom:10, opacity: footerP }}>
+          <div style={{ textAlign: "center", marginTop: 10, marginBottom: 10, opacity: footerP }}>
             <span style={{ color: "rgba(255,255,255,0.38)", fontSize: 13 }}>
               Source:{" "}
               <a
@@ -189,8 +119,7 @@ export default function FraudSection() {
                 style={{ color: "rgba(255,255,255,0.58)", textDecoration: "underline", cursor: "pointer" }}
               >Niti Ayog</a>
               {" "}and{" "}
-              
-               <a href="https://www.livemint.com/money/personal-finance/indias-gig-economy-in-2025-growth-formalisation-and-financial-inclusion-explained-11753438649777.html"
+              <a href="https://www.livemint.com/money/personal-finance/indias-gig-economy-in-2025-growth-formalisation-and-financial-inclusion-explained-11753438649777.html"
                 target="_blank" rel="noreferrer"
                 style={{ color: "rgba(255,255,255,0.58)", textDecoration: "underline", cursor: "pointer" }}
               >Mint</a>

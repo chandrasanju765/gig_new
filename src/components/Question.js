@@ -45,7 +45,7 @@ useEffect(() => {
   return (
     <div  ref={sectionRef} style={{ height: "400vh", position: "relative" }}>
        
-      <div className="sm:h-[153vh] h-[204vh]" style={{
+      <div className="sm:h-[125vh] h-[204vh]" style={{
         position: "sticky", top: 0,  overflow: "hidden",
         background: `black`,
         display: "flex", flexDirection: "column",

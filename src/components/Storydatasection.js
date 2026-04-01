@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { clamp, ease } from "./helpers";
+import { clamp } from "./helpers";
 
 const INSIGHTS = [
   {
@@ -34,71 +34,16 @@ const INSIGHTS = [
   },
 ];
 
-function InsightCard({ insight, progress, index, total }) {
-  const segSize = 1 / total;
-  const segStart = index * segSize;
-  const segEnd   = segStart + segSize;
-  const midStart = segStart + segSize * 0.15;
-  const midEnd   = segEnd   - segSize * 0.15;
-
-  const fadeIn  = ease(clamp((progress - segStart) / (segSize * 0.25), 0, 1));
-  const fadeOut = ease(clamp((progress - midEnd)   / (segSize * 0.25), 0, 1));
-
-  const opacity   = index === 0 && progress < segSize * 0.1
-    ? 1
-    : fadeIn * (1 - fadeOut);
-
-  const translateY = (1 - fadeIn) * 30 - fadeOut * 30;
-
-  if (opacity < 0.01) return null;
-
-  return (
-    <div style={{
-      position: "absolute", top: 0, left: 0, right: 0,
-      opacity,
-      transform: `translateY(${translateY}px)`,
-      willChange: "opacity, transform",
-    }}>
-      <div style={{
-        width: 3, height: "100%",
-        background: "#e53e3e",
-        position: "absolute", left: -20, top: 0,
-        borderRadius: 2,
-      }}/>
-      <h3 style={{
-        fontFamily: "'Inter',sans-serif",
-        fontSize: "clamp(16px,1.3vw,20px)",
-        fontWeight: 700, color: "white",
-        marginBottom: 20, lineHeight: 1.4,
-      }}>{insight.title}</h3>
-      <p style={{
-        fontFamily: "'Inter',sans-serif",
-        fontSize: "clamp(14px,1vw,16px)",
-        color: "rgba(255,255,255,0.65)",
-        lineHeight: 1.8, margin: 0,
-      }}>{insight.body}</p>
-    </div>
-  );
-}
-
 export default function StoryDataSection() {
   const sectionRef = useRef(null);
   const [progress, setProgress] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => setIsMobile(window.innerWidth < 1024);
-    checkScreen();
-    window.addEventListener("resize", checkScreen);
-    return () => window.removeEventListener("resize", checkScreen);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => {
       const el = sectionRef.current;
       if (!el) return;
       const scrolled = -el.getBoundingClientRect().top;
-      const total    = el.offsetHeight - window.innerHeight;
+      const total = el.offsetHeight - window.innerHeight;
       setProgress(clamp(scrolled / (total * 0.95), 0, 1));
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -110,104 +55,143 @@ export default function StoryDataSection() {
     Math.floor(progress * INSIGHTS.length),
     INSIGHTS.length - 1
   );
-
-  const leftT = ease(clamp(progress / 0.12, 0, 1));
+  const nextIdx = (activeIdx + 1) % INSIGHTS.length;
 
   return (
+    /* Original height formula — no extra multiplier */
     <div ref={sectionRef} style={{ height: `${100 * (INSIGHTS.length + 1)}vh`, position: "relative" }}>
+
+      {/* Sticky viewport */}
       <div style={{
-        position: "sticky", 
-        top: 0, 
-        height: "100vh",
-        overflow: "hidden",
-        background: "radial-gradient(ellipse at 20% 50%, #14080a 0%, #0d0d0d 50%, #080a14 100%)",
+        position: "sticky",
+        top: 0,
+        height: "70vh",
         display: "flex",
-        flexDirection: isMobile ? "column" : "row",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "radial-gradient(ellipse at 20% 50%, #14080a 0%, #0d0d0d 50%, #080a14 100%)",
+        overflow: "hidden",
       }}>
 
-        {/* Left Panel */}
+        {/* ── Main content row ── */}
         <div style={{
-          width: isMobile ? "100%" : "42%", 
-          flexShrink: 0,
-          padding: isMobile ? "10vw 6vw 8vw" : "0 5vw 0 6vw",
-          display: "flex", 
-          flexDirection: "column", 
-          justifyContent: "center",
-          borderRight: isMobile ? "none" : "1px solid #222",
-          borderBottom: isMobile ? "1px solid #222" : "none",
-          opacity: leftT,
-          transform: `translateY(${(1 - leftT) * 30}px)`,
+          width: "100%",
+          maxWidth: 1200,
+          padding: "0 6vw",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "stretch",
+          gap: 0,
         }}>
-          <h2 className="sm:text-[105px] text-[50px]" style={{
-            fontFamily: "'Inter',sans-serif",
-            fontWeight: 600, 
-            color: "white",
-            lineHeight: 1.0, 
-            margin: "0 0 36px",
-            letterSpacing: "-1px",
-            fontSize: isMobile ? "52px" : undefined,
-          }}>
-            The Story<br className="sm:flex hidden" />Behind<br className="sm:flex hidden"  />the Data
-          </h2>
-          <p style={{
-            fontFamily: "'Inter',sans-serif",
-            fontSize: isMobile ? "15px" : "clamp(14px,1.05vw,17px)",
-            color: "rgba(255,255,255,1)",
-            lineHeight: 1.75, 
-            margin: "0 0 48px",
-          }}>
-            After analyzing all the numbers, we identified a few observations
-            across the segments of truck drivers, delivery partners, and dark
-            store employees.
-          </p>
 
-          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            {INSIGHTS.map((_, i) => (
-              <div key={i} style={{
-                width: activeIdx === i ? 28 : 8,
-                height: 8,
-                borderRadius: 4,
-                background: activeIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
-                transition: "all 0.4s ease",
-              }}/>
-            ))}
+          {/* Left Panel */}
+          <div style={{
+            width: "38%",
+            flexShrink: 0,
+            paddingRight: "5vw",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingTop: 8,
+            paddingBottom: 8,
+          }}>
+            <div>
+              <h2 style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 700,
+                color: "white",
+                fontSize: "clamp(36px, 4vw, 64px)",
+                lineHeight: 1.05,
+                margin: "0 0 24px",
+                letterSpacing: "-1.5px",
+              }}>
+                The Story<br />Behind<br />the Data
+              </h2>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(13px, 1vw, 15px)",
+                color: "rgba(255,255,255,0.65)",
+                lineHeight: 1.75,
+                margin: "0 0 32px",
+              }}>
+                After analyzing all the numbers, we identified a few observations
+                across the segments of truck drivers, delivery partners, and dark
+                store employees.
+              </p>
+            </div>
+
+            {/* Dot indicators */}
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              {INSIGHTS.map((_, i) => (
+                <div key={i} style={{
+                  width: activeIdx === i ? 28 : 8,
+                  height: 8,
+                  borderRadius: 4,
+                  background: activeIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
+                  transition: "all 0.4s ease",
+                }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Right Panel */}
+          <div style={{
+            flex: 1,
+            paddingLeft: "4vw",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            overflow: "hidden",
+            minHeight: 260,
+          }}>
+            <div key={activeIdx} style={{ animation: "fadeSlideIn 0.45s ease forwards" }}>
+
+              {/* Active insight */}
+              <div style={{
+                borderLeft: "3px solid #e53e3e",
+                paddingLeft: 20,
+                marginBottom: 28,
+              }}>
+                <h3 style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "clamp(14px, 1.15vw, 17px)",
+                  fontWeight: 700,
+                  color: "white",
+                  margin: "0 0 12px",
+                  lineHeight: 1.4,
+                }}>
+                  {INSIGHTS[activeIdx].title}
+                </h3>
+                <p style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "clamp(13px, 0.95vw, 15px)",
+                  color: "rgba(255,255,255,0.55)",
+                  lineHeight: 1.75,
+                  margin: 0,
+                }}>
+                  {INSIGHTS[activeIdx].body}
+                </p>
+              </div>
+
+              {/* Next insight preview */}
+              <div style={{ paddingLeft: 23 }}>
+                <h3 style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "clamp(13px, 1vw, 16px)",
+                  fontWeight: 700,
+                  color: "rgba(255,255,255,0.28)",
+                  margin: 0,
+                  lineHeight: 1.4,
+                }}>
+                  {INSIGHTS[nextIdx].title}
+                </h3>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right Panel - Insights */}
-        <div style={{
-          flex: 1,
-          padding: isMobile ? "10vw 6vw" : "0 6vw 0 7vw",
-          display: "flex", 
-          alignItems: "center",
-          position: "relative",
-        }}>
-          <div style={{
-            position: "absolute", 
-            left: isMobile ? "6vw" : 0, 
-            top: isMobile ? "20%" : "10%", 
-            bottom: isMobile ? "20%" : "10%",
-            width: 1, 
-            background: "rgba(255,255,255,0.08)",
-          }}/>
-
-          <div style={{
-            position: "relative", 
-            width: "100%",
-            minHeight: 300,
-            paddingLeft: isMobile ? 0 : 24,
-          }}>
-            {INSIGHTS.map((insight, i) => (
-              <InsightCard
-                key={insight.id}
-                insight={insight}
-                progress={progress}
-                index={i}
-                total={INSIGHTS.length}
-              />
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );

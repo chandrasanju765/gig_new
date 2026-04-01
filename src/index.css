@@ -22,7 +22,7 @@
   height: 100vh;
   width: 100%;
 position: absolute;
-top:-33px;
+top:-30px;
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -231,15 +231,15 @@ top:-33px;
 #calender-highlight{
    background-image: url("../public/assets/highlight-card.png");
   background-repeat: no-repeat;
-  height: 34vh;
-width: 73%;;
+  height: 28vh;
+  /* width: 73%;; */
   background-size: contain;
 }
 #calender-img{
   background-image: url("../public/assets/calender.png");
   background-repeat: no-repeat;
-  height: 34vh;
-width: 73%;;
+  height: 28vh;
+/* width: 73%;; */
   background-size: contain;
 }
 #home-banner {

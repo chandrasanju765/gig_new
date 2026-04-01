@@ -11,12 +11,9 @@ const MONTHS = [
   { month: "June",      pct: "2.75%", highlight: false },
   { month: "July",      pct: "3.2%",  highlight: false },
   { month: "August",    pct: "3.17%", highlight: false },
-
 ];
 
-
 const HighlightMONTHS = [
- 
   { month: "September", pct: "3.36%", highlight: true  },
   { month: "October",   pct: "3.32%", highlight: true  },
   { month: "November",  pct: "3.48%", highlight: true  },
@@ -26,12 +23,13 @@ const HighlightMONTHS = [
 export default function StatsSection() {
   const [isMobile, setIsMobile] = useState(false);
 
-useEffect(() => {
-  const checkMobile = () => setIsMobile(window.innerWidth < 768);
-  checkMobile();
-  window.addEventListener("resize", checkMobile);
-  return () => window.removeEventListener("resize", checkMobile);
-}, []);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const [progress, setProgress] = useState(0);
   const sectionRef = useRef(null);
 
@@ -52,13 +50,68 @@ useEffect(() => {
   const title2P = ease(clamp((progress - 0.28) / 0.15, 0, 1));
   const subP    = ease(clamp((progress - 0.35) / 0.15, 0, 1));
 
+
+  const renderCard = (m, i, isHighlight) => {
+    const cp = ease(clamp((progress - 0.38 - i * 0.022) / 0.18, 0, 1));
+    const cardId = isHighlight ? "calender-highlight" : "calender-img";
+
+    return (
+      <div
+        key={i}
+        style={{
+          position: "relative",         
+          opacity: cp,
+          transform: `translateY(${lerp(20, 0, cp)}px) scale(${lerp(0.95, 1, cp)})`,
+        }}
+      >
+        {/* Empty div: carries the CSS id so background-image, height, width apply */}
+        <div id={cardId} style={{ display: "block", padding: 0, margin: 0 }} />
+
+        {/* Text overlay: absolutely positioned over the card */}
+        <div
+          style={{
+            position: "absolute",
+            /* top:22% skips the ring area; bottom:8% keeps clear of card edge */
+            top: "22%",
+            bottom: "8%",
+            left: 0,
+            right: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+            pointerEvents: "none",
+          }}
+        >
+          <div style={{
+            color: "white",
+            fontSize: "clamp(24px, 1vw, 15px)",
+            fontFamily: "'Inter', sans-serif",
+            letterSpacing: 0.3,
+            fontWeight: 800,
+          }}>
+            {m.month}
+          </div>
+          <div style={{
+            color: "white",
+            fontSize: "clamp(20px, 2.2vw, 32px)",
+            fontWeight: 800,
+            fontFamily: "'Inter', sans-serif",
+            lineHeight: 1,
+          }}>
+            {m.pct}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div ref={sectionRef} style={{ height: "520vh", position: "relative" }}>
-      <div className="sm:h-[227vh] h-[192vh]" style={{
-        position: "sticky", top: 0,overflow: "hidden",
-        background: `
-         black
-        `,
+      <div className="sm:h-[200vh] h-[192vh]" style={{
+        position: "sticky", top: 0, overflow: "hidden",
+        background: "black",
         display: "flex", flexDirection: "column",
         alignItems: "center",
         padding: "48px 64px 36px",
@@ -81,7 +134,6 @@ useEffect(() => {
           width: "100%", maxWidth: 1100, marginBottom: 44,
           opacity: hotP, transform: `translateY(${lerp(20, 0, hotP)}px)`,
         }}>
-          {/* Delivery Partners */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <img src="/assets/delivery.png" alt="" style={{ width: 60, height: 60, objectFit: "contain" }} />
@@ -89,18 +141,16 @@ useEffect(() => {
                 Delivery<br />Partners
               </span>
             </div>
-            <div style={{ color: "#e53e3e", fontSize: 18, fontWeight: 600, fontFamily: "'Inter',sans-serif", marginTop: 18   }}>Karnataka</div>
+            <div style={{ color: "#e53e3e", fontSize: 18, fontWeight: 600, fontFamily: "'Inter',sans-serif", marginTop: 18 }}>Karnataka</div>
             <div style={{ color: "white", fontSize: "48px", fontWeight: 700, fontFamily: "'Inter',sans-serif", lineHeight: 1 }}>6.91%</div>
           </div>
 
-          {/* Center */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 6 }}>
-            <div style={{ width:0, height:0, borderLeft:"6px solid transparent", borderRight:"6px solid transparent", borderBottom:"10px solid #CE1010", marginBottom:6 }} />
-            <span style={{ color:"white", fontSize:17, fontWeight:700, fontFamily:"'Inter',sans-serif", letterSpacing:0.3 }}>Quick commerce</span>
-            <div style={{ width:0, height:0, borderLeft:"6px solid transparent", borderRight:"6px solid transparent", borderTop:"10px solid #CE1010", marginTop:6 }} />
+            <div style={{ width: 0, height: 0, borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderBottom: "10px solid #CE1010", marginBottom: 6 }} />
+            <span style={{ color: "white", fontSize: 17, fontWeight: 700, fontFamily: "'Inter',sans-serif", letterSpacing: 0.3 }}>Quick commerce</span>
+            <div style={{ width: 0, height: 0, borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: "10px solid #CE1010", marginTop: 6 }} />
           </div>
 
-          {/* Truck Drivers */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <img src="/assets/truck_driver.png" alt="" style={{ width: 60, height: 60, objectFit: "contain" }} />
@@ -108,15 +158,14 @@ useEffect(() => {
                 Truck<br />Drivers
               </span>
             </div>
-            <div style={{ color: "#e53e3e", fontSize: 18, fontWeight: 600, fontFamily: "'Inter',sans-serif", marginTop: 18   }}>Maharashtra</div>
+            <div style={{ color: "#e53e3e", fontSize: 18, fontWeight: 600, fontFamily: "'Inter',sans-serif", marginTop: 18 }}>Maharashtra</div>
             <div style={{ color: "white", fontSize: "48px", fontWeight: 700, fontFamily: "'Inter',sans-serif", lineHeight: 1 }}>7.24%</div>
           </div>
         </div>
 
         {/* Title 2 */}
-        <h2 className="pt-16  sm:text-[105px] text-[50px]" style={{
+        <h2 className="pt-16 sm:text-[105px] text-[50px]" style={{
           fontFamily: "'Inter','Helvetica Neue',sans-serif",
-
           fontWeight: 700, color: "white",
           margin: "0 0 8px", textAlign: "center", lineHeight: 1.05,
           opacity: title2P, transform: `translateY(${lerp(20, 0, title2P)}px)`,
@@ -133,62 +182,15 @@ useEffect(() => {
         </p>
 
         {/* Month Grid */}
-     <div style={{
-  display: "grid",
-gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",  gap: isMobile ? 1 : 20,
-  width: "100%",
-  maxWidth:1000,
-}}>
-          {MONTHS.map((m, i) => {
-            const cp = ease(clamp((progress - 0.38 - i * 0.022) / 0.18, 0, 1));
-            return (
-              <div id="calender-img" key={i} style={{
-                borderRadius: 16,
-                padding: "18px 20px 20px",
-                justifyContent:"center",
-                display: "flex", flexDirection: "column", alignItems: "center",
-                opacity: cp,
-                transform: `translateY(${lerp(20, 0, cp)}px) scale(${lerp(0.95, 1, cp)})`,
-                
-              }}>
-                {/* Calendar rings */}
-                
-                <div style={{
-                  color: "white",
-                  fontSize: 13, fontFamily: "'Inter',sans-serif", marginBottom: 6,
-                }}>{m.month}</div>
-                <div style={{
-                  color: "white", fontSize: "clamp(20px,2.2vw,32px)",
-                  fontWeight: 800, fontFamily: "'Inter',sans-serif", lineHeight: 1,
-                }}>{m.pct}</div>
-              </div>
-            );
-          })}
-            {HighlightMONTHS.map((p, i) => {
-            const cp = ease(clamp((progress - 0.38 - i * 0.022) / 0.18, 0, 1));
-            return (
-              <div id="calender-highlight" key={i} style={{
-                borderRadius: 16,
-                padding: "18px 20px 20px",
-                justifyContent:"center",
-                display: "flex", flexDirection: "column", alignItems: "center",
-                opacity: cp,
-                transform: `translateY(${lerp(20, 0, cp)}px) scale(${lerp(0.95, 1, cp)})`,
-                
-              }}>
-                {/* Calendar rings */}
-                
-                <div style={{
-                  color: "white",
-                  fontSize: 13, fontFamily: "'Inter',sans-serif", marginBottom: 6,
-                }}>{p.month}</div>
-                <div style={{
-                  color: "white", fontSize: "clamp(20px,2.2vw,32px)",
-                  fontWeight: 800, fontFamily: "'Inter',sans-serif", lineHeight: 1,
-                }}>{p.pct}</div>
-              </div>
-            );
-          })}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
+          gap: isMobile ? 10 : 20,
+          width: "100%",
+          maxWidth: 1000,
+        }}>
+          {MONTHS.map((m, i) => renderCard(m, i, false))}
+          {HighlightMONTHS.map((m, i) => renderCard(m, i, true))}
         </div>
 
         {/* Footer note */}
@@ -199,7 +201,7 @@ gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",  gap: isMob
           opacity: ease(clamp((progress - 0.75) / 0.15, 0, 1)),
           maxWidth: 700,
         }}>
-          Risk rates remain consistent throughout the year for all segments,<br className="sm:flex hidden"/>
+          Risk rates remain consistent throughout the year for all segments,<br className="sm:flex hidden" />
           <span style={{ color: "#CE1010" }}>except for September to December.</span>
         </p>
       </div>
