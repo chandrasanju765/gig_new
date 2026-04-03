@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { clamp, useInView } from "./helpers";
 
-// ─────────────────────────────────────────────
-// DATA
-// ─────────────────────────────────────────────
-
 const SPIKES = [
   { id: 1, label: "Festive hiring surges" },
   { id: 2, label: "Inventory scale-up" },
@@ -48,25 +44,22 @@ const INSIGHTS = [
   },
 ];
 
-// ─────────────────────────────────────────────
-// SPIKE CARD
-// ─────────────────────────────────────────────
-
-function SpikeCard({ item, delay, visible }) {
+function SpikeCard({ item, delay, visible, isMobile }) {
   return (
     <div style={{
-      display: "flex", alignItems: "center", gap: 18,
+      display: "flex", alignItems: "center", gap: isMobile ? 12 : 18,
       backgroundImage: "linear-gradient(rgb(29, 29, 29), rgb(33, 33, 33))",
       borderRadius: 14,
       border: "1px solid white",
-      padding: "10px 18px",
+      padding: isMobile ? "8px 12px" : "10px 18px",
       opacity: visible ? 1 : 0,
       transform: visible ? "translateY(0)" : "translateY(24px)",
       transition: `opacity 0.55s ${delay}s, transform 0.55s ${delay}s`,
     }}>
       <div style={{
         flexShrink: 0,
-        width: 68, height: 68,
+        width: isMobile ? 48 : 68,
+        height: isMobile ? 48 : 68,
         background: "white",
         borderRadius: 12,
         display: "flex", alignItems: "center", justifyContent: "center",
@@ -75,13 +68,13 @@ function SpikeCard({ item, delay, visible }) {
         <img
           src="/assets/Spike.png"
           alt="spike icon"
-          style={{ width: 52, height: 52, objectFit: "contain" }}
+          style={{ width: isMobile ? 36 : 52, height: isMobile ? 36 : 52, objectFit: "contain" }}
         />
       </div>
       <span style={{
         fontFamily: "'Inter', sans-serif",
-        fontSize: "clamp(15px, 1.15vw, 19px)",
-        fontWeight: 500, color: "white", lineHeight: 1.5,
+        fontSize: isMobile ? "clamp(12px, 3.5vw, 14px)" : "clamp(15px, 1.15vw, 19px)",
+        fontWeight: 500, color: "white", lineHeight: 1.4,
       }}>
         {item.label}
       </span>
@@ -89,15 +82,17 @@ function SpikeCard({ item, delay, visible }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// COMBINED SECTION
-// ─────────────────────────────────────────────
-
 export default function SpikesSection() {
-  // Spikes in-view
   const [spikesRef, spikesVisible] = useInView(0.2);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Story scroll progress
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const storySectionRef = useRef(null);
   const [progress, setProgress] = useState(0);
 
@@ -122,16 +117,13 @@ export default function SpikesSection() {
 
   return (
     <>
-      {/* ══════════════════════════════════════
-          1. SPIKES SECTION
-      ══════════════════════════════════════ */}
+      {/* ══ 1. SPIKES SECTION ══ */}
       <section style={{
         background: "radial-gradient(ellipse at 60% 40%, #1a0a0a 0%, #0d0d0d 60%, #0a0a12 100%)",
-        padding: "0px 8vw 0px",
+        padding: "10px 5vw 0px",
         display: "flex", flexDirection: "column", alignItems: "center",
         textAlign: "center",
       }}>
-        {/* ── Connector: comes from above into this section ── */}
         <div style={{
           display: "flex", flexDirection: "column", alignItems: "center",
           marginTop: 20,
@@ -150,36 +142,33 @@ export default function SpikesSection() {
           <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#e53e3e" }} />
         </div>
 
-        {/* Heading */}
         <h2 style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "28px",
+          fontSize: isMobile ? "15px" : "28px",
           fontWeight: 700, color: "white",
           marginBottom: 48, lineHeight: 1.3,
         }}>
           These spikes typically occur due to
         </h2>
 
-        {/* Cards */}
         <div ref={spikesRef} style={{
           width: "100%", maxWidth: 1040,
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: 18,
+          gap: isMobile ? 12 : 18,
           marginBottom: 48,
         }}>
           {SPIKES.slice(0, 2).map((item, i) => (
-            <SpikeCard key={item.id} item={item} delay={0.1 * i} visible={spikesVisible} />
+            <SpikeCard key={item.id} item={item} delay={0.1 * i} visible={spikesVisible} isMobile={isMobile} />
           ))}
           <div style={{ gridColumn: "1 / -1" }}>
-            <SpikeCard item={SPIKES[2]} delay={0.22} visible={spikesVisible} />
+            <SpikeCard item={SPIKES[2]} delay={0.22} visible={spikesVisible} isMobile={isMobile} />
           </div>
         </div>
 
-        {/* Body text */}
         <p style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "19px",
+          fontFamily: "Inter",
+          fontSize: isMobile ? "11px" : "25px",
           fontWeight: 300,
           color: "rgba(255,255,255,1)",
           lineHeight: 1.6, maxWidth: 820,
@@ -197,17 +186,13 @@ export default function SpikesSection() {
           <br className="sm:flex hidden" />
           of additional high-risk profiles entering the ecosystem.
         </p>
-
       </section>
 
-      {/* ══════════════════════════════════════
-          2. STORY SECTION (scroll-driven)
-      ══════════════════════════════════════ */}
+      {/* ══ 2. STORY SECTION ══ */}
       <div
         ref={storySectionRef}
         style={{ height: `calc(100vh + ${INSIGHTS.length * 40}vh)`, position: "relative", marginTop: -20 }}
       >
-        {/* Sticky viewport */}
         <div style={{
           position: "sticky",
           top: 0,
@@ -220,47 +205,50 @@ export default function SpikesSection() {
           overflow: "hidden",
           boxSizing: "border-box",
         }}>
-
           {/* Content row */}
           <div style={{
             width: "100%",
             maxWidth: 1200,
-            padding: "0 6vw",
+            padding: "0 3vw",
             boxSizing: "border-box",
             display: "flex",
-            flexDirection: "row",
-            alignItems: "stretch",
+            flexDirection: isMobile ? "column" : "row",
+            alignItems: isMobile ? "center" : "stretch",
           }}>
 
             {/* Left Panel */}
             <div style={{
-              width: "38%",
+              width: isMobile ? "100%" : "38%",
               flexShrink: 0,
-              paddingRight: "5vw",
+              paddingRight: isMobile ? 0 : "5vw",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              justifyContent: isMobile ? "flex-start" : "space-between",
               paddingTop: 8,
-              paddingBottom: 8,
+              paddingBottom: isMobile ? 24 : 8,
+              textAlign: isMobile ? "center" : "left",
             }}>
               <div>
-                <h2 style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontWeight: 700,
-                  color: "white",
-                  fontSize: "clamp(36px, 4vw, 64px)",
-                  lineHeight: 1.05,
-                  margin: "0 0 24px",
-                  letterSpacing: "-1.5px",
-                }}>
-                  The Story<br />Behind<br />the Data
-                </h2>
+               <h2 style={{
+  fontFamily: "'Inter', sans-serif",
+  fontWeight: 700,
+  color: "white",
+  fontSize: isMobile ? "clamp(28px, 7vw, 36px)" : "clamp(36px, 4vw, 64px)",
+  lineHeight: 1.05,
+  margin: "0 0 16px",
+  letterSpacing: "-1.5px",
+  // maxWidth: isMobile ? "280px" : "220px",
+  fontSize: isMobile ? "30px" : "70px",
+}}>
+  The Story Behind the Data
+</h2>
+
                 <p style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: "clamp(13px, 1vw, 15px)",
+                  fontSize: isMobile ? "13px" : "clamp(13px, 1vw, 15px)",
                   color: "rgba(255,255,255,0.65)",
                   lineHeight: 1.75,
-                  margin: "0 0 32px",
+                  margin: isMobile ? "0 0 20px" : "0 0 32px",
                 }}>
                   After analyzing all the numbers, we identified a few observations
                   across the segments of truck drivers, delivery partners, and dark
@@ -269,7 +257,10 @@ export default function SpikesSection() {
               </div>
 
               {/* Dot indicators */}
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <div style={{
+                display: "flex", gap: 8, alignItems: "center",
+                justifyContent: isMobile ? "center" : "flex-start",
+              }}>
                 {INSIGHTS.map((_, i) => (
                   <div key={i} style={{
                     width: activeIdx === i ? 28 : 8,
@@ -285,12 +276,13 @@ export default function SpikesSection() {
             {/* Right Panel */}
             <div style={{
               flex: 1,
-              paddingLeft: "4vw",
+              paddingLeft: isMobile ? 0 : "4vw",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               overflow: "hidden",
               minHeight: 180,
+              width: isMobile ? "100%" : "auto",
             }}>
               <div key={activeIdx} style={{ animation: "fadeSlideIn 0.45s ease forwards" }}>
 
@@ -301,9 +293,10 @@ export default function SpikesSection() {
                   marginBottom: 28,
                 }}>
                   <h3 style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "clamp(14px, 1.15vw, 17px)",
+                    fontFamily: "Inter",
+                    fontSize: isMobile ? "14px" : "30px",
                     fontWeight: 700,
+                    fontStyle: "Bold",
                     color: "white",
                     margin: "0 0 12px",
                     lineHeight: 1.4,
@@ -311,11 +304,12 @@ export default function SpikesSection() {
                     {INSIGHTS[activeIdx].title}
                   </h3>
                   <p style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "clamp(13px, 0.95vw, 15px)",
+                    fontFamily: "Inter",
+                    fontSize: isMobile ? "12px" : "30px",
                     color: "rgba(255,255,255,0.55)",
-                    lineHeight: 1.75,
+                    // lineHeight: 1.75,
                     margin: 0,
+                    fontWeight: 300,
                   }}>
                     {INSIGHTS[activeIdx].body}
                   </p>
@@ -325,9 +319,9 @@ export default function SpikesSection() {
                 <div style={{ paddingLeft: 23 }}>
                   <h3 style={{
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: "clamp(13px, 1vw, 16px)",
+                    fontSize: isMobile ? "13px" : "30px",
                     fontWeight: 700,
-                    color: "rgba(255,255,255,0.28)",
+                    color: "white",
                     margin: 0,
                     lineHeight: 1.4,
                   }}>

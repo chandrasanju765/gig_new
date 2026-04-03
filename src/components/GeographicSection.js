@@ -5,20 +5,14 @@ const SEGMENTS = [
   {
     title: "Truck Drivers",
     mapSrc: "/assets/truck driver.svg",
-    content:
-      "Truck drivers face elevated risk due to long-haul travel, extended driving hours, highway exposure, and fatigue-related incidents across inter‑state routes.",
   },
   {
     title: "Dark Store Workers",
     mapSrc: "/assets/dark store .svg",
-    content:
-      "Dark store workers experience localized operational risk driven by dense urban locations, late‑night activity, inventory movement, and limited on‑ground supervision.",
   },
   {
     title: "Delivery Partners",
     mapSrc: "/assets/delivery partners .svg",
-    content:
-      "Delivery partners encounter frequent risk events due to high trip volumes, time‑bound deliveries, traffic violations, and continuous exposure to congested city roads.",
   },
 ];
 
@@ -118,9 +112,9 @@ export default function GeographicSection() {
           </p>
         </div>
 
-        {/* Body */}
+        {/* Body — desktop: grid, mobile: column-reverse so map is on top */}
         <div
-          className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-12 w-full max-w-[1200px] flex-1 mt-6"
+          className="flex flex-col-reverse lg:grid lg:grid-cols-[320px_1fr] gap-12 w-full max-w-[1200px] flex-1 mt-6"
           style={{ position: "relative", zIndex: 1 }}
         >
           {/* Left panel */}
@@ -134,7 +128,9 @@ export default function GeographicSection() {
               paddingTop: 8,
             }}
           >
+            {/* Paragraphs: hidden on mobile, visible on desktop */}
             <p
+              className="hidden lg:block"
               style={{
                 color: "white",
                 fontSize: 20,
@@ -149,6 +145,7 @@ export default function GeographicSection() {
               concentration states across segments.
             </p>
             <p
+              className="hidden lg:block"
               style={{
                 color: "white",
                 fontSize: 20,
@@ -164,12 +161,11 @@ export default function GeographicSection() {
               through AI-enabled monitoring cameras at traffic junctions.
             </p>
 
-            {/* Segment Accordion */}
+            {/* Segment Accordion — clickable, no expanded content */}
             <div
+              className="flex lg:flex-col flex-row justify-center lg:justify-start"
               style={{
                 marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
                 gap: 10,
               }}
             >
@@ -204,28 +200,47 @@ export default function GeographicSection() {
                       </span>
                       {item.title}
                     </div>
-
-                    {isOpen && (
-                      <div
-                        style={{
-                          marginLeft: 22,
-                          marginTop: 6,
-                          color: "rgba(255,255,255,0.75)",
-                          fontSize: 14,
-                          lineHeight: 1.6,
-                          fontFamily: "'Inter',sans-serif",
-                        }}
-                      >
-                        {item.content}
-                      </div>
-                    )}
+                    {/* No expanded content rendered */}
                   </div>
                 );
               })}
             </div>
+
+            {/* Mobile-only paragraphs below segments */}
+            <p
+              className="block lg:hidden"
+              style={{
+                color: "white",
+                fontSize: 11,
+                lineHeight: 1.7,
+                fontFamily: "'Inter',sans-serif",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              Kerala records the highest risk rate in the country, with
+              Maharashtra close behind, making them two of the highest risk
+              concentration states across segments.
+            </p>
+            <p
+              className="block lg:hidden"
+              style={{
+                color: "white",
+                fontSize: 11,
+                lineHeight: 1.7,
+                fontFamily: "'Inter',sans-serif",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              Another contributing factor behind this surge could be stronger
+              crime reporting mechanisms in southern and western states. For
+              example, in Kerala, many challans are automatically generated
+              through AI-enabled monitoring cameras at traffic junctions.
+            </p>
           </div>
 
-          {/* Map — increased size */}
+          {/* Map */}
           <div
             style={{
               position: "relative",

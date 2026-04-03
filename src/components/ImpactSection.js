@@ -4,7 +4,15 @@ import "../index.css";
 
 export default function ImpactSection() {
   const [progress, setProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -46,7 +54,7 @@ export default function ImpactSection() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "flex-end",
-            padding: "72px 80px 300px",
+            padding: isMobile ? "40px 24px 200px" : "72px 80px 300px",
             textAlign: "center",
           }}
         >
@@ -63,11 +71,12 @@ export default function ImpactSection() {
               alt="ellipse"
               style={{
                 width: "900px",
-                height: "900px", // adjust size
-                opacity: 1, // optional
+                height: "900px",
+                opacity: 1,
               }}
             />
           </div>
+
           {/* Faint grid */}
           <div
             style={{
@@ -94,10 +103,10 @@ export default function ImpactSection() {
             <h2
               style={{
                 fontFamily: "'Inter','Helvetica Neue',sans-serif",
-                fontSize: "43px",
+                fontSize: isMobile ? "22px" : "43px",
                 fontWeight: 700,
                 color: "white",
-                margin: "0 0 36px",
+                margin: isMobile ? "0 0 20px" : "0 0 36px",
                 lineHeight: 1.15,
                 opacity: titleP,
                 transform: `translateY(${lerp(20, 0, titleP)}px)`,
@@ -110,9 +119,9 @@ export default function ImpactSection() {
             <p
               style={{
                 color: "rgba(255,255,255,0.78)",
-                fontSize: "24px",
-                lineHeight: 1.4,
-                margin: "0 auto 40px",
+                fontSize: isMobile ? "12px" : "24px",
+                lineHeight: 1.6,
+                margin: isMobile ? "0 auto 20px" : "0 auto 40px",
                 maxWidth: 920,
                 fontFamily: "'Inter',sans-serif",
                 opacity: text1P,
@@ -120,7 +129,8 @@ export default function ImpactSection() {
               }}
             >
               Even one missed red flag in any of these segments can increase the
-              risk of <br className="sm:flex hidden" />
+              risk of{" "}
+              <br className="sm:flex hidden" />
               high-value cargo being stolen, a customer being mistreated, or
               possible <br className="sm:flex hidden" />
               food adulteration in a dark store. Incidents such as this
@@ -139,7 +149,7 @@ export default function ImpactSection() {
             >
               <span
                 style={{
-                  fontSize: "105px",
+                  fontSize: isMobile ? "42px" : "105px",
                   fontWeight: 700,
                   color: "#ce1010",
                   fontFamily: "'Inter',sans-serif",
@@ -148,8 +158,9 @@ export default function ImpactSection() {
               >
                 ₹
               </span>
-              <span className="sm:text-[105px] text-[50px]"
+              <span
                 style={{
+                  fontSize: isMobile ? "42px" : "105px",
                   fontWeight: 700,
                   color: "white",
                   fontFamily: "'Inter','Helvetica Neue',sans-serif",
@@ -159,16 +170,17 @@ export default function ImpactSection() {
                 1.21 Crore
               </span>
             </div>
+
             {/* Para 2 */}
             <p
               style={{
                 color: "rgba(255,255,255,0.92)",
-                fontSize: "clamp(14px,1.15vw,28px)",
+                fontSize: isMobile ? "12px" : "clamp(14px,1.15vw,28px)",
                 lineHeight: 1.8,
-                margin: "0 auto 24px",
+                margin: "0 auto",
                 maxWidth: 820,
-                marginTop: 40,
-                marginBottom: 40,
+                marginTop: isMobile ? 16 : 40,
+                marginBottom: isMobile ? 16 : 40,
                 fontFamily: "'Inter',sans-serif",
                 opacity: text2P,
                 transform: `translateY(${lerp(16, 0, text2P)}px)`,
@@ -183,12 +195,12 @@ export default function ImpactSection() {
             <p
               style={{
                 color: "rgba(255,255,255,0.45)",
-                fontSize: 13,
+                fontSize: isMobile ? 11 : 13,
                 fontFamily: "'Inter',sans-serif",
                 fontStyle: "italic",
                 margin: 0,
                 opacity: sourceP,
-                position: "relative",   // ← add this
+                position: "relative",
                 zIndex: 2,
               }}
             >
@@ -202,12 +214,12 @@ export default function ImpactSection() {
                   textDecoration: "underline",
                   cursor: "pointer",
                   pointerEvents: "auto",
-
                 }}
               >
                 Logistics Insider
               </a>
             </p>
+
             <div
               id="gradient-bg"
               style={{
@@ -216,33 +228,11 @@ export default function ImpactSection() {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                padding: "52px 80px 48px",
+                padding: isMobile ? "24px 16px 24px" : "52px 80px 48px",
                 textAlign: "center",
               }}
-            ></div>
+            />
           </div>
-
-          {/* Bottom half — blue, full width */}
-          {/* <div id="gradient-bg"  style={{
-          flex: "0 0 auto",
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          padding: "52px 80px 48px",
-          textAlign: "center",
-        }}> */}
-          {/* Para 2 */}
-          {/* <p style={{
-            color: "rgba(255,255,255,0.92)",
-            fontSize: "clamp(14px,1.15vw,19px)",
-            lineHeight: 1.8, margin: "0 auto 24px",
-            maxWidth: 820,
-            fontFamily: "'Inter',sans-serif",
-            opacity: text2P, transform: `translateY(${lerp(16, 0, text2P)}px)`,
-          }}>
-            truck robbery involving smartphones, apparel, and perfumes highlight how
-            gaps in background screening can increase exposure to serious financial
-            losses and erode customer trust.
-          </p> */}
         </div>
       </div>
     </div>

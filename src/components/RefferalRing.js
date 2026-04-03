@@ -1,3 +1,4 @@
+// ReferralRingSection.jsx
 import { useInView } from "./helpers";
 import { useState, useEffect } from "react";
 
@@ -43,11 +44,11 @@ export default function ReferralRingSection() {
   ];
 
   return (
-    <section style={{ 
-      padding: isMobile ? "60px 5vw 80px" : "80px 6vw 100px", 
-      position: "relative", 
-      backgroundColor: "#000", 
-      overflow: "hidden" 
+    <section style={{
+      padding: isMobile ? "60px 6vw 80px" : "80px 6vw 100px",
+      position: "relative",
+      backgroundColor: "#000",
+      overflow: "hidden"
     }}>
       <style>{`
         .timeline-grid {
@@ -59,10 +60,9 @@ export default function ReferralRingSection() {
         .horizontal-line {
           position: absolute;
           top: 50%;
-          left: 0;
-          right: 0;
+          left: 0; right: 0;
           height: 2px;
-          background: rgba(255, 255, 255, 1);
+          background: rgba(255,255,255,1);
           transform: translateY(-50%);
           z-index: 1;
         }
@@ -82,6 +82,7 @@ export default function ReferralRingSection() {
           justify-content: center;
           width: 100%;
           padding: 0 10px;
+          text-align: center;
         }
         .dot-container {
           height: 40px;
@@ -89,22 +90,58 @@ export default function ReferralRingSection() {
           align-items: center;
           justify-content: center;
           position: relative;
+          z-index: 3;
         }
         .red-dot {
           width: 16px;
           height: 16px;
           background: #e53e3e;
           border-radius: 50%;
-          box-shadow: 0 0 12px rgba(229, 62, 62, 0.6);
+          box-shadow: 0 0 12px rgba(229,62,62,0.6);
           border: 2px solid #e53e3e;
+          flex-shrink: 0;
+        }
+        .timeline-mobile {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+        .timeline-mobile-line {
+          position: absolute;
+          left: 50%;
+          top: 8px;
+          bottom: 8px;
+          width: 2px;
+          background: rgba(255,255,255,1);
+          transform: translateX(-50%);
+          z-index: 1;
+        }
+        .timeline-mobile-row {
+          display: grid;
+          grid-template-columns: 1fr 32px 1fr;
+          align-items: flex-start;
+          position: relative;
+          z-index: 2;
+          min-height: 120px;
+          padding: 16px 0;
+        }
+        .tm-left { padding-right: 16px; text-align: right; }
+        .tm-right { padding-left: 16px; text-align: left; }
+        .tm-dot-col {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          padding-top: 2px;
+          z-index: 3;
         }
       `}</style>
 
       {/* Background Ellipse */}
-      <div style={{ 
-        position: "absolute", 
-        top: isMobile ? -80 : 20, 
-        left: isMobile ? -180 : -440, 
+      <div style={{
+        position: "absolute",
+        top: isMobile ? -80 : 20,
+        left: isMobile ? -180 : -440,
         zIndex: 0,
         opacity: isMobile ? 0.65 : 1
       }}>
@@ -112,201 +149,213 @@ export default function ReferralRingSection() {
       </div>
 
       {/* Story Columns */}
-      <div style={{ 
-        display: isMobile ? "flex" : "grid", 
-        gridTemplateColumns: "1fr 1fr", 
+      <div style={{
+        display: isMobile ? "flex" : "grid",
+        gridTemplateColumns: "1fr 1fr",
         flexDirection: isMobile ? "column" : "row",
-        gap: isMobile ? 70 : 60, 
-        maxWidth: 1000, 
-        margin: "0 auto 100px", 
-        position: "relative", 
-        zIndex: 1 
+        gap: isMobile ? 40 : 60,
+        maxWidth: 1000,
+        margin: "0 auto 100px",
+        position: "relative",
+        zIndex: 1,
+        textAlign: isMobile ? "center" : "left",
       }}>
-        
         {/* Left */}
-        <div ref={leftRef} style={{ 
-          opacity: leftVisible ? 1 : 0, 
-          transform: leftVisible ? "translateY(0)" : "translateY(30px)", 
-          transition: "opacity 0.7s, transform 0.7s" 
+        <div ref={leftRef} style={{
+          opacity: leftVisible ? 1 : 0,
+          transform: leftVisible ? "translateY(0)" : "translateY(30px)",
+          transition: "opacity 0.7s, transform 0.7s"
         }}>
-          <p style={{ 
-            fontFamily: "'Inter',sans-serif", 
-            fontSize: isMobile ? "17px" : "28px", 
-            color: "#fff", 
-            lineHeight: 1.75, 
-            marginBottom: 32 
+          <p style={{
+            fontFamily: "'Inter',sans-serif",
+            fontSize: isMobile ? "11px" : "28px",
+            color: "#fff",
+            lineHeight: isMobile ? 1.7 : "40px",
+            marginBottom: isMobile ? 20 : 32
           }}>
             Vishal was a delivery agent with Zap Logistics, which was running a generous referral scheme
           </p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 8 }}>
-            <span style={{ 
-              fontFamily: "'Inter',sans-serif", 
-              fontSize: isMobile ? "68px" : "105px", 
-              fontWeight: 700, 
-              color: "white", 
-              lineHeight: 1 
+          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 8, justifyContent: isMobile ? "center" : "flex-start" }}>
+            <span style={{
+              fontFamily: "'Inter',sans-serif",
+              fontSize: isMobile ? "56px" : "105px",
+              fontWeight: 700,
+              color: "white",
+              lineHeight: 1
             }}>
               <span style={{ color: "#CE1010" }}>₹</span> 3000
             </span>
           </div>
-          <p style={{ 
-            fontFamily: "'Inter',sans-serif", 
-            fontSize: isMobile ? "17px" : "28px", 
-            marginTop: 23, 
-            color: "#fff" 
+          <p style={{
+            fontFamily: "'Inter',sans-serif",
+            fontSize: isMobile ? "11px" : "28px",
+            marginTop: isMobile ? 12 : 23,
+            color: "#fff",
+            lineHeight: 1.7
           }}>
-            for every delivery agent referred.<br />Vishal spotted an opportunity.
+            for every delivery agent referred. Vishal spotted an opportunity.
           </p>
         </div>
 
         {/* Right */}
-        <div ref={rightRef} style={{ 
-          opacity: rightVisible ? 1 : 0, 
-          transform: rightVisible ? "translateY(0)" : "translateY(30px)", 
-          transition: "opacity 0.7s 0.15s, transform 0.7s 0.15s" 
+        <div ref={rightRef} style={{
+          opacity: rightVisible ? 1 : 0,
+          transform: rightVisible ? "translateY(0)" : "translateY(30px)",
+          transition: "opacity 0.7s 0.15s, transform 0.7s 0.15s"
         }}>
-          <p style={{ 
-            fontFamily: "'Inter',sans-serif", 
-            fontSize: isMobile ? "17px" : "28px", 
-            color: "#fff", 
-            fontWeight: 300, 
-            lineHeight: 1.75, 
-            marginBottom: 20 
+          <p style={{
+            fontFamily: "'Inter',sans-serif",
+            fontSize: isMobile ? "11px" : "28px",
+            color: "#fff",
+            fontWeight: 300,
+            lineHeight: isMobile ? 1.7 : "40px",
+            marginBottom: isMobile ? 16 : 20
           }}>
             He and his friends found a loophole to bypass the verification process and fabricated
             <span style={{ color: "#CE1010", fontWeight: 700 }}> 107 fake IDs</span> to pocket the referral bonuses.
           </p>
-          <p style={{ 
-            fontFamily: "'Inter',sans-serif", 
-            fontSize: isMobile ? "17px" : "28px", 
-            color: "#fff", 
-            fontWeight: 300, 
-            lineHeight: 1.75 
+          <p style={{
+            fontFamily: "'Inter',sans-serif",
+            fontSize: isMobile ? "11px" : "28px",
+            color: "#fff",
+            fontWeight: 300,
+            lineHeight: isMobile ? 1.7 : "40px"
           }}>
-            The entire scheme collapsed during onboarding, when every ID linked to his referrals was 
+            The entire scheme collapsed during onboarding, when every ID linked to his referrals was
             <span style={{ color: "#CE1010", fontWeight: 700 }}> flagged for fraud.</span>
           </p>
         </div>
       </div>
 
       {/* Timeline Section */}
-      <div ref={tlRef} style={{ 
-        maxWidth: 1100, 
-        margin: "0 auto 100px", 
-        opacity: tlVisible ? 1 : 0, 
-        transform: tlVisible ? "translateY(0)" : "translateY(30px)", 
-        transition: "opacity 0.7s, transform 0.7s" 
+      <div ref={tlRef} style={{
+        maxWidth: 1100,
+        margin: "0 auto 100px",
+        opacity: tlVisible ? 1 : 0,
+        transform: tlVisible ? "translateY(0)" : "translateY(30px)",
+        transition: "opacity 0.7s, transform 0.7s"
       }}>
-        <h2 style={{ 
-          fontFamily: "'Inter',sans-serif", 
-          fontSize: isMobile ? "58px" : "105px", 
-          fontWeight: 700, 
-          color: "white", 
-          textAlign: "center", 
+        <h2 style={{
+          fontFamily: "'Inter',sans-serif",
+          fontSize: isMobile ? "40px" : "105px",
+          fontWeight: 700,
+          color: "white",
+          textAlign: "center",
           marginBottom: isMobile ? 40 : 60,
           lineHeight: 1.05
         }}>
           Timeline of events
         </h2>
 
-        <div className="timeline-grid" style={{
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
-          gap: isMobile ? 60 : 0,
-          paddingLeft: isMobile ? "56px" : 0,
-        }}>
-          <div className="horizontal-line" style={{
-            top: isMobile ? "0" : "50%",
-            left: isMobile ? "27px" : "0",
-            right: isMobile ? "auto" : "0",
-            width: isMobile ? "2px" : "auto",
-            height: isMobile ? "calc(100% - 60px)" : "2px",
-            transform: isMobile ? "none" : "translateY(-50%)",
-          }}/>
-
-          {TIMELINE_EVENTS.map((ev, i) => (
-            <div key={i} className="timeline-item" style={{
-              flexDirection: isMobile ? "row" : "column",
-              alignItems: isMobile ? "flex-start" : "center",
-              minHeight: isMobile ? "auto" : "280px",
-              textAlign: isMobile ? "left" : "center",
-              gap: isMobile ? "12px" : "0",
-            }}>
-              
-              <div className="timeline-content" style={{ 
-                justifyContent: ev.pos === "above" ? "flex-end" : "center",
-                textAlign: isMobile ? "left" : "center",
-                height: isMobile ? "auto" : "120px",
-                padding: isMobile ? "0 0 0 36px" : "0 10px"
-              }}>
-                {ev.pos === "above" ? (
-                  <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 16, margin: "0 0 8px" }}>{ev.label}</p>
-                ) : (
-                  <p style={{ color: "rgba(255,255,255,0.9)", fontSize: 15, lineHeight: 1.6 }}>{ev.desc}</p>
-                )}
+        {/* WEB timeline */}
+        {!isMobile && (
+          <div className="timeline-grid">
+            <div className="horizontal-line" />
+            {TIMELINE_EVENTS.map((ev, i) => (
+              <div key={i} className="timeline-item">
+                <div className="timeline-content" style={{ justifyContent: "flex-end" }}>
+                  {ev.pos === "above" ? (
+                    <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 16, margin: "0 0 8px" }}>{ev.label}</p>
+                  ) : (
+                    <p style={{ color: "rgba(255,255,255,0.9)", fontSize: 15, lineHeight: 1.6, margin: 0 }}>{ev.desc}</p>
+                  )}
+                </div>
+                <div className="dot-container">
+                  <div className="red-dot" />
+                </div>
+                <div className="timeline-content" style={{ justifyContent: "flex-start" }}>
+                  {ev.pos === "above" ? (
+                    <p style={{ color: "rgba(255,255,255,0.9)", fontSize: 15, lineHeight: 1.65, whiteSpace: "pre-line", margin: 0 }}>
+                      {ev.subDesc}
+                    </p>
+                  ) : (
+                    <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 16, margin: 0 }}>{ev.label}</p>
+                  )}
+                </div>
               </div>
+            ))}
+          </div>
+        )}
 
-              <div className="dot-container" style={{ width: isMobile ? "55px" : "auto", marginTop: isMobile ? "4px" : "0" }}>
-                <div className="red-dot"></div>
-              </div>
-
-              <div className="timeline-content" style={{ 
-                justifyContent: ev.pos === "above" ? "center" : "flex-start",
-                textAlign: isMobile ? "left" : "center",
-                height: isMobile ? "auto" : "120px",
-                padding: isMobile ? "0 0 0 36px" : "0 10px"
-              }}>
-                {ev.pos === "above" ? (
-                  <p style={{ 
-                    color: "rgba(255,255,255,0.9)", 
-                    fontSize: 15, 
-                    lineHeight: 1.65, 
-                    whiteSpace: "pre-line"
-                  }}>
-                    {ev.subDesc}
-                  </p>
-                ) : (
-                  <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 16 }}>{ev.label}</p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* MOBILE timeline */}
+        {isMobile && (
+          <div className="timeline-mobile">
+            <div className="timeline-mobile-line" />
+            {TIMELINE_EVENTS.map((ev, i) => {
+              const labelLeft = i % 2 === 0;
+              return (
+                <div key={i} className="timeline-mobile-row">
+                  <div className="tm-left">
+                    {labelLeft ? (
+                      <>
+                        <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 13, margin: "0 0 4px", lineHeight: 1.3 }}>{ev.label}</p>
+                        <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 12, lineHeight: 1.6, margin: 0, whiteSpace: "pre-line" }}>
+                          {ev.subDesc || ev.desc}
+                        </p>
+                      </>
+                    ) : (
+                      <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 12, lineHeight: 1.6, margin: 0, whiteSpace: "pre-line" }}>
+                        {ev.subDesc || ev.desc}
+                      </p>
+                    )}
+                  </div>
+                  <div className="tm-dot-col">
+                    <div className="red-dot" />
+                  </div>
+                  <div className="tm-right">
+                    {!labelLeft ? (
+                      <>
+                        <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 13, margin: "0 0 4px", lineHeight: 1.3 }}>{ev.label}</p>
+                        <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 12, lineHeight: 1.6, margin: 0, whiteSpace: "pre-line" }}>
+                          {ev.subDesc || ev.desc}
+                        </p>
+                      </>
+                    ) : (
+                      <div />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Savings impact */}
-      <div ref={savingsRef} style={{ 
-        maxWidth: 1000, 
-        margin: "0 auto", 
-        textAlign: "center", 
-        opacity: savingsVisible ? 1 : 0, 
-        transform: savingsVisible ? "translateY(0)" : "translateY(30px)", 
-        transition: "opacity 0.7s, transform 0.7s" 
+      <div ref={savingsRef} style={{
+        maxWidth: 1000,
+        margin: "0 auto",
+        textAlign: "center",
+        opacity: savingsVisible ? 1 : 0,
+        transform: savingsVisible ? "translateY(0)" : "translateY(30px)",
+        transition: "opacity 0.7s, transform 0.7s"
       }}>
-        <p style={{ 
-          fontFamily: "'Inter',sans-serif", 
-          fontSize: isMobile ? "28px" : "clamp(22px,2.5vw,36px)", 
-          color: "rgba(255,255,255,0.8)", 
-          marginBottom: 16 
+        <p style={{
+          fontFamily: "'Inter',sans-serif",
+          fontSize: isMobile ? "11px" : "50px",
+          color: "rgba(255,255,255,0.8)",
+          marginBottom: 16,
+          lineHeight: 1.6
         }}>
           This single catch saved <span style={{ color: "#CE1010", fontWeight: 700 }}>Zap Logistics</span> nearly
         </p>
-        <h2 style={{ 
-          fontFamily: "'Inter',sans-serif", 
-          fontSize: isMobile ? "62px" : "105px", 
-          fontWeight: 700, 
-          color: "white", 
-          lineHeight: 1.05, 
-          margin: "0 0 24px" 
+        <h2 style={{
+          fontFamily: "'Inter',sans-serif",
+          fontSize: isMobile ? "38px" : "105px",
+          fontWeight: 700,
+          color: "white",
+          lineHeight: 1.05,
+          margin: "0 0 24px"
         }}>
           <span style={{ color: "#CE1010" }}>₹</span>16 lakh in potential<br />theft and fraud
         </h2>
-        <p style={{ 
-          fontFamily: "'Inter',sans-serif", 
-          fontSize: isMobile ? "17px" : "20px", 
-          color: "rgba(255,255,255,0.6)", 
-          lineHeight: 1.75, 
-          maxWidth: 700, 
-          margin: "0 auto" 
+        <p style={{
+          fontFamily: "'Inter',sans-serif",
+          fontSize: isMobile ? "14px" : "20px",
+          color: "rgba(255,255,255,0.6)",
+          lineHeight: 1.75,
+          maxWidth: 700,
+          margin: "0 auto"
         }}>
           More importantly, it stopped countless bad actors from entering customer homes under the mask of a 'verified' agent.
         </p>

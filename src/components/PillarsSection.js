@@ -1,6 +1,6 @@
 import { useInView } from "./helpers";
 
-const IMAGES = ["speed-Photoroom.png", "speed-Photoroom.png", "speed-Photoroom.png"];
+const IMAGES = ["speed.png", "scale.png", "trust.png"];
 const SWAYS = ["hang-0", "hang-0", "hang-2"];
 
 function PillarCard({ title, index, visible }) {
@@ -44,13 +44,13 @@ function PillarCard({ title, index, visible }) {
 
         <div style={{ width: "85%", height: 1, background: "rgba(0,0,0,0.08)", marginBottom: 12 }} />
 
-        <div style={{ width: "80%", height: 180, overflow: "hidden", marginBottom: 16 }}>
-          <img
-            src={`/assets/${IMAGES[index]}`}
-            alt={title}
-            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
-          />
-        </div>
+       <div style={{ width: "95%", height: 240, overflow: "hidden", marginBottom: 16 }}>
+  <img
+    src={`/assets/${IMAGES[index]}`}
+    alt={title}
+    style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+  />
+</div>
       </div>
     </div>
   );

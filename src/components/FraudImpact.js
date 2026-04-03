@@ -96,6 +96,7 @@ useEffect(() => {
                 fontFamily: "'Inter','Helvetica Neue',sans-serif",
           fontWeight: 700, color: "white",
           lineHeight: 1.05, margin: "0 0 4px",
+          fontSize: isMobile ? "30px" : "120px",
         }}>
           Every fraudulent
         </h2>
@@ -103,6 +104,7 @@ useEffect(() => {
                 fontFamily: "'Inter','Helvetica Neue',sans-serif",
           fontWeight: 400, color: "rgba(255,255,255,1)",
           lineHeight: 1.1, margin: 0,
+          fontSize: isMobile ? "15px" : "60px",
         }}>
           employee we caught helped avoid
         </h2>
@@ -159,7 +161,7 @@ useEffect(() => {
       }}>
         <p style={{
           fontFamily: "'Inter',sans-serif",
-          fontSize: "20px",
+          fontSize: isMobile ? "11px" : "30px",
           color: "white", fontWeight: 500,
           marginBottom: 12,
           position:'relative',
@@ -169,7 +171,7 @@ useEffect(() => {
         </p>
         <p style={{
           fontFamily: "'Inter',sans-serif",
-          fontSize: "clamp(14px,1.1vw,17px)",
+          fontSize: isMobile ? "11px" : "17px",
           color: "rgba(255,255,255,0.60)",
           lineHeight: 1.65, margin: 0,
             position:'relative',

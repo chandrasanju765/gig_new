@@ -46,8 +46,7 @@ export default function Footer() {
   return (
     <footer style={{
       background: "#0a0a0f",
-      padding: "60px 80px 40px",
-      // ← no borderTop here, removes the line
+      padding: "60px 20px 40px",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -72,7 +71,7 @@ export default function Footer() {
         {/* Row 1: Contact Info | About Us | Platforms */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1.2fr 1fr 1fr",
+          gridTemplateColumns: "repeat(3, 1fr)",
           gap: "48px 32px",
           marginBottom: "48px",
         }}>
@@ -111,7 +110,7 @@ export default function Footer() {
         {/* Row 2: Resources | Industries left | Industries right */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1.2fr 1fr 1fr",
+          gridTemplateColumns: "repeat(3, 1fr)",
           gap: "48px 32px",
           marginBottom: "48px",
         }}>
@@ -158,7 +157,7 @@ export default function Footer() {
         {/* Row 3: Corporate | empty | empty */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1.2fr 1fr 1fr",
+          gridTemplateColumns: "repeat(3, 1fr)",
           gap: "48px 32px",
         }}>
           <div>
@@ -198,6 +197,50 @@ export default function Footer() {
         </p>
       </div>
 
+      {/* Mobile responsive styles */}
+      <style jsx>{`
+        @media (max-width: 768px) {
+          footer > div:first-of-type {
+            padding: 0 16px !important;
+          }
+          
+          footer > div:first-of-type > div {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+          
+          footer > div:first-of-type > div > div:last-child {
+            margin-bottom: 0 !important;
+          }
+          
+          footer > div:first-of-type > div:nth-child(2) > div:last-child p {
+            visibility: visible !important;
+            margin-top: 32px !important;
+          }
+          
+          footer > div:first-of-type > div:nth-child(2) {
+            margin-bottom: 32px !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          footer {
+            padding: 40px 16px 32px !important;
+          }
+          
+          footer img {
+            height: 48px !important;
+          }
+          
+          p, a {
+            font-size: 13px !important;
+          }
+          
+          p[style*="font-weight: 700"] {
+            font-size: 14px !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 }

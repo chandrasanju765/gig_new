@@ -50,7 +50,7 @@ useEffect(() => {
         background: `black`,
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        padding: "48px 64px",
+         padding: isMobile ? "48px 20px" : "48px 64px",
         gap: 40,
       }}>
        <div style={{
@@ -72,14 +72,14 @@ useEffect(() => {
 
         {/* ── Section 1: Questions ── */}
         <div style={{ width: "100%", maxWidth: 1300 }}>
-          <h2 className="sm:text-[105px] text-[50px]" style={{
+          <h2 className="sm:text-[120px] text-[30px]" style={{
             fontFamily: "'Inter','Helvetica Neue',sans-serif",
             fontWeight: 700, color: "white",
             margin: "0 0 32px", textAlign: "center", lineHeight: 1.08,
             opacity: title1P, transform: `translateY(${lerp(200, 0, title1P)}px)`,
           }}>
             This section{" "} 
-            <span style={{ fontWeight: 700 }}>answers questions like</span>
+            <p style={{ fontWeight: 700 }}>answers questions like</p>
           </h2>
 
          <div style={{
