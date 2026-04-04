@@ -61,6 +61,15 @@ function AnimatedDots({ trigger }) {
 export default function StatsSection() {
   const [ref, visible] = useInView(0.25);
   const [bigRef, bigVisible] = useInView(0.2);
+  const [isMobile, setIsMobile] = useState(false);
+
+useEffect(() => {
+  const handleResize = () => setIsMobile(window.innerWidth < 1024);
+  handleResize();
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+  
 
   return (
     <>
@@ -70,22 +79,22 @@ export default function StatsSection() {
         style={{ borderRadius: "23px 23px 0px 0px" }}
       >
         <h2
-          className="sm:mt-0 mt-5 text-[30px] sm:text-[54px] text-[#343434] leading-tight font-[300] max-w-[760px] mb-7 tracking-[-0.02em]"
-          style={{ fontFamily: "'Inter',sans-serif" }}
+          className="sm:mt-0 mt-5 text-[19px] sm:text-[60px] text-[#343434] leading-tight font-[300] max-w-[760px] mb-7 tracking-[-0.02em]"
+          style={{ fontFamily: "'Inter',sans-serif" , padding: isMobile ? "0 60px" : "0" }}
         >
           The gig economy has changed{" "}
-          <strong className="text-[30px] sm:text-[54px] text-[#343434] font-bold leading-3">
+          <strong className="text-[19px] sm:text-[60px] text-[#343434] font-bold leading-3">
             our consumption patterns
           </strong>
         </h2>
 
-        <p className="font-sans text-[#5D5D5D] text-[16px] sm:text-[20px] leading-relaxed max-w-[960px] mb-3 font-light px-2 sm:px-0">
+        <p className="font-sans text-[#5D5D5D] text-[16px] sm:text-[30px] leading-relaxed max-w-[960px] mb-3 font-light px-2 sm:px-0">
           becoming an integral part of everyday life. From late-night food deliveries{" "}
           <br className="sm:flex hidden" />
           and instant electronics, it has fundamentally reshaped urban living.
         </p>
 
-        <p className="font-sans text-[#5D5D5D] text-[16px] sm:text-[20px] leading-relaxed max-w-[960px] font-light mb-4 px-2 sm:px-0">
+        <p className="font-sans text-[#5D5D5D] text-[16px] sm:text-[30px] leading-relaxed max-w-[960px] font-light mb-4 px-2 sm:px-0">
           At the heart of this transformation are millions of gig workers powering{" "}
           <br className="sm:flex hidden" />
           the instant convenience ecosystem, a workforce that stood at
@@ -94,7 +103,7 @@ export default function StatsSection() {
             <CountUp target={7.7} suffix="M in 2020" trigger={visible} />
           </strong>{" "}
           and is expected to{" "}
-          <strong className="text-[#1A3BB0] text-[16px] sm:text-[18px] font-sans font-bold">
+          <strong className="text-[#1A3BB0] text-[16px] sm:text-[28px] font-sans font-bold">
             exceed <CountUp target={23.5} suffix="M by 2030." trigger={visible} duration={2400} />
           </strong>
         </p>

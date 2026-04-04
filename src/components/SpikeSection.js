@@ -72,7 +72,7 @@ function SpikeCard({ item, delay, visible, isMobile }) {
         />
       </div>
       <span style={{
-        fontFamily: "'Inter', sans-serif",
+        fontFamily: "Inter",
         fontSize: isMobile ? "clamp(12px, 3.5vw, 14px)" : "clamp(15px, 1.15vw, 19px)",
         fontWeight: 500, color: "white", lineHeight: 1.4,
       }}>
@@ -129,24 +129,24 @@ export default function SpikesSection() {
           marginTop: 20,
         }}>
           <div style={{
-            width: 24, height: 24, borderRadius: "50%",
+            width: 30, height: 30, borderRadius: "50%",
             background: "#e53e3e",
             border: "3px solid #0d0d0d",
             boxShadow: "0 0 0 3px #e53e3e",
             flexShrink: 0,
           }} />
           <div style={{
-            width: 2, height: 50,
+            width: 2, height: 130,
             background: "linear-gradient(180deg, #e53e3e 0%, #e53e3e66 100%)",
           }} />
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#e53e3e" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#e53e3e" }} />
         </div>
 
         <h2 style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: isMobile ? "15px" : "28px",
+          fontFamily: "Inter",
+          fontSize: isMobile ? "15px" : "30px",
           fontWeight: 700, color: "white",
-          marginBottom: 48, lineHeight: 1.3,
+          marginBottom: 48, lineHeight: isMobile ? 1.3 : "150%",
         }}>
           These spikes typically occur due to
         </h2>
@@ -168,10 +168,10 @@ export default function SpikesSection() {
 
         <p style={{
           fontFamily: "Inter",
-          fontSize: isMobile ? "11px" : "25px",
+          fontSize: isMobile ? "11px" : "30px",
           fontWeight: 300,
           color: "rgba(255,255,255,1)",
-          lineHeight: 1.6, maxWidth: 820,
+          lineHeight: "38px", maxWidth: 1100,
           opacity: spikesVisible ? 1 : 0,
           transform: spikesVisible ? "translateY(0)" : "translateY(16px)",
           transition: "opacity 0.55s 0.38s, transform 0.55s 0.38s",
@@ -205,22 +205,22 @@ export default function SpikesSection() {
           overflow: "hidden",
           boxSizing: "border-box",
         }}>
-          {/* Content row */}
+          {/* Content row — wider maxWidth to fit 120px heading */}
           <div style={{
             width: "100%",
-            maxWidth: 1200,
-            padding: "0 3vw",
+            maxWidth: 1300,
+            padding: "0 48px",
             boxSizing: "border-box",
             display: "flex",
             flexDirection: isMobile ? "column" : "row",
             alignItems: isMobile ? "center" : "stretch",
+            gap: isMobile ? 0 : "4vw",
           }}>
 
-            {/* Left Panel */}
+            {/* Left Panel — wider to accommodate 120px heading */}
             <div style={{
-              width: isMobile ? "100%" : "38%",
+              width: isMobile ? "100%" : "48%",
               flexShrink: 0,
-              paddingRight: isMobile ? 0 : "5vw",
               display: "flex",
               flexDirection: "column",
               justifyContent: isMobile ? "flex-start" : "space-between",
@@ -229,74 +229,76 @@ export default function SpikesSection() {
               textAlign: isMobile ? "center" : "left",
             }}>
               <div>
-               <h2 style={{
-  fontFamily: "'Inter', sans-serif",
-  fontWeight: 700,
-  color: "white",
-  fontSize: isMobile ? "clamp(28px, 7vw, 36px)" : "clamp(36px, 4vw, 64px)",
-  lineHeight: 1.05,
-  margin: "0 0 16px",
-  letterSpacing: "-1.5px",
-  // maxWidth: isMobile ? "280px" : "220px",
-  fontSize: isMobile ? "30px" : "70px",
-}}>
-  The Story Behind the Data
-</h2>
+                <h2 style={{
+                  fontFamily: "Inter",
+                  fontWeight: 700,
+                  color: "white",
+                  fontSize: isMobile ? "30px" : "120px",
+                  lineHeight: 1.0,
+                  margin: "0 0 24px",
+                  letterSpacing: "-2px",
+                }}>
+                  The Story<br />Behind<br />the Data
+                </h2>
 
                 <p style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: isMobile ? "13px" : "clamp(13px, 1vw, 15px)",
-                  color: "rgba(255,255,255,0.65)",
-                  lineHeight: 1.75,
+                  fontFamily: "Inter",
+                  fontSize: isMobile ? "13px" : "30px",
+                  color: "white",
+                  lineHeight: isMobile ? 1.5 : "115%",
                   margin: isMobile ? "0 0 20px" : "0 0 32px",
+                  maxWidth: isMobile ? "100%" : 540,
+                  fontWeight: 300,
                 }}>
                   After analyzing all the numbers, we identified a few observations
                   across the segments of truck drivers, delivery partners, and dark
                   store employees.
                 </p>
               </div>
-
-              {/* Dot indicators */}
-              <div style={{
-                display: "flex", gap: 8, alignItems: "center",
-                justifyContent: isMobile ? "center" : "flex-start",
-              }}>
-                {INSIGHTS.map((_, i) => (
-                  <div key={i} style={{
-                    width: activeIdx === i ? 28 : 8,
-                    height: 8,
-                    borderRadius: 4,
-                    background: activeIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
-                    transition: "all 0.4s ease",
-                  }} />
-                ))}
-              </div>
             </div>
 
-            {/* Right Panel */}
+            {/* Right Panel — scroll progress line on RIGHT edge */}
             <div style={{
               flex: 1,
-              paddingLeft: isMobile ? 0 : "4vw",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               overflow: "hidden",
               minHeight: 180,
               width: isMobile ? "100%" : "auto",
+              position: "relative",
+              paddingRight: isMobile ? 0 : 40,
             }}>
+              {/* Scroll progress vertical line — track (dim) + fill (white) */}
+              {!isMobile && (
+                <div style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  width: 2,
+                  height: "100%",
+                  background: "rgba(255,255,255,0.12)",
+                  borderRadius: 2,
+                  overflow: "hidden",
+                }}>
+                  <div style={{
+                    width: "100%",
+                    height: `${progress * 100}%`,
+                    background: "white",
+                    borderRadius: 2,
+                    transition: "height 0.1s linear",
+                  }} />
+                </div>
+              )}
+
               <div key={activeIdx} style={{ animation: "fadeSlideIn 0.45s ease forwards" }}>
 
                 {/* Active insight */}
-                <div style={{
-                  borderLeft: "3px solid #e53e3e",
-                  paddingLeft: 20,
-                  marginBottom: 28,
-                }}>
+                <div style={{ marginBottom: 32 }}>
                   <h3 style={{
                     fontFamily: "Inter",
                     fontSize: isMobile ? "14px" : "30px",
                     fontWeight: 700,
-                    fontStyle: "Bold",
                     color: "white",
                     margin: "0 0 12px",
                     lineHeight: 1.4,
@@ -306,19 +308,19 @@ export default function SpikesSection() {
                   <p style={{
                     fontFamily: "Inter",
                     fontSize: isMobile ? "12px" : "30px",
-                    color: "rgba(255,255,255,0.55)",
-                    // lineHeight: 1.75,
+                    color: "white",
                     margin: 0,
                     fontWeight: 300,
+                    lineHeight: isMobile ? 1.5 : "115%",
                   }}>
                     {INSIGHTS[activeIdx].body}
                   </p>
                 </div>
 
                 {/* Next insight preview */}
-                <div style={{ paddingLeft: 23 }}>
+                <div>
                   <h3 style={{
-                    fontFamily: "'Inter', sans-serif",
+                    fontFamily: "Inter",
                     fontSize: isMobile ? "13px" : "30px",
                     fontWeight: 700,
                     color: "white",

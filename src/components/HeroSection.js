@@ -120,7 +120,7 @@ export default function HeroSection() {
 
           <p
             style={{
-              fontSize: "clamp(18px, 4vw, 45px)",
+              fontSize: "60px",
               fontWeight: 700,
               color: "white",
               margin: "24px 0 0 0",
@@ -128,22 +128,6 @@ export default function HeroSection() {
             }}
           >
             A closer look at the risks in India's gig workforce.
-          </p>
-
-          <p
-            style={{
-              color: "rgba(255,255,255,0.75)",
-              fontSize: "clamp(13px, 1.1vw, 18px)",
-              marginTop: 20,
-              lineHeight: 1.7,
-              maxWidth: 540,
-              marginLeft: "auto",
-              marginRight: "auto",
-              opacity: subP,
-              transform: `translateY(${lerp(20, 0, subP)}px)`,
-            }}
-          >
-            Uncover the risks facing India's gig workforce
           </p>
         </div>
       </div>

@@ -30,7 +30,7 @@ export default function App() {
       <WhyReportSection />
       <PeopleSection />
       <FraudSection/>
-      <Question />
+      {/* <Question /> */}
       <GeographicSection/>
       <Risk />
       <SpikesSection />

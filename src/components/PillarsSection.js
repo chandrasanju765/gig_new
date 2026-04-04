@@ -1,11 +1,22 @@
+import { useEffect, useState } from "react";
 import { useInView } from "./helpers";
 
 const IMAGES = ["speed.png", "scale.png", "trust.png"];
 const SWAYS = ["hang-0", "hang-0", "hang-2"];
 
 function PillarCard({ title, index, visible }) {
+
+   const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 768);
+      check();
+      window.addEventListener("resize", check);
+      return () => window.removeEventListener("resize", check);
+    }, []);
+  
   return (
-    <div style={{
+    <div className="pillar-card" style={{
       flex: "1 1 280px", maxWidth: 360,
       transformOrigin: "50% 0%",
       opacity: visible ? 1 : 0,
@@ -26,13 +37,14 @@ function PillarCard({ title, index, visible }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        height: isMobile ? "186px" : "auto",
       }}>
         <div style={{ paddingTop: 20, paddingBottom: 12, textAlign: "center" }}>
           <div style={{
             width: 10, height: 10, borderRadius: "50%",
             background: "#CE1010", margin: "0 auto 12px",
           }} />
-          <span style={{
+          <span className="pillar-card-title" style={{
             fontFamily: "'Inter','system-ui',sans-serif",
             fontWeight: 800, fontSize: 28,
             letterSpacing: 1,
@@ -44,13 +56,13 @@ function PillarCard({ title, index, visible }) {
 
         <div style={{ width: "85%", height: 1, background: "rgba(0,0,0,0.08)", marginBottom: 12 }} />
 
-       <div style={{ width: "95%", height: 240, overflow: "hidden", marginBottom: 16 }}>
-  <img
-    src={`/assets/${IMAGES[index]}`}
-    alt={title}
-    style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
-  />
-</div>
+        <div className="pillar-card-img" style={{ width: "95%", height: 240, overflow: "hidden", marginBottom: 16 }}>
+          <img
+            src={`/assets/${IMAGES[index]}`}
+            alt={title}
+            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+          />
+        </div>
       </div>
     </div>
   );
@@ -59,9 +71,17 @@ function PillarCard({ title, index, visible }) {
 export default function PillarsSection() {
   const [ref, visible] = useInView(0.2);
   const [headRef, headVisible] = useInView(0.3);
+     const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 768);
+      check();
+      window.addEventListener("resize", check);
+      return () => window.removeEventListener("resize", check);
+    }, []);
 
   return (
-    <section style={{
+    <section className="pillars-section" style={{
       background: "white", padding: "0px 60px 120px",
       display: "flex", flexDirection: "column", alignItems: "center",
       overflow: "visible",
@@ -70,22 +90,54 @@ export default function PillarsSection() {
         @keyframes hang-0{0%,100%{transform:rotate(4deg)}50%{transform:rotate(-1.5deg)}}
         @keyframes hang-1{0%,100%{transform:rotate(2deg)}50%{transform:rotate(4.5deg)}}
         @keyframes hang-2{0%,100%{transform:rotate(3deg)}50%{transform:rotate(-0.5deg)}}
+        @media (max-width: 640px) {
+          .pillars-section {
+            padding: 0px 0px 80px !important;
+          }
+          .pillars-row {
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 8px !important;
+            padding: 10px 16px 32px !important;
+            overflow-x: auto !important;
+            justify-content: flex-start !important;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+          }
+          .pillars-row::-webkit-scrollbar { display: none; }
+          .pillar-card {
+  flex: 0 0 128px !important;  
+  max-width: 128px !important; 
+}
+          .pillar-card-title {
+            font-size: 14px !important;
+          }
+          .pillar-card-img {
+            height: 100px !important;
+          }
+          .pillars-paragraph {
+            font-size: 16px !important;
+            padding: 0 16px !important;
+            text-align: center !important;
+          }
+        }
       `}</style>
 
       <h2 className="mt-0 sm:mt-6 sm:text-[55px] text-[30px]" ref={headRef} style={{
         fontFamily: "'Inter','system-ui',sans-serif",
         fontWeight: 700,
-        color: "#343434", textAlign: "center", marginBottom: 56,
+        color: "#343434", textAlign: "center", marginBottom: isMobile ? 0 : 56,
         letterSpacing: 0,
         opacity: headVisible ? 1 : 0,
         transform: headVisible ? "translateY(0)" : "translateY(24px)",
         transition: "opacity 0.6s, transform 0.6s",
+        fontSize: isMobile ? "22px" : "60px",
+        marginTop: isMobile ? 20 : 0,
       }}>
         The three pillars of the gig economy
       </h2>
 
-      {/* Cards row — extra padding so shadow + tilted corners aren't clipped */}
-      <div ref={ref} style={{
+      <div ref={ref} className="pillars-row" style={{
         display: "flex", gap: 40,
         alignItems: "flex-start", justifyContent: "center", flexWrap: "wrap",
         width: "100%", maxWidth: 1200,
@@ -97,14 +149,13 @@ export default function PillarsSection() {
         ))}
       </div>
 
-      <p style={{
-        marginTop: 48,
-                       fontFamily: "'Inter',sans-serif",
-
-        fontSize: "clamp(15px,1.2vw,20px)", color: "#333",
+      <p className="pillars-paragraph" style={{
+        marginTop:isMobile ? 0 : 48,
+        fontFamily: "'Inter',sans-serif",
+        fontSize: isMobile ? "10px" : "30px", color: "#333",
         textAlign: "center",
         width: "100%", maxWidth: 1200,
-        lineHeight: 1.75,
+        lineHeight: "140%",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(20px)",
         transition: "opacity 0.6s 0.5s, transform 0.6s 0.5s",

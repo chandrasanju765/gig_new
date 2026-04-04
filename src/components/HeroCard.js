@@ -1,17 +1,19 @@
 import { lerp, clamp, ease } from "./helpers";
 
-export const RX = 38;
-export const RY = 28;
+export const RX = 32;
+export const RY = 24;
 
 export default function HeroCard({ card, progress, vw }) {
-  const rx = vw >= 1024 ? RX : vw >= 600 ? 26 : 32;
-  const ry = vw >= 1024 ? RY : vw >= 600 ? 20 : 26;
+  // Tighter orbit — pulled back in
+  const rx = vw >= 1024 ? 32 : vw >= 600 ? 24 : 28;
+  const ry = vw >= 1024 ? 24 : vw >= 600 ? 18 : 21;
 
-  const cardWidth  = vw >= 1024 ? 185 : vw >= 600 ? 130 : 148;
-  const cardHeight = vw >= 1024 ? 230 : vw >= 600 ? 162 : 185;
+  // Smaller cards
+  const cardWidth  = vw >= 1024 ? 155 : vw >= 600 ? 115 : 130;
+  const cardHeight = vw >= 1024 ? 192 : vw >= 600 ? 142 : 160;
   const borderRad  = vw >= 1024 ? 16  : 10;
 
-  const explodeDist = vw >= 1024 ? 140 : vw >= 600 ? 100 : 105;
+  const explodeDist = vw >= 1024 ? 115 : vw >= 600 ? 82 : 92;
 
   const rad = (card.angle * Math.PI) / 180;
   const ox = Math.cos(rad) * rx;
@@ -51,9 +53,14 @@ export default function HeroCard({ card, progress, vw }) {
       >
         <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
           <img
-            src={`/assets/img${card.id}.png`}  
+            src={`/assets/img${card.id}.png`}
             alt=""
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
           />
         </div>
       </div>

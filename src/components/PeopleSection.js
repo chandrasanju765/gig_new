@@ -31,10 +31,8 @@ const ANIM_MS = 500;
 const EASE    = "cubic-bezier(0.4, 0, 0.2, 1)";
 
 function MileContent({ mile, isMobile }) {
-  const imageSize = 380;
-
   return isMobile ? (
-    /* ── Mobile layout: image full-width top, 2-col text grid below ── */
+    /* ── Mobile layout unchanged ── */
     <div style={{ width: "100%" }}>
       <div style={{
         width: "100%",
@@ -60,7 +58,7 @@ function MileContent({ mile, isMobile }) {
         {mile.items.map((item, i) => (
           <div key={i} style={{ textAlign: "center" }}>
             <h3 style={{
-              fontFamily: "'Inter',sans-serif",
+              fontFamily: "Inter",
               fontSize: "15px",
               fontWeight: 700,
               color: "#1C43B9",
@@ -73,7 +71,7 @@ function MileContent({ mile, isMobile }) {
               fontSize: "11px",
               color: "#5D5D5D",
               lineHeight: 1.65,
-              fontFamily: "'Inter',sans-serif",
+              fontFamily: "Inter",
               margin: 0,
             }}>{item.desc}</p>
           </div>
@@ -81,7 +79,7 @@ function MileContent({ mile, isMobile }) {
       </div>
     </div>
   ) : (
-    /* ── Desktop layout ─────────────────────────────────────────────── */
+    /* ── Desktop layout ── */
     <div style={{
       display: "flex",
       gap: 80,
@@ -90,11 +88,11 @@ function MileContent({ mile, isMobile }) {
       justifyContent: "center",
       flexDirection: "row",
     }}>
-      {/* Image — size unchanged */}
+      {/* Image — fixed width AND height with aspectRatio so all 3 are identical */}
       <div style={{
         flexShrink: 0,
-        width: imageSize,
-        height: imageSize,
+        width: 380,
+        height: 380,                      // ← explicit height matches width
         borderRadius: 10,
         overflow: "hidden",
         background: "#f0eeeb",
@@ -103,17 +101,23 @@ function MileContent({ mile, isMobile }) {
         <img
           src={mile.image}
           alt={mile.label}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",           // ← fills box consistently for all images
+            objectPosition: "center",     // ← centers crop for all images
+            display: "block",
+          }}
         />
       </div>
 
-      {/* Text — font sizes reduced so desc wraps to ~2 lines */}
-      <div style={{ flex: 1, paddingTop: 4, textAlign: "left" }}>
+      {/* Text */}
+      <div style={{ flex: 1, paddingTop: 4, textAlign: "left", maxWidth: 480, }}>
         {mile.items.map((item, i) => (
           <div key={i} style={{ marginBottom: 44 }}>
             <h3 style={{
-              fontFamily: "'Inter',sans-serif",
-              fontSize: "30px",        
+              fontFamily: "Inter",
+              fontSize: "30px",
               fontWeight: 700,
               color: "#1C43B9",
               marginBottom: 12,
@@ -122,10 +126,10 @@ function MileContent({ mile, isMobile }) {
               {item.num}.&nbsp;{item.title}
             </h3>
             <p style={{
-              fontSize: "30px",        
+              fontSize: "28px",
               color: "#5D5D5D",
-              lineHeight: 1.6,
-              fontFamily: "'Inter',sans-serif",
+              lineHeight: "36px",
+              fontFamily: "Inter",
               margin: 0,
             }}>{item.desc}</p>
           </div>
@@ -170,7 +174,6 @@ export default function PeopleSection() {
   return (
     <section style={{
       background: "#fff",
-      padding: isMobile ? "70px 0 90px" : "100px 0 130px",
       borderRadius: "0px 0px 23px 23px"
     }}>
       <style>{`
@@ -187,21 +190,23 @@ export default function PeopleSection() {
       {/* Heading */}
       <div style={{ textAlign: "center", padding: "0 7vw", marginBottom: 56 }}>
         <h2 className="sm:text-[100px] text-[50px]" style={{
-          fontFamily: "'Inter',sans-serif",
+          fontFamily: "Inter",
           fontWeight: 700,
           color: "#343434",
           lineHeight: 1.03,
           margin: "0 0 24px",
+          fontSize: isMobile ? "30px" : "120px",
         }}>
-          The people who<br className="sm:flex hidden" />powered this evolution
+          The people who <br className="sm:flex hidden" />powered this evolution
         </h2>
         <p style={{
-          fontSize: "20px",
+          fontSize: isMobile ? "11px" : "30px",
           color: "#5D5D5D",
-          lineHeight: 1.7,
-          maxWidth: 680,
+          lineHeight: isMobile ? "15px" : "40px",
+          maxWidth:  900,
           margin: "0 auto",
-          fontFamily: "'Inter',sans-serif",
+          fontFamily: "Inter",
+          fontWeight: 300,
         }}>
           The gig workforce spans the entire supply chain, from first-mile
           operations to last-mile delivery.
@@ -232,7 +237,7 @@ export default function PeopleSection() {
                 }}
               >
                 <span style={{
-                  fontFamily: "'Inter',sans-serif",
+                  fontFamily: "Inter",
                   fontSize: isMobile ? 14 : 16,
                   fontWeight: 700,
                   color: "#e53e3e",

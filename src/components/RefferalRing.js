@@ -48,7 +48,7 @@ export default function ReferralRingSection() {
       padding: isMobile ? "60px 6vw 80px" : "80px 6vw 100px",
       position: "relative",
       backgroundColor: "#000",
-      overflow: "hidden"
+      overflow: "hidden",
     }}>
       <style>{`
         .timeline-grid {
@@ -167,8 +167,8 @@ export default function ReferralRingSection() {
           transition: "opacity 0.7s, transform 0.7s"
         }}>
           <p style={{
-            fontFamily: "'Inter',sans-serif",
-            fontSize: isMobile ? "11px" : "28px",
+            fontFamily: "Inter",
+            fontSize: isMobile ? "11px" : "30px",
             color: "#fff",
             lineHeight: isMobile ? 1.7 : "40px",
             marginBottom: isMobile ? 20 : 32
@@ -177,7 +177,7 @@ export default function ReferralRingSection() {
           </p>
           <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 8, justifyContent: isMobile ? "center" : "flex-start" }}>
             <span style={{
-              fontFamily: "'Inter',sans-serif",
+              fontFamily: "Inter",
               fontSize: isMobile ? "56px" : "105px",
               fontWeight: 700,
               color: "white",
@@ -187,8 +187,8 @@ export default function ReferralRingSection() {
             </span>
           </div>
           <p style={{
-            fontFamily: "'Inter',sans-serif",
-            fontSize: isMobile ? "11px" : "28px",
+            fontFamily: "Inter",
+            fontSize: isMobile ? "11px" : "30px",
             marginTop: isMobile ? 12 : 23,
             color: "#fff",
             lineHeight: 1.7
@@ -204,8 +204,8 @@ export default function ReferralRingSection() {
           transition: "opacity 0.7s 0.15s, transform 0.7s 0.15s"
         }}>
           <p style={{
-            fontFamily: "'Inter',sans-serif",
-            fontSize: isMobile ? "11px" : "28px",
+            fontFamily: "Inter",
+            fontSize: isMobile ? "11px" : "30px",
             color: "#fff",
             fontWeight: 300,
             lineHeight: isMobile ? 1.7 : "40px",
@@ -215,8 +215,8 @@ export default function ReferralRingSection() {
             <span style={{ color: "#CE1010", fontWeight: 700 }}> 107 fake IDs</span> to pocket the referral bonuses.
           </p>
           <p style={{
-            fontFamily: "'Inter',sans-serif",
-            fontSize: isMobile ? "11px" : "28px",
+            fontFamily: "Inter",
+            fontSize: isMobile ? "11px" : "30px",
             color: "#fff",
             fontWeight: 300,
             lineHeight: isMobile ? 1.7 : "40px"
@@ -229,15 +229,15 @@ export default function ReferralRingSection() {
 
       {/* Timeline Section */}
       <div ref={tlRef} style={{
-        maxWidth: 1100,
+        maxWidth: 1250,
         margin: "0 auto 100px",
         opacity: tlVisible ? 1 : 0,
         transform: tlVisible ? "translateY(0)" : "translateY(30px)",
         transition: "opacity 0.7s, transform 0.7s"
       }}>
         <h2 style={{
-          fontFamily: "'Inter',sans-serif",
-          fontSize: isMobile ? "40px" : "105px",
+          fontFamily: "Inter",
+          fontSize: isMobile ? "40px" : "120px",
           fontWeight: 700,
           color: "white",
           textAlign: "center",
@@ -255,9 +255,9 @@ export default function ReferralRingSection() {
               <div key={i} className="timeline-item">
                 <div className="timeline-content" style={{ justifyContent: "flex-end" }}>
                   {ev.pos === "above" ? (
-                    <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 16, margin: "0 0 8px" }}>{ev.label}</p>
+                    <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 24, margin: "0 0 8px" }}>{ev.label}</p>
                   ) : (
-                    <p style={{ color: "rgba(255,255,255,0.9)", fontSize: 15, lineHeight: 1.6, margin: 0 }}>{ev.desc}</p>
+                    <p style={{ color: "rgba(255,255,255,0.9)", fontSize: 20, lineHeight: "26px", margin: 0, textAlign: "left" }}>{ev.desc}</p>
                   )}
                 </div>
                 <div className="dot-container">
@@ -265,11 +265,11 @@ export default function ReferralRingSection() {
                 </div>
                 <div className="timeline-content" style={{ justifyContent: "flex-start" }}>
                   {ev.pos === "above" ? (
-                    <p style={{ color: "rgba(255,255,255,0.9)", fontSize: 15, lineHeight: 1.65, whiteSpace: "pre-line", margin: 0 }}>
+                    <p style={{ color: "rgba(255,255,255,0.9)", fontSize: 18, lineHeight: "26px", whiteSpace: "pre-line", margin: 0, textAlign: "left" }}>
                       {ev.subDesc}
                     </p>
                   ) : (
-                    <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 16, margin: 0 }}>{ev.label}</p>
+                    <p style={{ color: "#CE1010", fontWeight: 700, fontSize: 24, margin: 0 }}>{ev.label}</p>
                   )}
                 </div>
               </div>
@@ -323,25 +323,26 @@ export default function ReferralRingSection() {
 
       {/* Savings impact */}
       <div ref={savingsRef} style={{
-        maxWidth: 1000,
+        maxWidth: 1200,
         margin: "0 auto",
         textAlign: "center",
         opacity: savingsVisible ? 1 : 0,
         transform: savingsVisible ? "translateY(0)" : "translateY(30px)",
-        transition: "opacity 0.7s, transform 0.7s"
+        transition: "opacity 0.7s, transform 0.7s",
       }}>
         <p style={{
-          fontFamily: "'Inter',sans-serif",
-          fontSize: isMobile ? "11px" : "50px",
+          fontFamily: "Inter",
+          fontSize: isMobile ? "11px" : "60px",
           color: "rgba(255,255,255,0.8)",
           marginBottom: 16,
-          lineHeight: 1.6
+          lineHeight: isMobile ? 1.5 : "70px"
+          
         }}>
           This single catch saved <span style={{ color: "#CE1010", fontWeight: 700 }}>Zap Logistics</span> nearly
         </p>
         <h2 style={{
-          fontFamily: "'Inter',sans-serif",
-          fontSize: isMobile ? "38px" : "105px",
+          fontFamily: "Inter",
+          fontSize: isMobile ? "38px" : "120px",
           fontWeight: 700,
           color: "white",
           lineHeight: 1.05,
@@ -350,14 +351,15 @@ export default function ReferralRingSection() {
           <span style={{ color: "#CE1010" }}>₹</span>16 lakh in potential<br />theft and fraud
         </h2>
         <p style={{
-          fontFamily: "'Inter',sans-serif",
-          fontSize: isMobile ? "14px" : "20px",
-          color: "rgba(255,255,255,0.6)",
-          lineHeight: 1.75,
-          maxWidth: 700,
-          margin: "0 auto"
+          fontFamily: "Inter",
+          fontSize: isMobile ? "14px" : "30px",
+          color: "white",
+          lineHeight: isMobile ? 1.6 : "36px",
+          maxWidth: 1100,
+          margin: "0 auto",
+          fontWeight: 300
         }}>
-          More importantly, it stopped countless bad actors from entering customer homes under the mask of a 'verified' agent.
+          More importantly, it stopped countless bad actors from entering customer homes under the mask of a 'verified' agent. The entire operation was shut down
         </p>
       </div>
     </section>

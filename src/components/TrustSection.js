@@ -1,154 +1,177 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { clamp, ease } from "./helpers";
 import '../index.css'
 
 export default function TrustSection() {
   const sectionRef = useRef(null);
-  const [p, setP] = useState(0);
+  const [p, setP] = useState(-1);
 
   useEffect(() => {
     const onScroll = () => {
       const el = sectionRef.current;
       if (!el) return;
-      const scrolled = -el.getBoundingClientRect().top;
+      const rect = el.getBoundingClientRect();
+      const scrolled = -rect.top;
       const total = el.offsetHeight - window.innerHeight;
-      setP(Math.max(0, Math.min(1, scrolled / (total * 0.88))));
+      if (total <= 0 || scrolled < 0 || scrolled > total) {
+        setP(-1);
+      } else {
+        setP(scrolled / total);
+      }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const lp = (start, end) => ease(clamp((p - start) / (end - start), 0, 1));
+  const lp = (start, end) =>
+    ease(clamp((p - start) / (end - start), 0, 1));
 
-  // Only the ghost annotations animate — scroll windows
-  const ghost1 = lp(0.15, 0.40); // left annotation slides in
-  const ghost2 = lp(0.45, 0.70); // right annotation slides in
+  // Both ghosts travel together — same scroll window
+  const ghost = lp(0.05, 0.95);
 
-  const serif = "'Playfair Display','Georgia',serif";
+  // Both travel from 120vh → -30vh together
+  const gY = 120 - ghost * 150;
+
+  const overlay = (
+    <div style={{
+      position: "fixed",
+      inset: 0,
+      pointerEvents: "none",
+      zIndex: 9999,
+      overflow: "hidden",
+    }}>
+
+{/* Ghost 1 — LEFT, higher up */}
+<div style={{
+  position: "absolute",
+  left: "18%",
+  top: "25%",                               // was 35%, move up
+  width: 590,
+  transform: `translateY(calc(${gY}vh - 25%))`,
+  background: "rgba(243,242,242,0.75)",
+  backdropFilter: "blur(14px)",
+  WebkitBackdropFilter: "blur(14px)",
+  borderRadius: 8,
+  padding: "16px 22px",
+  boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+}}>
+  <p style={{
+    fontSize: 26, color: "#343434", lineHeight: "30px",
+    fontFamily: "Inter", margin: 0, fontWeight: 300,
+  }}>
+    When speed and scale take priority, due diligence
+    slips and blind spots widen. That's exactly what is
+    happening in the gig economy today.
+  </p>
+</div>
+
+{/* Ghost 2 — RIGHT, lower down */}
+<div style={{
+  position: "absolute",
+  right: "18%",
+  top: "58%",                               // was 42%, move down
+  width: 590,
+  transform: `translateY(calc(${gY}vh - 58%))`,
+  background: "rgba(243,242,242,0.75)",
+  backdropFilter: "blur(14px)",
+  WebkitBackdropFilter: "blur(14px)",
+  borderRadius: 8,
+  padding: "16px 22px",
+  boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+}}>
+  <p style={{
+    fontSize: 26, color: "#343434", lineHeight: "30px",
+    fontFamily: "Inter", margin: 0, fontWeight: 300,
+  }}>
+    Identity swaps, impersonation, and hidden criminal
+    histories do more than disrupt operations. They put
+    safety, credibility, and customer trust at risk.
+  </p>
+</div>
+
+    </div>
+  );
 
   return (
-    <div id="dots-png" ref={sectionRef} className="h-[100vh] sm:h-[280vh]"  style={{  position: "relative"}}>
-      <div className="h-[72vh] sm:h-[100vh]"  style={{
-        position: "sticky", top: 0, height: "100vh",
-        display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center",
-        overflow: "hidden",
-        padding: "0 6vw",
-      }}>
+    <>
+      {createPortal(overlay, document.body)}
 
-        {/* ── Static big text — always fully visible ─────────────────── */}
+      <div
+        id="dots-png"
+        ref={sectionRef}
+        style={{ position: "relative", height: "280vh" }}
+      >
         <div style={{
-          position: "relative",
-          textAlign: "center",
-          zIndex: 1,
-          lineHeight: 1.08,
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          padding: "0 6vw",
         }}>
-          {/* Trust, */}
-          <div>
-            <span className="sm:text-[110px] text-[50px]" style={{
-                    fontFamily: "'Inter',sans-serif",
-              fontWeight: 600, color: "#1A3BB0",
-              display: "block", lineHeight: 1.0,
-            }}>Trust,</span>
-          </div>
 
-          {/* however is fragile. — same line */}
           <div style={{
-            display: "flex", alignItems: "baseline",
-            justifyContent: "center", gap: "0.2em", flexWrap: "wrap",
+            position: "relative",
+            textAlign: "center",
+            zIndex: 1,
+            lineHeight: 1.08,
           }}>
-            <span className="sm:text-[105px] text-[50px]" style={{
-                    fontFamily: "'Inter',sans-serif",
-              fontWeight: 300, color: "#5D5D5D", lineHeight: 1.0,
-            }}>however is  </span>
-            <span className="sm:text-[105px] text-[50px]"  style={{
-                    fontFamily: "'Inter',sans-serif",
-              fontWeight: 700, color: "#343434", lineHeight: 1.05,marginLeft:"14px",
-            }}>fragile.</span>
-          </div>
 
-          {/* One news headline. */}
-          <div>
-            <span className="sm:text-[105px] text-[50px]" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, color: "#CE1010" }}>One </span>
-            <span className="sm:text-[105px] text-[50px]" style={{ fontFamily: "'Inter',sans-serif",  fontWeight: 400, color: "#5d5d5d" }}>news headline.</span>
-          </div>
+            <div>
+              <span style={{
+                fontFamily: "Inter",
+                fontWeight: 600, color: "#1A3BB0",
+                display: "block", lineHeight: 1.0,
+                fontSize: "clamp(40px, 8vw, 110px)",
+              }}>Trust,</span>
+            </div>
 
-          {/* One breach */}
-          <div>
-            <span className="sm:text-[105px] text-[50px]" style={{ fontFamily: "'Inter',sans-serif",  fontWeight: 700, color: "#CE1010" }}>One </span>
-            <span className="sm:text-[105px] text-[50px]" style={{ fontFamily: "'Inter',sans-serif",  fontWeight: 400, color: "#5d5d5d" }}>breach</span>
-          </div>
+            <div style={{
+              display: "flex", alignItems: "baseline",
+              justifyContent: "center", gap: "0.2em", flexWrap: "wrap",
+            }}>
+              <span style={{
+                fontFamily: "Inter",
+                fontWeight: 300, color: "#5D5D5D", lineHeight: 1.0,
+                fontSize: "clamp(38px, 7.5vw, 105px)",
+              }}>however is </span>
+              <span style={{
+                fontFamily: "Inter",
+                fontWeight: 700, color: "#343434", lineHeight: 1.05,
+                marginLeft: "14px",
+                fontSize: "clamp(38px, 7.5vw, 105px)",
+              }}>fragile.</span>
+            </div>
 
-          {/* One bad experience. */}
-          <div>
-            <span className="sm:text-[105px] text-[50px]" style={{ fontFamily: "'Inter',sans-serif",  fontWeight: 700, color: "#CE1010" }}>One </span>
-            <span className="sm:text-[105px] text-[50px]" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 400, color: "#5d5d5d"}}>bad experience.</span>
-          </div>
+            <div>
+              <span style={{ fontFamily: "Inter", fontWeight: 700, color: "#CE1010", fontSize: "clamp(38px, 7.5vw, 105px)" }}>One </span>
+              <span style={{ fontFamily: "Inter", fontWeight: 400, color: "#5d5d5d", fontSize: "clamp(38px, 7.5vw, 105px)" }}>news headline.</span>
+            </div>
 
-          {/* Footer line */}
-          <div style={{ marginTop: 28 }}>
-            <p style={{ fontSize: "20px", color: "#343434", lineHeight: 1.6, margin: 0 }}>
-              is all it takes to undo years of hard-earned customer confidence.
-            </p>
+            <div>
+              <span style={{ fontFamily: "Inter", fontWeight: 700, color: "#CE1010", fontSize: "clamp(38px, 7.5vw, 105px)" }}>One </span>
+              <span style={{ fontFamily: "Inter", fontWeight: 400, color: "#5d5d5d", fontSize: "clamp(38px, 7.5vw, 105px)" }}>breach</span>
+            </div>
+
+            <div>
+              <span style={{ fontFamily: "Inter", fontWeight: 700, color: "#CE1010", fontSize: "clamp(38px, 7.5vw, 105px)" }}>One </span>
+              <span style={{ fontFamily: "Inter", fontWeight: 400, color: "#5d5d5d", fontSize: "clamp(38px, 7.5vw, 105px)" }}>bad experience.</span>
+            </div>
+
+            <div style={{ marginTop: 28 }}>
+              <p style={{ fontSize: "20px", color: "#343434", lineHeight: 1.6, margin: 0 }}>
+                is all it takes to undo years of hard-earned customer confidence.
+              </p>
+            </div>
+
           </div>
         </div>
-
-        {/* ── Ghost annotation 1 — slides UP from below as user scrolls ── */}
-        <div className="sm:left-[22%] left-[2%]" style={{
-          position: "absolute",
-          top: "42%",
-          zIndex: 10,
-          pointerEvents: "none",
-          background: "rgba(243,242,242,0.55)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderRadius: 8,
-          padding: "16px 22px",
-          width: 390,
-          opacity: ghost1,
-          // Starts 120px below its final position, scrolls up into place
-          transform: `translateY(${(1 - ghost1) * 120}px)`,
-          transition: "none",
-        }}>
-          <p style={{
-            fontSize: 14, color: "#343434", lineHeight: 1.7,
-            fontFamily: "'Inter',sans-serif", margin: 0,
-          }}>
-            When speed and scale take priority, due diligence
-            slips and blind spots widen. That's exactly what is
-            happening in the gig economy today.
-          </p>
-        </div>
-
-        {/* ── Ghost annotation 2 — slides UP from below, offset timing ─── */}
-        <div style={{
-          position: "absolute",
-          right: "10%", bottom: "19%",
-          zIndex: 10,
-          pointerEvents: "none",
-          background: "rgba(243,242,242,0.55)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderRadius: 8,
-          padding: "16px 22px",
-          width: 390,
-          opacity: ghost1,
-          // Starts 120px below, scrolls up into place
-          transform: `translateY(${(1 - ghost1) * 120}px)`,
-          transition: "none",
-        }}>
-          <p style={{
-            fontSize: 14, color: "#343434", lineHeight: 1.7,
-            fontFamily: "'Inter',sans-serif", margin: 0,
-          }}>
-            Identity swaps, impersonation, and hidden criminal
-            histories do more than disrupt operations. They put
-            safety, credibility, and customer trust at risk.
-          </p>
-        </div>
-
       </div>
-    </div>
+    </>
   );
 }

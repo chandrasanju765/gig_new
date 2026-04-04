@@ -37,15 +37,14 @@ const TIMELINE = [
   { year: "2025", desc: "On-demand services (cleaning, cooking, etc) can be booked instantly.", title: "Medium", sub: "For everything instantly", tilt: 1.2 },
 ];
 
-// Mobile card dimensions
 const MOBILE_CARD_W = 240;
 const MOBILE_GAP = 24;
 const TOTAL_MOBILE_RAIL_W =
-  TIMELINE.length * MOBILE_CARD_W + (TIMELINE.length - 1) * MOBILE_GAP; // 1560px
+  TIMELINE.length * MOBILE_CARD_W + (TIMELINE.length - 1) * MOBILE_GAP;
 
 function TimelineCard({ item, entrance, isMobile, index }) {
-  const cardWidth = isMobile ? MOBILE_CARD_W : 340;
-  const imgHeight = isMobile ? 150 : 220;
+  const cardWidth = isMobile ? MOBILE_CARD_W : 300;
+  const imgHeight = isMobile ? 120 : 160;
 
   return (
     <div style={{
@@ -64,25 +63,26 @@ function TimelineCard({ item, entrance, isMobile, index }) {
         overflow: "hidden",
         boxShadow: "0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06)",
       }}>
-        <div style={{ padding: isMobile ? "16px 16px 10px" : "24px 24px 16px" }}>
+        <div style={{ padding: isMobile ? "12px 14px 8px" : "18px 20px 12px" }}>   {/* ← reduced padding */}
           <div style={{
             display: "inline-block", color: "#CE1010",
-            fontSize: isMobile ? 20 : 26, fontWeight: 800,
-            fontFamily: "'Inter',sans-serif", letterSpacing: -0.5, marginBottom: 8,
+            fontSize: isMobile ? 18 : 22,                  // was 20/26
+            fontWeight: 800,
+            fontFamily: "'Inter',sans-serif", letterSpacing: -0.5, marginBottom: 6,
           }}>{item.year}</div>
           <p style={{
-            fontSize: isMobile ? 13 : 15, color: "#444", lineHeight: 1.65,
+            fontSize: isMobile ? 12 : 13,                  // was 13/15
+            color: "#444", lineHeight: 1.55,
             fontFamily: "'Inter',sans-serif", margin: 0,
           }}>{item.desc}</p>
         </div>
 
-        <div style={{ padding: isMobile ? "8px 16px 12px" : "12px 24px 16px" }}>
-          <p style={{ fontSize: isMobile ? 15 : 18, fontWeight: 800, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", marginBottom: 4 }}>{item.title}</p>
-          <p style={{ fontSize: isMobile ? 11 : 13, color: "#888", fontFamily: "'Inter',sans-serif", lineHeight: 1.5, margin: 0 }}>{item.sub}</p>
+        <div style={{ padding: isMobile ? "6px 14px 10px" : "8px 20px 12px" }}>    {/* ← reduced padding */}
+          <p style={{ fontSize: isMobile ? 13 : 16, fontWeight: 800, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", marginBottom: 2 }}>{item.title}</p>
+          <p style={{ fontSize: isMobile ? 10 : 12, color: "#888", fontFamily: "'Inter',sans-serif", lineHeight: 1.4, margin: 0 }}>{item.sub}</p>
         </div>
 
-        <div style={{ margin: isMobile ? "0 12px 12px" : "0 16px 16px", borderRadius: 16, overflow: "hidden", height: imgHeight, background: "#f5f5f5" }}>
-          {/* ← only change: img1.png … img6.png via index */}
+        <div style={{ margin: isMobile ? "0 10px 10px" : "0 14px 14px", borderRadius: 12, overflow: "hidden", height: imgHeight, background: "#f5f5f5" }}>
           <img
             src={`/assets/${index + 15}.png`}
             alt={item.year}
@@ -92,6 +92,7 @@ function TimelineCard({ item, entrance, isMobile, index }) {
       </div>
     </div>
   );
+
 }
 
 export default function WhyReportSection() {
@@ -131,82 +132,162 @@ export default function WhyReportSection() {
     return ease(clamp((progress - start) / (end - start), 0, 1));
   };
 
-  // Mobile: pixel-based rail so all 6 cards are reachable.
-  // Container width = vw minus 4vw padding each side = 0.92 * vw.
-  // Start: translateX(containerW)  → first card just off right edge
-  // End:   translateX(-(TOTAL_MOBILE_RAIL_W - containerW)) → last card visible
-  const mobileContainerW = vw * 0.92;
-  const mobileRailTransform = `translateX(${
-    mobileContainerW - railShift * (TOTAL_MOBILE_RAIL_W + mobileContainerW - mobileContainerW)
-  }px)`;
-  // Simplified: start = +containerW, travel = totalRailW, end = containerW - totalRailW
-  const mobileTranslateX = mobileContainerW - railShift * TOTAL_MOBILE_RAIL_W;
-
-  // Desktop: original percentage-based formula (unchanged)
+  const mobileTranslateX = vw * 0.92 - railShift * TOTAL_MOBILE_RAIL_W;
   const desktopTranslateX = `calc(100% - ${railShift * 110}% + ${railShift * 20}px)`;
 
   return (
     <>
-      {/* Why Report Section */}
+      {/* ── Why Report Section ── */}
       <section style={{
         background: "#fff",
-        padding: isMobile ? "32px 5vw" : "50px 8vw",
+        padding: isMobile ? "48px 5vw 48px" : "80px 8vw 100px",   // ← more padding
         fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
-        marginBottom: 0,
       }}>
         <h2
-          className="sm:text-[60px] text-[32px]"
           style={{
-            fontWeight: 700, fontFamily: "'Inter',sans-serif",
-            color: "#343434", textAlign: "center",
-            marginBottom: isMobile ? 32 : 56,
+            fontWeight: 700,
+            fontFamily: "'Inter',sans-serif",
+            color: "#343434",
+            textAlign: "center",
+            fontSize: isMobile ? "22px" : "60px",
+            marginBottom: isMobile ? 36 : 72,               // ← more gap below heading
             letterSpacing: "-0.02em",
           }}
         >
           Why we put this report together
         </h2>
 
-        <div className="flex justify-center">
-          <div
-            className="grid max-w-5xl gap-4"
-            style={{
-              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-              gap: isMobile ? "32px" : "40px",
-              width: "100%",
-            }}
-          >
-            {/* Left: Stat block */}
-            <div className="col-span-1">
-              <div
-                ref={ref}
-                style={{
-                  display: "flex", gap: 48,
-                  alignItems: "flex-start", flexWrap: "wrap",
-                  maxWidth: 1200, margin: "0 auto",
-                }}
-              >
-                <div style={{
-                  flex: "0 0 auto",
-                  minWidth: isMobile ? "100%" : 260,
-                  paddingTop: 12,
-                  textAlign: isMobile ? "center" : "left",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: isMobile ? "center" : "flex-start",
+        {/* ── MOBILE layout ── */}
+        {isMobile ? (
+          <div ref={ref} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 24 }}>
+
+            {/* Mobile stat — inline: "We analyzed over 4.9M Background Verifications" */}
+            <div style={{
+              textAlign: "center",
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.5s ease, transform 0.5s ease",
+            }}>
+              <p style={{
+                fontSize: 30,
+                color: "#4b5563",
+                fontWeight: 400,
+                margin: "0 0 4px 0",
+                lineHeight: 1.5,
+              }}>
+                We analyzed over
+              </p>
+              {/* Big stat inline with label */}
+              <p style={{
+                fontSize: 16,
+                color: "#343434",
+                fontWeight: 500,
+                margin: 0,
+                lineHeight: 1.6,
+              }}>
+                <span style={{
+                  fontSize: 17,
+                  fontWeight: 700,
+                  color: "#CE1010",
+                  verticalAlign: "middle",
+                  marginRight: 6,
+                  lineHeight: "20px",
                 }}>
+                  <CountUp target={4.9} trigger={visible} duration={1600} />M
+                </span>
+                <span style={{ fontWeight: 700, color: "#343434", fontSize: 17, lineHeight: "20px" }}>
+                  Background Verifications
+                </span>
+              </p>
+              <p style={{
+                fontSize: 14,
+                color: "#5a6874",
+                margin: "6px 0 0 0",
+                fontWeight: 300,
+                lineHeight: "13px",
+              }}>
+                conducted last year to build this report,
+              </p>
+            </div>
+
+            {/* Aims card */}
+            <div style={{
+              background: "#EEEEEE",
+              borderRadius: 20,
+              padding: "20px 18px",
+              border: "1px solid #e2e2e2",
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.6s 0.15s, transform 0.6s 0.15s",
+            }}>
+              <p style={{
+                fontSize: 13,
+                color: "#343434",
+                fontWeight: 700,
+                marginBottom: 16,
+                letterSpacing: "0.4px",
+              }}>
+                with the aim of
+              </p>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+                {AIMS.map((aim, i) => (
+                  <li key={i} style={{
+                    display: "flex", gap: 12, alignItems: "flex-start",
+                    opacity: visible ? 1 : 0,
+                    transform: visible ? "translateY(0)" : "translateY(12px)",
+                    transition: `opacity 0.4s ${0.2 + i * 0.08}s, transform 0.4s ${0.2 + i * 0.08}s`,
+                  }}>
+                    <span style={{
+                      flexShrink: 0, width: 7, height: 7,
+                      borderRadius: "50%", background: "#d93025", marginTop: 6,
+                    }} />
+                    <span style={{ fontSize: 13, color: "#2c3e4f", lineHeight: 1.6, fontWeight: 400 }}>
+                      {aim}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+        ) : (
+          /* ── DESKTOP layout ── */
+          <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "0.55fr 1.45fr",
+              gap: "120px",                                  // ← was 80px, more spacing
+              width: "100%",
+              maxWidth: 1100,
+              alignItems: "start",
+            }}>
+              {/* Left: Stat block */}
+              <div>
+                <div
+                  ref={ref}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    paddingTop: 12,
+                  }}
+                >
                   <p style={{
-                    fontSize: 18, color: "#4b5563", fontWeight: 500, marginBottom: 8,
+                    fontSize: 30, color: "#4b5563", fontWeight: 500,
+                    marginBottom: 8, margin: "0 0 8px 0",
                     opacity: visible ? 1 : 0,
                     transform: visible ? "translateY(0)" : "translateY(20px)",
                     transition: "opacity 0.5s ease, transform 0.5s ease",
+                    lineHeight: "115%",
                   }}>
                     We analyzed over
                   </p>
 
                   <div style={{
-                    fontSize: isMobile ? "80px" : "clamp(80px, 12vw, 120px)",
+                    fontSize: "clamp(80px, 12vw, 120px)",
                     fontWeight: 700, color: "#CE1010", lineHeight: 1,
-                    letterSpacing: "-0.02em", marginTop: 4, marginBottom: 8,
+                    letterSpacing: "-0.02em",
+                    margin: "12px 0 8px",
                     opacity: visible ? 1 : 0,
                     transform: visible ? "translateY(0)" : "translateY(20px)",
                     transition: "opacity 0.5s 0.05s, transform 0.5s 0.05s",
@@ -215,9 +296,9 @@ export default function WhyReportSection() {
                   </div>
 
                   <p style={{
-                    fontSize: isMobile ? "24px" : "clamp(24px, 3vw, 36px)",
+                    fontSize: "clamp(24px, 6vw, 50px)",
                     fontWeight: 700, color: "#343434", lineHeight: 1.2,
-                    marginTop: 12, marginBottom: 16,
+                    margin: "16px 0 24px",                   // ← more gap
                     opacity: visible ? 1 : 0,
                     transform: visible ? "translateY(0)" : "translateY(20px)",
                     transition: "opacity 0.5s 0.1s, transform 0.5s 0.1s",
@@ -226,59 +307,76 @@ export default function WhyReportSection() {
                   </p>
 
                   <p style={{
-                    fontSize: 16, color: "#5a6874", lineHeight: 1.5,
+                    fontSize: 30,
+                    color: "#5a6874",
+                    margin: 0,
+                    fontWeight: 300,
                     opacity: visible ? 1 : 0,
                     transform: visible ? "translateY(0)" : "translateY(20px)",
                     transition: "opacity 0.5s 0.15s, transform 0.5s 0.15s",
+                    lineHeight: "36px",
                   }}>
-                    conducted last year to build<br />this report,
+                    conducted last year to build this report,
                   </p>
                 </div>
               </div>
-            </div>
 
-            {/* Right: Aims card */}
-            <div className="col-span-1">
-              <div style={{
-                flex: 1, minWidth: 100,
-                background: "#EEEEEE", borderRadius: 28,
-                padding: isMobile ? "24px 20px" : "36px 40px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.03)",
-                border: "1px solid #edf2f7",
-                opacity: visible ? 1 : 0,
-                transform: visible ? "translateX(0)" : "translateX(24px)",
-                transition: "opacity 0.6s 0.2s, transform 0.6s 0.2s",
-              }}>
-                <p style={{ fontSize: 16, color: "#343434", fontWeight: 700, marginBottom: 24, letterSpacing: "0.5px" }}>
-                  with the aim of
-                </p>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 11 }}>
-                  {AIMS.map((aim, i) => (
-                    <li key={i} style={{
-                      display: "flex", gap: 14, alignItems: "flex-start",
-                      opacity: visible ? 1 : 0,
-                      transform: visible ? "translateY(0)" : "translateY(12px)",
-                      transition: `opacity 0.4s ${0.25 + i * 0.08}s, transform 0.4s ${0.25 + i * 0.08}s`,
-                    }}>
-                      <span style={{ flexShrink: 0, width: 8, height: 8, borderRadius: "50%", background: "#d93025", marginTop: 8 }} />
-                      <span style={{ fontSize: isMobile ? 14 : 16, color: "#2c3e4f", lineHeight: 1.55, fontWeight: 450 }}>
-                        {aim}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+              {/* Right: Aims card */}
+              <div>
+                <div style={{
+                  background: "#EEEEEE",
+                  borderRadius: 28,
+                  padding: "44px 48px",                      // ← more internal padding
+                  border: "1px solid #e8e8e8",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateX(0)" : "translateX(24px)",
+                  transition: "opacity 0.6s 0.2s, transform 0.6s 0.2s",
+                }}>
+                  <p style={{
+                    fontSize: 16, color: "#343434",
+                    fontWeight: 700, marginBottom: 28,        // ← more gap after label
+                    letterSpacing: "0.5px",
+                  }}>
+                    with the aim of
+                  </p>
+                  <ul style={{
+                    listStyle: "none", padding: 0, margin: 0,
+                    display: "flex", flexDirection: "column",
+                    gap: 20,                                  // ← was 11, more breathing room
+                  }}>
+                    {AIMS.map((aim, i) => (
+                      <li key={i} style={{
+                        display: "flex", gap: 16, alignItems: "flex-start",
+                        opacity: visible ? 1 : 0,
+                        transform: visible ? "translateY(0)" : "translateY(12px)",
+                        transition: `opacity 0.4s ${0.25 + i * 0.08}s, transform 0.4s ${0.25 + i * 0.08}s`,
+                      }}>
+                        <span style={{
+                          flexShrink: 0, width: 8, height: 8,
+                          borderRadius: "50%", background: "#d93025", marginTop: 9,
+                        }} />
+                        <span style={{
+                          fontSize: 20, color: "#2c3e4f",
+                          lineHeight: 1.6, fontWeight: 400,
+                        }}>
+                          {aim}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
 
-      <div style={{ height: "100px", background: "#fff" }} />
+      {/* <div style={{ height: isMobile ? "0px" : "100px", background: "#fff" }} /> */}
 
-      {/* Workforce Section */}
+      {/* ── Workforce Timeline Section (unchanged) ── */}
       <div className="rounded-xl" ref={sectionRef} style={{ height: "450vh", position: "relative", marginTop: 0 }}>
         <div style={{
-          position: "sticky", top: 0, height: "100vh",
+          position: "sticky", top: 0, height: isMobile ? "100vh" : "120vh",
           overflow: "hidden",
           display: "flex", flexDirection: "column",
           background: "#fff",
@@ -298,17 +396,21 @@ export default function WhyReportSection() {
               The Workforce<br />Behind Every Order
             </h2>
             <p style={{
-              fontSize: isMobile ? "14px" : "16px",
-              color: "#343434", lineHeight: 1.75, maxWidth: 780,
+              fontSize: "30px",                // ← was "16px"
+              lineHeight: isMobile ? "20px" : "40px",              // ← was 1.75
+              color: "#343434",
+              maxWidth: 1100,                  // ← was 780, matches Figma width
               margin: "0 auto 10px",
               padding: isMobile ? "0 16px" : 0,
+              fontWeight: 300,                 // ← Light weight like Figma
+              textAlign: "center",
             }}>
               India's doorstep economy operates at the intersection of logistics,
               technology, and human workforce. But that wasn't the case 15 years ago.
               Let's look at how the gig economy evolved with various business models
               over the last 3 decades.
             </p>
-            <p style={{ fontSize: 13, color: "#aaa", fontStyle: "italic", margin: 0 }}>
+            <p style={{ fontSize: isMobile ? 13 : 16, color: "#aaa", fontStyle: "italic", margin: 0 }}>
               Sources:{" "}
               {["Kearney", "Young Urban Project", "Shiproket"].map((s) => (
                 <a
@@ -334,9 +436,6 @@ export default function WhyReportSection() {
             <div style={{
               display: "flex",
               gap: isMobile ? MOBILE_GAP : 48,
-              // KEY FIX: mobile uses pixel-based translateX so all cards are reachable.
-              // Start: +containerW (first card just off right edge)
-              // End:   containerW - TOTAL_MOBILE_RAIL_W (last card visible)
               transform: isMobile
                 ? `translateX(${mobileTranslateX}px)`
                 : `translateX(${desktopTranslateX})`,
@@ -349,7 +448,7 @@ export default function WhyReportSection() {
                   item={item}
                   entrance={cardEntrance(i)}
                   isMobile={isMobile}
-                  index={i}  
+                  index={i}
                 />
               ))}
             </div>

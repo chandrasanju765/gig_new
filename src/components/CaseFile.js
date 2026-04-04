@@ -20,7 +20,7 @@ export default function CaseFilesSection() {
     }}>
 
       {/* "Case Files" big heading */}
-      <h1 className="sm:text-[140px] text-[60px]" style={{
+      <h1 className="sm:text-[140px] text-[120px]" style={{
         fontFamily: "'Inter','Helvetica Neue',sans-serif",
         fontWeight: 700,
         background: "linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(180,180,200,0.55) 100%)",
@@ -32,8 +32,8 @@ export default function CaseFilesSection() {
         Case Files
       </h1>
       <p style={{
-        fontFamily: "'Inter',sans-serif",
-        fontSize: isMobile ? "19px" : "20px",
+        fontFamily: "Inter",
+        fontSize: isMobile ? "19px" : "30px",
         color: "rgba(255,255,255,1)",
         marginBottom: 35,
       }}>
@@ -42,8 +42,8 @@ export default function CaseFilesSection() {
 
       {/* Case title */}
       <h2 style={{
-        fontFamily: "'Inter',sans-serif",
-        fontSize: isMobile ? "20px" : "clamp(22px,2.5vw,36px)",
+        fontFamily: "Inter",
+        fontSize: isMobile ? "20px" : "45px",
         fontWeight: 800, color: "white",
         marginBottom: 40,
       }}>
@@ -70,7 +70,7 @@ export default function CaseFilesSection() {
           transition: "opacity 0.6s, transform 0.6s",
         }}>
           <p style={{
-            fontFamily: "'Inter',sans-serif",
+            fontFamily: "Inter",
             fontSize: isMobile ? "18px" : 24,
             fontWeight: 700,
             color: "#CE1010", marginBottom: 28,
@@ -87,13 +87,13 @@ export default function CaseFilesSection() {
               ].map(row => (
                 <div key={row.label} style={{ marginBottom: isMobile ? 14 : 20 }}>
                   <p style={{
-                    fontFamily: "'Inter',sans-serif",
+                    fontFamily: "Inter",
                     fontSize: isMobile ? "12px" : 14,
                     color: "rgba(255,255,255,0.45)",
                     margin: "0 0 4px",
                   }}>{row.label}</p>
                   <p style={{
-                    fontFamily: "'Inter',sans-serif",
+                    fontFamily: "Inter",
                     fontSize: isMobile ? "15px" : 22,
                     fontWeight: 700, color: "white",
                     margin: 0,
@@ -104,12 +104,12 @@ export default function CaseFilesSection() {
 
             {/* Suspect 1 Photo */}
             <div style={{
-              width: isMobile ? 110 : 140,
-              height: isMobile ? 132 : 168,
+              width: isMobile ? 140 : 180,
+              height: isMobile ? 168 : 216,
               flexShrink: 0,
               borderRadius: 8,
               overflow: "hidden",
-              border: "1px solid rgba(255,255,255,0.15)",
+              border: "14px solid rgba(255,255,255,1)",
             }}>
               <img
                 src="/assets/suspect1.png"
@@ -131,7 +131,7 @@ export default function CaseFilesSection() {
           transition: "opacity 0.6s 0.15s, transform 0.6s 0.15s",
         }}>
           <p style={{
-            fontFamily: "'Inter',sans-serif",
+            fontFamily: "Inter",
             fontSize: isMobile ? "18px" : 24,
             fontWeight: 700,
             color: "#CE1010", marginBottom: 28,
@@ -143,13 +143,13 @@ export default function CaseFilesSection() {
               {["Rahul", "Chavan", "Trivam"].map((name, i) => (
                 <div key={name} style={{ marginBottom: isMobile ? 14 : 22 }}>
                   <p style={{
-                    fontFamily: "'Inter',sans-serif",
+                    fontFamily: "Inter",
                     fontSize: isMobile ? "12px" : 14,
                     color: "rgba(255,255,255,0.45)",
                     margin: "0 0 4px",
                   }}>Friend {i + 1}</p>
                   <p style={{
-                    fontFamily: "'Inter',sans-serif",
+                    fontFamily: "Inter",
                     fontSize: isMobile ? "15px" : 22,
                     fontWeight: 700, color: "white",
                     margin: 0,
@@ -159,54 +159,62 @@ export default function CaseFilesSection() {
             </div>
 
             {/* Stacked friend photos */}
-            <div style={{
-              position: "relative",
-              width: isMobile ? 160 : 200,
-              height: isMobile ? 168 : 210,
-              flexShrink: 0,
-            }}>
-              {/* Rahul — top left */}
-              <div style={{
-                position: "absolute",
-                top: 0, left: 0,
-                width: isMobile ? 72 : 92,
-                height: isMobile ? 86 : 110,
-                borderRadius: 6, overflow: "hidden",
-                boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
-                zIndex: 1,
-              }}>
-                <img src="/assets/rahul.png" alt="Rahul"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
-              </div>
+<div style={{
+  position: "relative",
+  width: isMobile ? "190px" : "230px",
+  height: isMobile ? "220px" : "260px",
+  flexShrink: 0,
+}}>
+  {/* Rahul — top left */}
+  <div style={{
+    position: "absolute",
+    top: 0, left: 0,
+    width: isMobile ? 88 : 108,
+    height: isMobile ? 105 : 130,
+    borderRadius: 6,
+    border: "6px solid white",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+    zIndex: 1,
+    overflow: "hidden",
+  }}>
+    <img src="/assets/rahul.png" alt="Rahul"
+      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }} />
+  </div>
 
-              {/* Chavan — top right */}
-              <div style={{
-                position: "absolute",
-                top: 0, left: isMobile ? 82 : 104,
-                width: isMobile ? 72 : 92,
-                height: isMobile ? 86 : 110,
-                borderRadius: 6, overflow: "hidden",
-                boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
-                zIndex: 1,
-              }}>
-                <img src="/assets/chavam.png" alt="Chavan"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
-              </div>
+  {/* Chavan — top right */}
+  <div style={{
+    position: "absolute",
+    top: 0,
+    left: isMobile ? 96 : 118,
+    width: isMobile ? 88 : 108,
+    height: isMobile ? 105 : 130,
+    borderRadius: 6,
+    border: "6px solid white",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+    zIndex: 1,
+    overflow: "hidden",
+  }}>
+    <img src="/assets/chavam.png" alt="Chavan"
+      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }} />
+  </div>
 
-              {/* Trivam — bottom center */}
-              <div style={{
-                position: "absolute",
-                top: isMobile ? 94 : 118,
-                left: isMobile ? 41 : 52,
-                width: isMobile ? 72 : 92,
-                height: isMobile ? 86 : 110,
-                borderRadius: 6, overflow: "hidden",
-                zIndex: 2,
-              }}>
-                <img src="/assets/trivam.png" alt="Trivam"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
-              </div>
-            </div>
+  {/* Trivam — bottom center */}
+  <div style={{
+    position: "absolute",
+    top: isMobile ? 118 : 142,
+    left: isMobile ? 44 : 54,
+    width: isMobile ? 88 : 108,
+    height: isMobile ? 105 : 130,
+    borderRadius: 6,
+    // border: "2px solid white",
+    // boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+    zIndex: 0,
+    overflow: "hidden",
+  }}>
+    <img src="/assets/trivam.png" alt="Trivam"
+      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }} />
+  </div>
+</div>
           </div>
         </div>
 

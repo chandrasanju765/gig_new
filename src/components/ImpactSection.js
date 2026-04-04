@@ -103,11 +103,11 @@ export default function ImpactSection() {
             <h2
               style={{
                 fontFamily: "'Inter','Helvetica Neue',sans-serif",
-                fontSize: isMobile ? "22px" : "43px",
+                fontSize: isMobile ? "22px" : "60px",
                 fontWeight: 700,
                 color: "white",
                 margin: isMobile ? "0 0 20px" : "0 0 36px",
-                lineHeight: 1.15,
+                lineHeight: isMobile ? 1.2 : "115%",
                 opacity: titleP,
                 transform: `translateY(${lerp(20, 0, titleP)}px)`,
               }}
@@ -119,10 +119,10 @@ export default function ImpactSection() {
             <p
               style={{
                 color: "rgba(255,255,255,0.78)",
-                fontSize: isMobile ? "12px" : "24px",
-                lineHeight: 1.6,
+                fontSize: isMobile ? "12px" : "30px",
+                lineHeight: isMobile ? 1.5 : "115%",
                 margin: isMobile ? "0 auto 20px" : "0 auto 40px",
-                maxWidth: 920,
+                maxWidth: 990,
                 fontFamily: "'Inter',sans-serif",
                 opacity: text1P,
                 transform: `translateY(${lerp(16, 0, text1P)}px)`,
@@ -160,7 +160,7 @@ export default function ImpactSection() {
               </span>
               <span
                 style={{
-                  fontSize: isMobile ? "42px" : "105px",
+                  fontSize: isMobile ? "42px" : "120px",
                   fontWeight: 700,
                   color: "white",
                   fontFamily: "'Inter','Helvetica Neue',sans-serif",
@@ -175,10 +175,10 @@ export default function ImpactSection() {
             <p
               style={{
                 color: "rgba(255,255,255,0.92)",
-                fontSize: isMobile ? "12px" : "clamp(14px,1.15vw,28px)",
-                lineHeight: 1.8,
+                fontSize: isMobile ? "12px" : "30px",
+                lineHeight: isMobile ? 1.5 : "115%",
                 margin: "0 auto",
-                maxWidth: 820,
+                maxWidth: 990,
                 marginTop: isMobile ? 16 : 40,
                 marginBottom: isMobile ? 16 : 40,
                 fontFamily: "'Inter',sans-serif",

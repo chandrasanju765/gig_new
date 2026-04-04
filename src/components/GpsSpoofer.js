@@ -27,7 +27,7 @@ export default function CaseFilesSection() {
         </div>
 
         {/* Main Title */}
-        <h1 className="sm:text-[96px] text-[45px]" style={{
+        <h1 className="sm:text-[96px] text-[120px]" style={{
           fontWeight: 700,
           fontFamily: "'Inter',sans-serif",
           background: "linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(170,170,200,0.5) 100%)",
@@ -36,6 +36,7 @@ export default function CaseFilesSection() {
           textAlign: "center",
           marginBottom: isMobile ? "40px" : "70px",
           lineHeight: "1.05",
+          fontSize: isMobile ? "48px" : "120px",
         }}>
           The GPS Spoofer
         </h1>
@@ -109,7 +110,7 @@ export default function CaseFilesSection() {
                   <img
                     src="../../assets/a4.png"
                     alt="Vishal Taleja"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" , borderRadius: "8px", border: "8px solid white" }}
                   />
                 </div>
               </div>
@@ -121,7 +122,7 @@ export default function CaseFilesSection() {
                 <p style={{ color: "white", fontSize: "28px", fontWeight: 800, marginBottom: "18px" }}>
                   Timeline of events
                 </p>
-                <div style={{ lineHeight: "1.85", fontSize: "22px", fontWeight: 800, color: "#e0e0e0" }}>
+                <div style={{ lineHeight: "1.85", fontSize: "30px", fontWeight: 700, color: "#e0e0e0" , lineHeight: "40px"}}>
                   <strong>Day 1:</strong> Rohan's application was submitted<br /><br />
                   <strong>Day 2:</strong> During the Digital Address Verification call:<br />
                   <span>His GPS showed Delhi.<br />His IP address showed Faridabad.</span><br /><br />
@@ -141,7 +142,7 @@ export default function CaseFilesSection() {
               fontSize: isMobile ? "24px" : "59px",
               lineHeight: isMobile ? 1.4 : "1.35",
               marginBottom: isMobile ? "16px" : "26px",
-              fontWeight: 600,
+              fontWeight: 700,
               textAlign: isMobile ? "center" : "left",
             }}>
               Rohan applied to be a truck driver at MPK Shipments Ltd.
@@ -151,17 +152,18 @@ export default function CaseFilesSection() {
               ...and the address verification revealed something even bigger.
             </p>
 
-            <p style={{ fontSize: isMobile ? "14px" : "20px", lineHeight: "1.78", fontWeight: 300, marginBottom: "16px", color: "white", textAlign: isMobile ? "center" : "left" }}>
+            <p style={{ fontSize: isMobile ? "14px" : "30px", lineHeight: isMobile ? "1.78" : "40px", fontWeight: 300, marginBottom: "16px", color: "white", textAlign: isMobile ? "center" : "left" }}>
               He was also flagged with two active FIRs linked to high-value cargo robbery,
-              both filed by his previous employers.
-            </p>
-
-            <p style={{ fontSize: isMobile ? "14px" : "20px", lineHeight: "1.78", fontWeight: 300, color: "#e0e0e0", textAlign: isMobile ? "center" : "left" }}>
-              Rohan was aware of MPK's high-value laptop inventory. His plan was simple:
+              both filed by his previous employers. Rohan was aware of MPK's high-value laptop inventory. His plan was simple:
               steal the cargo, disappear, and leave no trace behind.
             </p>
 
-            <p style={{ fontSize: isMobile ? "14px" : "20px", lineHeight: "1.78", fontWeight: 300, marginTop: "20px", color: "#e0e0e0", textAlign: isMobile ? "center" : "left" }}>
+            {/* <p style={{ fontSize: isMobile ? "14px" : "20px", lineHeight: "1.78", fontWeight: 300, color: "#e0e0e0", textAlign: isMobile ? "center" : "left" }}>
+              Rohan was aware of MPK's high-value laptop inventory. His plan was simple:
+              steal the cargo, disappear, and leave no trace behind.
+            </p> */}
+
+            <p style={{ fontSize: isMobile ? "14px" : "30px", lineHeight: isMobile ? "1.78" : "40px", fontWeight: 300, marginTop: "20px", color: "#e0e0e0", textAlign: isMobile ? "center" : "left" }}>
               The catch saved MPK Shipments Ltd. Several lakhs in potential cargo theft and
               exposed how sophisticated address fraud has become with GPS spoofing and VPN usage.
             </p>

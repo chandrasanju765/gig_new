@@ -16,10 +16,20 @@ const SEGMENTS = [
   },
 ];
 
+const DEFAULT_MAP = "/assets/india.png";
+
 export default function GeographicSection() {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(null); // null = default india.png
   const [progress, setProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -34,15 +44,20 @@ export default function GeographicSection() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const titleP = ease(clamp(progress / 0.2, 0, 1));
-  const leftP  = ease(clamp((progress - 0.2) / 0.25, 0, 1));
-  const mapP   = ease(clamp((progress - 0.2) / 0.3, 0, 1));
+  const titleP = ease(clamp(progress / 0.35, 0, 1));
+  const leftP  = ease(clamp((progress - 0.25) / 0.35, 0, 1));
+  const mapP   = ease(clamp((progress - 0.25) / 0.40, 0, 1));
 
-  const activeIndex = openIndex === null ? 0 : openIndex;
-  const activeMap   = SEGMENTS[activeIndex].mapSrc;
+  // If nothing selected → show india.png, else show segment map
+  const activeMap = openIndex === null ? DEFAULT_MAP : SEGMENTS[openIndex].mapSrc;
+
+  const handleSegmentClick = (i) => {
+    // clicking same index deselects → back to india.png
+    setOpenIndex(prev => prev === i ? null : i);
+  };
 
   return (
-    <div ref={sectionRef} style={{ height: "350vh", position: "relative" }}>
+    <div ref={sectionRef} style={{ height: "200vh", position: "relative" }}>
       <div
         style={{
           position: "sticky",
@@ -56,23 +71,8 @@ export default function GeographicSection() {
           padding: "72px 56px 40px",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: -450,
-            zIndex: 0,
-          }}
-        >
-          <img
-            src="/assets/Ellipse.png"
-            alt="ellipse"
-            style={{
-              width: "900px",
-              height: "900px",
-              opacity: 1,
-            }}
-          />
+        <div style={{ position: "absolute", top: 0, left: -450, zIndex: 0 }}>
+          <img src="/assets/Ellipse.png" alt="ellipse" style={{ width: "900px", height: "900px", opacity: 1 }} />
         </div>
 
         {/* Title */}
@@ -81,7 +81,7 @@ export default function GeographicSection() {
             textAlign: "center",
             marginBottom: 8,
             opacity: titleP,
-            transform: `translateY(${lerp(24, 0, titleP)}px)`,
+            transform: `none`,
             position: "relative",
             zIndex: 1,
           }}
@@ -89,11 +89,12 @@ export default function GeographicSection() {
           <h2
             className="sm:text-[105px] text-[40px]"
             style={{
-              fontFamily: "'Inter','Helvetica Neue',sans-serif",
+              fontFamily: "Inter",
               fontWeight: 700,
               color: "white",
               margin: 0,
               lineHeight: 1.05,
+              fontSize: isMobile ? "30px" : "120px",
             }}
           >
             Geographic Risk
@@ -103,18 +104,18 @@ export default function GeographicSection() {
           <p
             style={{
               color: "white",
-              fontSize: "18px",
               margin: "12px 0 0",
               fontFamily: "'Inter',sans-serif",
+              fontSize: isMobile ? "11px" : "30px",
             }}
           >
             A breakdown of states with the highest risk rates across India.
           </p>
         </div>
 
-        {/* Body — desktop: grid, mobile: column-reverse so map is on top */}
+        {/* Body */}
         <div
-          className="flex flex-col-reverse lg:grid lg:grid-cols-[320px_1fr] gap-12 w-full max-w-[1200px] flex-1 mt-6"
+          className="flex flex-col-reverse lg:grid lg:grid-cols-[370px_1fr] gap-12 w-full max-w-[1400px] flex-1 mt-6"
           style={{ position: "relative", zIndex: 1 }}
         >
           {/* Left panel */}
@@ -128,17 +129,9 @@ export default function GeographicSection() {
               paddingTop: 8,
             }}
           >
-            {/* Paragraphs: hidden on mobile, visible on desktop */}
             <p
               className="hidden lg:block"
-              style={{
-                color: "white",
-                fontSize: 20,
-                lineHeight: 1.7,
-                fontFamily: "'Inter',sans-serif",
-                margin: 0,
-                paddingLeft: 12,
-              }}
+              style={{ color: "white", fontSize: 30, lineHeight: "115%", fontFamily: "'Inter',sans-serif", margin: 0 }}
             >
               Kerala records the highest risk rate in the country, with
               Maharashtra close behind, making them two of the highest risk
@@ -146,14 +139,7 @@ export default function GeographicSection() {
             </p>
             <p
               className="hidden lg:block"
-              style={{
-                color: "white",
-                fontSize: 20,
-                lineHeight: 1.7,
-                fontFamily: "'Inter',sans-serif",
-                margin: 0,
-                paddingLeft: 12,
-              }}
+              style={{ color: "white", fontSize: 30, lineHeight: "115%", fontFamily: "'Inter',sans-serif", margin: 0 }}
             >
               Another contributing factor behind this surge could be stronger
               crime reporting mechanisms in southern and western states. For
@@ -161,21 +147,17 @@ export default function GeographicSection() {
               through AI-enabled monitoring cameras at traffic junctions.
             </p>
 
-            {/* Segment Accordion — clickable, no expanded content */}
+            {/* Segment Accordion */}
             <div
               className="flex lg:flex-col flex-row justify-center lg:justify-start"
-              style={{
-                marginTop: 8,
-                gap: 10,
-              }}
+              style={{ marginTop: 8, gap: 10 }}
             >
               {SEGMENTS.map((item, i) => {
                 const isOpen = openIndex === i;
-
                 return (
                   <div key={i}>
                     <div
-                      onClick={() => setOpenIndex(isOpen ? null : i)}
+                      onClick={() => handleSegmentClick(i)}
                       style={{
                         display: "flex",
                         alignItems: "center",
@@ -200,23 +182,15 @@ export default function GeographicSection() {
                       </span>
                       {item.title}
                     </div>
-                    {/* No expanded content rendered */}
                   </div>
                 );
               })}
             </div>
 
-            {/* Mobile-only paragraphs below segments */}
+            {/* Mobile-only paragraphs */}
             <p
               className="block lg:hidden"
-              style={{
-                color: "white",
-                fontSize: 11,
-                lineHeight: 1.7,
-                fontFamily: "'Inter',sans-serif",
-                margin: 0,
-                textAlign: "center",
-              }}
+              style={{ color: "white", fontSize: 11, lineHeight: 1.7, fontFamily: "'Inter',sans-serif", margin: 0, textAlign: "center" }}
             >
               Kerala records the highest risk rate in the country, with
               Maharashtra close behind, making them two of the highest risk
@@ -224,14 +198,7 @@ export default function GeographicSection() {
             </p>
             <p
               className="block lg:hidden"
-              style={{
-                color: "white",
-                fontSize: 11,
-                lineHeight: 1.7,
-                fontFamily: "'Inter',sans-serif",
-                margin: 0,
-                textAlign: "center",
-              }}
+              style={{ color: "white", fontSize: 11, lineHeight: 1.7, fontFamily: "'Inter',sans-serif", margin: 0, textAlign: "center" }}
             >
               Another contributing factor behind this surge could be stronger
               crime reporting mechanisms in southern and western states. For
@@ -249,7 +216,6 @@ export default function GeographicSection() {
               height: "100%",
               maxHeight: 680,
               minHeight: 420,
-              transition: "opacity 0.35s ease",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -258,7 +224,7 @@ export default function GeographicSection() {
             <img
               key={activeMap}
               src={activeMap}
-              alt={SEGMENTS[activeIndex].title + " map"}
+              alt={openIndex === null ? "India map" : SEGMENTS[openIndex].title + " map"}
               style={{
                 width: "115%",
                 maxWidth: "115%",

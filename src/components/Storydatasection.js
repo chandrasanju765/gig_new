@@ -102,7 +102,7 @@ export default function StoryDataSection() {
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 700,
                 color: "white",
-                fontSize: "clamp(36px, 4vw, 64px)",
+                fontSize: "120px",
                 lineHeight: 1.05,
                 margin: "0 0 24px",
                 letterSpacing: "-1.5px",

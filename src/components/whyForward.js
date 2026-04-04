@@ -23,7 +23,7 @@ export default function WayForwardSection() {
       overflow: "hidden",
     }}>
 
-      <div className="max-w-5xl w-full">
+      <div className="max-w-7xl w-full">
 
         {/* Ellipse — hidden on mobile to avoid overflow */}
         {!isMobile && (
@@ -44,6 +44,7 @@ export default function WayForwardSection() {
             textAlign: "center",
             marginBottom: isMobile ? "36px" : "70px",
             lineHeight: "1.05",
+            fontSize: isMobile ? "36px" : "120px",
           }}
         >
           Way Forward
@@ -66,7 +67,7 @@ export default function WayForwardSection() {
               className="text-center"
               style={{
                 fontFamily: "'Inter',sans-serif",
-                fontSize: isMobile ? "18px" : "25px",
+                fontSize: isMobile ? "18px" : "30px",
                 lineHeight: "1.45",
                 marginBottom: isMobile ? "18px" : "26px",
                 fontWeight: 600,
@@ -80,8 +81,8 @@ export default function WayForwardSection() {
             <p
               className="text-center"
               style={{
-                fontSize: isMobile ? "15px" : "25px",
-                lineHeight: "1.78",
+                fontSize: isMobile ? "15px" : "30px",
+                lineHeight: isMobile ? 1.6 : "40px",
                 fontWeight: 300,
                 marginBottom: "20px",
                 color: "white",

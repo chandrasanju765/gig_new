@@ -1,49 +1,21 @@
 import { useInView } from "./helpers";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const CARDS = [
   {
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <rect x="4" y="8" width="20" height="16" rx="2" stroke="white" strokeWidth="2"/>
-        <path d="M8 12h8M8 16h5" stroke="#e53e3e" strokeWidth="2" strokeLinecap="round"/>
-        <circle cx="26" cy="22" r="6" fill="#1a1a2e" stroke="#e53e3e" strokeWidth="2"/>
-        <path d="M23 22l2 2 4-4" stroke="#e53e3e" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
+    icon: "/assets/fraudulent1.png",
     title: "Inventory leakage in\nthe middle mile",
   },
   {
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="14" r="6" stroke="white" strokeWidth="2"/>
-        <path d="M6 30c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <circle cx="28" cy="10" r="5" fill="#1a1a2e" stroke="#e53e3e" strokeWidth="2"/>
-        <path d="M26 10h4M28 8v4" stroke="#e53e3e" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
+    icon: "/assets/fraudulent2.png",
     title: "Customer safety incidents\nin the last mile",
   },
   {
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <rect x="4" y="6" width="28" height="22" rx="2" stroke="white" strokeWidth="2"/>
-        <path d="M9 14h18M9 19h12" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5"/>
-        <circle cx="27" cy="25" r="6" fill="#1a1a2e" stroke="#e53e3e" strokeWidth="2"/>
-        <path d="M27 22v4M25 26h4" stroke="#e53e3e" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
+    icon: "/assets/fraudulent3.png",
     title: "Regulatory exposure\nin high-risk states",
   },
   {
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M18 4l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z" stroke="white" strokeWidth="1.5" fill="none"/>
-        <circle cx="27" cy="26" r="7" fill="#1a1a2e" stroke="#e53e3e" strokeWidth="2"/>
-        <path d="M24 26h6M27 23v6" stroke="#e53e3e" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M8 28c2-4 5-6 8-6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5"/>
-      </svg>
-    ),
+    icon: "/assets/fraudulent4.png",
     title: "Brand damage amplified\nby digital virality",
   },
 ];
@@ -51,21 +23,37 @@ const CARDS = [
 export default function FraudImpact() {
   const [isMobile, setIsMobile] = useState(false);
 
-useEffect(() => {
-  const handleResize = () => setIsMobile(window.innerWidth < 1024);
-  handleResize();
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const [ref, visible] = useInView(0.2);
   const [headRef, headVisible] = useInView(0.3);
 
   return (
     <section style={{
       padding: "100px 6vw 120px",
-      display: "flex", flexDirection: "column", alignItems: "center",justifyContent:"center",
+      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
       textAlign: "center",
+      position: "relative",
+      overflow: "hidden",
     }}>
+
+      {/* Large blue radial glow */}
+      <div style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -40%)",
+        width: isMobile ? "600px" : "1100px",
+        height: isMobile ? "500px" : "900px",
+        background: "radial-gradient(ellipse at center, rgba(30, 70, 220, 0.55) 0%, rgba(20, 50, 160, 0.30) 35%, rgba(10, 20, 80, 0.10) 60%, transparent 75%)",
+        pointerEvents: "none",
+        zIndex: 0,
+      }} />
 
       {/* Heading */}
       <div ref={headRef} style={{
@@ -73,38 +61,29 @@ useEffect(() => {
         transform: headVisible ? "translateY(0)" : "translateY(32px)",
         transition: "opacity 0.7s, transform 0.7s",
         marginBottom: 64,
+        position: "relative",
+        zIndex: 1,
       }}>
-         <div
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 50,
-              zIndex: 0,
-            }}
-          >
-            <img
-              src="/assets/Ellipse.png"
-              alt="ellipse"
-              style={{
-                width: "800px",
-                height: "800px", // adjust size
-                opacity: 1, // optional
-              }}
-            />
-          </div>
-        <h2 className="sm:text-[105px] text-[50px]" style={{
-                fontFamily: "'Inter','Helvetica Neue',sans-serif",
+        <div style={{ position: "absolute", top: 0, right: 50, zIndex: 0 }}>
+          <img src="/assets/Ellipse.png" alt="ellipse" style={{ width: "800px", height: "800px", opacity: 1 }} />
+        </div>
+        <h2 style={{
+          fontFamily: "Inter",
           fontWeight: 700, color: "white",
-          lineHeight: 1.05, margin: "0 0 4px",
+          lineHeight: isMobile ? 1.2 : "115%", margin: "0 0 4px",
           fontSize: isMobile ? "30px" : "120px",
+          position: "relative",
+          zIndex: 1,
         }}>
           Every fraudulent
         </h2>
-        <h2 className="sm:text-[43px] text-[20px]"  style={{
-                fontFamily: "'Inter','Helvetica Neue',sans-serif",
+        <h2 style={{
+          fontFamily: "Inter",
           fontWeight: 400, color: "rgba(255,255,255,1)",
-          lineHeight: 1.1, margin: 0,
+          lineHeight: isMobile ? 1.2 : "115%", margin: 0,
           fontSize: isMobile ? "15px" : "60px",
+          position: "relative",
+          zIndex: 1,
         }}>
           employee we caught helped avoid
         </h2>
@@ -112,15 +91,15 @@ useEffect(() => {
 
       {/* 2×2 grid */}
       <div ref={ref} style={{
-    display: "grid",
-    gridTemplateColumns: isMobile 
-      ? "1fr" 
-      : "repeat(2, minmax(280px, 480px))",
-    gap: isMobile ? 24 : 16,
-    width: "100%", 
-    maxWidth: 1000,
-    marginBottom: isMobile ? 50 : 72,
-}}>
+        display: "grid",
+        gridTemplateColumns: isMobile ? "1fr" : "repeat(2, minmax(380px, 580px))",
+        gap: isMobile ? 24 : 16,
+        width: "100%",
+        maxWidth: 1000,
+        marginBottom: isMobile ? 50 : 72,
+        position: "relative",
+        zIndex: 1,
+      }}>
         {CARDS.map((card, i) => (
           <div key={i} style={{
             background: "rgba(255,255,255,0.06)",
@@ -136,18 +115,25 @@ useEffect(() => {
             {/* Icon box */}
             <div style={{
               width: 70, height: 60, flexShrink: 0,
-              background: "rgba(255,255,255,0.08)",
+              background: "#000",
               borderRadius: 12,
-              display: "flex", alignItems: "center", justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
             }}>
-              {card.icon}
+              <img
+                src={card.icon}
+                alt=""
+                style={{ width: 52, height: 52, objectFit: "contain" }}
+              />
             </div>
             <p style={{
-              fontFamily: "'Inter',sans-serif",
-              fontSize: "18px",
+              fontFamily: "Inter",
+              fontSize: isMobile ? "18px" : "30px",
               color: "rgba(255,255,255,1)",
-              lineHeight: 1.45, margin: 0,
-              fontWeight: 400,
+              lineHeight: isMobile ? 1.4 : "36px", margin: 0,
+              fontWeight: 300,
               whiteSpace: "pre-line",
             }}>{card.title}</p>
           </div>
@@ -158,24 +144,24 @@ useEffect(() => {
       <div style={{
         opacity: visible ? 1 : 0,
         transition: "opacity 0.7s 0.55s",
+        position: "relative",
+        zIndex: 1,
       }}>
         <p style={{
-          fontFamily: "'Inter',sans-serif",
+          fontFamily: "Inter",
           fontSize: isMobile ? "11px" : "30px",
           color: "white", fontWeight: 500,
           marginBottom: 12,
-          position:'relative',
-          zIndex:999,
+          lineHeight: isMobile ? 1.3 : "115%",
         }}>
           Let's look at two real cases we uncovered.
         </p>
         <p style={{
-          fontFamily: "'Inter',sans-serif",
-          fontSize: isMobile ? "11px" : "17px",
-          color: "rgba(255,255,255,0.60)",
-          lineHeight: 1.65, margin: 0,
-            position:'relative',
-          zIndex:999, 
+          fontFamily: "Inter",
+          fontSize: isMobile ? "11px" : "30px",
+          color: "white",
+          lineHeight: isMobile ? 1.3 : "40px", margin: 0,
+          fontWeight: 300,
         }}>
           In both instances, fraudsters tried to game the system.<br />
           Here's how their seemingly sophisticated tactics quickly unraveled.
