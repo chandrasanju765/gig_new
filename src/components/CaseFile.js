@@ -28,6 +28,7 @@ export default function CaseFilesSection() {
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
         lineHeight: 1.0, margin: "0 0 18px",
+        fontSize: isMobile ? "48px" : "120px",
       }}>
         Case Files
       </h1>

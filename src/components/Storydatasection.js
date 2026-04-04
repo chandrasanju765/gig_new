@@ -37,8 +37,20 @@ const INSIGHTS = [
 export default function StoryDataSection() {
   const sectionRef = useRef(null);
   const [progress, setProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Web scroll handler
+  useEffect(() => {
+    if (isMobile) return;
     const onScroll = () => {
       const el = sectionRef.current;
       if (!el) return;
@@ -49,19 +61,151 @@ export default function StoryDataSection() {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isMobile]);
 
-  const activeIdx = Math.min(
+  const webActiveIdx = Math.min(
     Math.floor(progress * INSIGHTS.length),
     INSIGHTS.length - 1
   );
-  const nextIdx = (activeIdx + 1) % INSIGHTS.length;
+  const webNextIdx = (webActiveIdx + 1) % INSIGHTS.length;
 
+  // Mobile: tap to advance
+  const handleMobileTap = () => {
+    if (animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setActiveIdx(prev => (prev + 1) % INSIGHTS.length);
+      setAnimating(false);
+    }, 300);
+  };
+
+  // ── MOBILE VIEW ──
+  if (isMobile) {
+    return (
+      <div style={{
+        background: "radial-gradient(ellipse at 20% 50%, #14080a 0%, #0d0d0d 50%, #080a14 100%)",
+        padding: "60px 20px 80px",
+        fontFamily: "'Inter', sans-serif",
+      }}>
+        <style>{`
+          @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes fadeSlideOut {
+            from { opacity: 1; transform: translateY(0); }
+            to   { opacity: 0; transform: translateY(-16px); }
+          }
+        `}</style>
+
+        {/* Title */}
+        <h2 style={{
+          fontWeight: 700,
+          color: "white",
+          fontSize: "40px",
+          lineHeight: 1.1,
+          textAlign: "center",
+          marginBottom: "16px",
+        }}>
+          The Story Behind <br/> the Data
+        </h2>
+
+        {/* Subtitle */}
+        <p style={{
+          fontSize: "13px",
+          color: "rgba(255,255,255,0.55)",
+          lineHeight: 1.75,
+          textAlign: "center",
+          marginBottom: "40px",
+        }}>
+          After analyzing all the numbers, we identified a few observations
+          across the segments of truck drivers, delivery partners, and dark
+          store employees.
+        </p>
+
+        {/* Dot indicators */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: "32px" }}>
+          {INSIGHTS.map((_, i) => (
+            <div key={i} style={{
+              width: activeIdx === i ? 28 : 8,
+              height: 8,
+              borderRadius: 4,
+              background: activeIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
+              transition: "all 0.4s ease",
+            }} />
+          ))}
+        </div>
+
+        {/* Active insight card */}
+        <div
+          onClick={handleMobileTap}
+          style={{
+            animation: animating ? "fadeSlideOut 0.3s ease forwards" : "fadeSlideIn 0.45s ease forwards",
+            cursor: "pointer",
+          }}
+        >
+          <div style={{
+            borderLeft: "3px solid #e53e3e",
+            paddingLeft: 20,
+            marginBottom: 24,
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 12,
+            padding: "20px 18px 20px 20px",
+            borderLeft: "3px solid #e53e3e",
+          }}>
+            <h3 style={{
+              fontSize: "15px",
+              fontWeight: 700,
+              color: "white",
+              margin: "0 0 10px",
+              lineHeight: 1.4,
+            }}>
+              {INSIGHTS[activeIdx].title}
+            </h3>
+            <p style={{
+              fontSize: "13px",
+              color: "rgba(255,255,255,0.55)",
+              lineHeight: 1.75,
+              margin: 0,
+            }}>
+              {INSIGHTS[activeIdx].body}
+            </p>
+          </div>
+
+          {/* Next preview */}
+          <div style={{
+            paddingLeft: 4,
+            opacity: 0.35,
+          }}>
+            <h3 style={{
+              fontSize: "13px",
+              fontWeight: 700,
+              color: "white",
+              margin: 0,
+              lineHeight: 1.4,
+            }}>
+              {INSIGHTS[(activeIdx + 1) % INSIGHTS.length].title}
+            </h3>
+          </div>
+        </div>
+
+        {/* Tap hint */}
+        <p style={{
+          fontSize: "11px",
+          color: "rgba(255,255,255,0.3)",
+          textAlign: "center",
+          marginTop: 28,
+        }}>
+          Tap to see next insight
+        </p>
+      </div>
+    );
+  }
+
+  // ── WEB VIEW (unchanged) ──
   return (
-    /* Original height formula — no extra multiplier */
     <div ref={sectionRef} style={{ height: `${100 * (INSIGHTS.length + 1)}vh`, position: "relative" }}>
-
-      {/* Sticky viewport */}
       <div style={{
         position: "sticky",
         top: 0,
@@ -73,8 +217,13 @@ export default function StoryDataSection() {
         background: "radial-gradient(ellipse at 20% 50%, #14080a 0%, #0d0d0d 50%, #080a14 100%)",
         overflow: "hidden",
       }}>
+        <style>{`
+          @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
 
-        {/* ── Main content row ── */}
         <div style={{
           width: "100%",
           maxWidth: 1200,
@@ -85,7 +234,6 @@ export default function StoryDataSection() {
           alignItems: "stretch",
           gap: 0,
         }}>
-
           {/* Left Panel */}
           <div style={{
             width: "38%",
@@ -126,10 +274,10 @@ export default function StoryDataSection() {
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
               {INSIGHTS.map((_, i) => (
                 <div key={i} style={{
-                  width: activeIdx === i ? 28 : 8,
+                  width: webActiveIdx === i ? 28 : 8,
                   height: 8,
                   borderRadius: 4,
-                  background: activeIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
+                  background: webActiveIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
                   transition: "all 0.4s ease",
                 }} />
               ))}
@@ -146,9 +294,7 @@ export default function StoryDataSection() {
             overflow: "hidden",
             minHeight: 260,
           }}>
-            <div key={activeIdx} style={{ animation: "fadeSlideIn 0.45s ease forwards" }}>
-
-              {/* Active insight */}
+            <div key={webActiveIdx} style={{ animation: "fadeSlideIn 0.45s ease forwards" }}>
               <div style={{
                 borderLeft: "3px solid #e53e3e",
                 paddingLeft: 20,
@@ -162,7 +308,7 @@ export default function StoryDataSection() {
                   margin: "0 0 12px",
                   lineHeight: 1.4,
                 }}>
-                  {INSIGHTS[activeIdx].title}
+                  {INSIGHTS[webActiveIdx].title}
                 </h3>
                 <p style={{
                   fontFamily: "'Inter', sans-serif",
@@ -171,11 +317,10 @@ export default function StoryDataSection() {
                   lineHeight: 1.75,
                   margin: 0,
                 }}>
-                  {INSIGHTS[activeIdx].body}
+                  {INSIGHTS[webActiveIdx].body}
                 </p>
               </div>
 
-              {/* Next insight preview */}
               <div style={{ paddingLeft: 23 }}>
                 <h3 style={{
                   fontFamily: "'Inter', sans-serif",
@@ -185,13 +330,12 @@ export default function StoryDataSection() {
                   margin: 0,
                   lineHeight: 1.4,
                 }}>
-                  {INSIGHTS[nextIdx].title}
+                  {INSIGHTS[webNextIdx].title}
                 </h3>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -136,7 +136,7 @@ export default function SpikesSection() {
             flexShrink: 0,
           }} />
           <div style={{
-            width: 2, height: 130,
+            width: 2, height: isMobile ? 80 : 130,
             background: "linear-gradient(180deg, #e53e3e 0%, #e53e3e66 100%)",
           }} />
           <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#e53e3e" }} />
@@ -229,17 +229,21 @@ export default function SpikesSection() {
               textAlign: isMobile ? "center" : "left",
             }}>
               <div>
-                <h2 style={{
-                  fontFamily: "Inter",
-                  fontWeight: 700,
-                  color: "white",
-                  fontSize: isMobile ? "30px" : "120px",
-                  lineHeight: 1.0,
-                  margin: "0 0 24px",
-                  letterSpacing: "-2px",
-                }}>
-                  The Story<br />Behind<br />the Data
-                </h2>
+               <h2 style={{
+  fontFamily: "Inter",
+  fontWeight: 700,
+  color: "white",
+  fontSize: isMobile ? "30px" : "120px",
+  lineHeight: 1.0,
+  margin: "0 0 24px",
+  letterSpacing: "-2px",
+}}>
+  {isMobile ? (
+    <>The Story Behind<br />the Data</>
+  ) : (
+    <>The Story<br />Behind<br />the Data</>
+  )}
+</h2>
 
                 <p style={{
                   fontFamily: "Inter",
