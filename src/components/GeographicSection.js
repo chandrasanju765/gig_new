@@ -1,26 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { lerp, clamp, ease } from "./helpers";
 
 const SEGMENTS = [
-  {
-    title: "Truck Drivers",
-    mapSrc: "/assets/truck driver.svg",
-  },
-  {
-    title: "Dark Store Workers",
-    mapSrc: "/assets/dark store .svg",
-  },
-  {
-    title: "Delivery Partners",
-    mapSrc: "/assets/delivery partners .svg",
-  },
+  { title: "Truck Drivers",       mapSrc: "/assets/truck driver.svg" },
+  { title: "Dark Store Workers",  mapSrc: "/assets/dark store .svg" },
+  { title: "Delivery Partners",   mapSrc: "/assets/delivery partners .svg" },
 ];
 
 const DEFAULT_MAP = "/assets/india.png";
 
 export default function GeographicSection() {
-  const [openIndex, setOpenIndex] = useState(null); // null = default india.png
-  const [progress, setProgress] = useState(0);
+  const [openIndex, setOpenIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef(null);
 
@@ -31,60 +20,38 @@ export default function GeographicSection() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  useEffect(() => {
-    const onScroll = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const p = clamp(-rect.top / (el.offsetHeight - window.innerHeight), 0, 1);
-      setProgress(p);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const titleP = ease(clamp(progress / 0.35, 0, 1));
-  const leftP  = ease(clamp((progress - 0.25) / 0.35, 0, 1));
-  const mapP   = ease(clamp((progress - 0.25) / 0.40, 0, 1));
-
-  // If nothing selected → show india.png, else show segment map
   const activeMap = openIndex === null ? DEFAULT_MAP : SEGMENTS[openIndex].mapSrc;
 
   const handleSegmentClick = (i) => {
-    // clicking same index deselects → back to india.png
     setOpenIndex(prev => prev === i ? null : i);
   };
 
   return (
     <div ref={sectionRef} style={{ height: "200vh", position: "relative" }}>
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          height: "120vh",
-          overflow: "hidden",
-          background: "black",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "72px 56px 40px",
-        }}
-      >
+      <div style={{
+        position: "sticky",
+        top: 0,
+        height: "120vh",
+        overflow: "hidden",
+        background: "black",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "72px 56px 40px",
+      }}>
         <div style={{ position: "absolute", top: 0, left: -450, zIndex: 0 }}>
-          <img src="/assets/Ellipse.png" alt="ellipse" style={{ width: "900px", height: "900px", opacity: 1 }} />
+          <img src="/assets/Ellipse.png" alt="ellipse"
+            style={{ width: "900px", height: "900px", opacity: 1 }} />
         </div>
 
         {/* Title */}
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: 8,
-            opacity: 1,
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
+        <div style={{
+          textAlign: "center",
+          marginBottom: 8,
+          opacity: 1,
+          position: "relative",
+          zIndex: 1,
+        }}>
           <h2
             className="sm:text-[105px] text-[40px]"
             style={{
@@ -100,14 +67,12 @@ export default function GeographicSection() {
             <br className="sm:flex hidden" />
             Concentration
           </h2>
-          <p
-            style={{
-              color: "white",
-              margin: "12px 0 0",
-              fontFamily: "'Inter',sans-serif",
-              fontSize: isMobile ? "11px" : "30px",
-            }}
-          >
+          <p style={{
+            color: "white",
+            margin: "12px 0 0",
+            fontFamily: "'Inter',sans-serif",
+            fontSize: isMobile ? "11px" : "30px",
+          }}>
             A breakdown of states with the highest risk rates across India.
           </p>
         </div>
@@ -118,28 +83,26 @@ export default function GeographicSection() {
           style={{ position: "relative", zIndex: 1 }}
         >
           {/* Left panel */}
-          <div
-            style={{
-              opacity: leftP,
-              transform: `translateX(${lerp(-24, 0, leftP)}px)`,
-              display: "flex",
-              flexDirection: "column",
-              gap: 20,
-              paddingTop: 8,
-            }}
-          >
-            <p
-              className="hidden lg:block"
-              style={{ color: "white", fontSize: 30, lineHeight: "115%", fontFamily: "'Inter',sans-serif", margin: 0 }}
-            >
+          <div style={{
+            opacity: 1,
+            transform: "none",
+            display: "flex",
+            flexDirection: "column",
+            gap: 20,
+            paddingTop: 8,
+          }}>
+            <p className="hidden lg:block" style={{
+              color: "white", fontSize: 30, lineHeight: "115%",
+              fontFamily: "'Inter',sans-serif", margin: 0,
+            }}>
               Kerala records the highest risk rate in the country, with
               Maharashtra close behind, making them two of the highest risk
               concentration states across segments.
             </p>
-            <p
-              className="hidden lg:block"
-              style={{ color: "white", fontSize: 30, lineHeight: "115%", fontFamily: "'Inter',sans-serif", margin: 0 }}
-            >
+            <p className="hidden lg:block" style={{
+              color: "white", fontSize: 30, lineHeight: "115%",
+              fontFamily: "'Inter',sans-serif", margin: 0,
+            }}>
               Another contributing factor behind this surge could be stronger
               crime reporting mechanisms in southern and western states. For
               example, in Kerala, many challans are automatically generated
@@ -170,15 +133,11 @@ export default function GeographicSection() {
                         transition: "color 0.2s ease",
                       }}
                     >
-                      <span
-                        style={{
-                          display: "inline-block",
-                          transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
-                          transition: "transform 0.2s ease",
-                        }}
-                      >
-                        ▶
-                      </span>
+                      <span style={{
+                        display: "inline-block",
+                        transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                        transition: "transform 0.2s ease",
+                      }}>▶</span>
                       {item.title}
                     </div>
                   </div>
@@ -187,18 +146,18 @@ export default function GeographicSection() {
             </div>
 
             {/* Mobile-only paragraphs */}
-            <p
-              className="block lg:hidden"
-              style={{ color: "white", fontSize: 11, lineHeight: 1.7, fontFamily: "'Inter',sans-serif", margin: 0, textAlign: "center" }}
-            >
+            <p className="block lg:hidden" style={{
+              color: "white", fontSize: 11, lineHeight: 1.7,
+              fontFamily: "'Inter',sans-serif", margin: 0, textAlign: "center",
+            }}>
               Kerala records the highest risk rate in the country, with
               Maharashtra close behind, making them two of the highest risk
               concentration states across segments.
             </p>
-            <p
-              className="block lg:hidden"
-              style={{ color: "white", fontSize: 11, lineHeight: 1.7, fontFamily: "'Inter',sans-serif", margin: 0, textAlign: "center" }}
-            >
+            <p className="block lg:hidden" style={{
+              color: "white", fontSize: 11, lineHeight: 1.7,
+              fontFamily: "'Inter',sans-serif", margin: 0, textAlign: "center",
+            }}>
               Another contributing factor behind this surge could be stronger
               crime reporting mechanisms in southern and western states. For
               example, in Kerala, many challans are automatically generated
@@ -207,19 +166,17 @@ export default function GeographicSection() {
           </div>
 
           {/* Map */}
-          <div
-            style={{
-              position: "relative",
-              opacity: mapP,
-              transform: `scale(${lerp(0.94, 1, mapP)})`,
-              height: "100%",
-              maxHeight: 680,
-              minHeight: 420,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div style={{
+            position: "relative",
+            opacity: 1,
+            transform: "none",
+            height: "100%",
+            maxHeight: 680,
+            minHeight: 420,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
             <img
               key={activeMap}
               src={activeMap}

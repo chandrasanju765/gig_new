@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { lerp, clamp, ease } from "./helpers";
+import { clamp } from "./helpers";
 import "../index.css";
 
 export default function ImpactSection() {
@@ -14,6 +14,7 @@ export default function ImpactSection() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Keep scroll tracking but don't use it for animations on web
   useEffect(() => {
     const onScroll = () => {
       const el = sectionRef.current;
@@ -27,19 +28,21 @@ export default function ImpactSection() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const titleP = isMobile ? 1 : ease(clamp(progress / 0.2, 0, 1));
-  const text1P = isMobile ? 1 : ease(clamp((progress - 0.15) / 0.2, 0, 1));
-  const amountP = isMobile ? 1 : ease(clamp((progress - 0.3) / 0.2, 0, 1));
-  const text2P = isMobile ? 1 : ease(clamp((progress - 0.45) / 0.2, 0, 1));
-  const sourceP = isMobile ? 1 : ease(clamp((progress - 0.6) / 0.2, 0, 1));
+  // For web: always show everything (progress = 1 for all elements)
+  // For mobile: keep original animation logic
+  const titleP = isMobile ? (progress / 0.2, 0, 1) : 1;
+  const text1P = isMobile ? (progress - 0.15) / 0.2 : 1;
+  const amountP = isMobile ? (progress - 0.3) / 0.2 : 1;
+  const text2P = isMobile ? (progress - 0.45) / 0.2 : 1;
+  const sourceP = isMobile ? (progress - 0.6) / 0.2 : 1;
 
   return (
-    <div ref={sectionRef} style={{ height: isMobile ? "auto" : "350vh", position: "relative" }}>
+    <div ref={sectionRef} style={{ height: isMobile ? "auto" : "auto", position: "relative" }}>
       <div
         style={{
-          position: isMobile ? "relative" : "sticky",
+          position: isMobile ? "relative" : "relative",
           top: 0,
-          height: isMobile ? "auto" : "100vh",
+          height: isMobile ? "auto" : "auto",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
@@ -54,7 +57,7 @@ export default function ImpactSection() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "flex-end",
-            padding: isMobile ? "40px 13px 40px" : "72px 80px 300px",
+            padding: isMobile ? "40px 13px 40px" : "72px 80px 120px",
             textAlign: "center",
           }}
         >
@@ -95,8 +98,8 @@ export default function ImpactSection() {
                 color: "white",
                 margin: isMobile ? "0 0 20px" : "0 0 36px",
                 lineHeight: isMobile ? 1.2 : "115%",
-                opacity: titleP,
-                transform: isMobile ? "none" : `translateY(${lerp(20, 0, titleP)}px)`,
+                opacity: isMobile ? titleP : 1,
+                transform: isMobile ? `translateY(${20 * (1 - titleP)}px)` : "none",
               }}
             >
               The Impact of the fraud We Caught
@@ -111,8 +114,8 @@ export default function ImpactSection() {
                 margin: isMobile ? "0 auto 20px" : "0 auto 40px",
                 maxWidth: 990,
                 fontFamily: "'Inter',sans-serif",
-                opacity: text1P,
-                transform: isMobile ? "none" : `translateY(${lerp(16, 0, text1P)}px)`,
+                opacity: isMobile ? text1P : 1,
+                transform: isMobile ? `translateY(${16 * (1 - text1P)}px)` : "none",
               }}
             >
               Even one missed red flag in any of these segments can increase the
@@ -130,8 +133,8 @@ export default function ImpactSection() {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 4,
-                opacity: amountP,
-                transform: isMobile ? "none" : `translateY(${lerp(16, 0, amountP)}px)`,
+                opacity: isMobile ? amountP : 1,
+                transform: isMobile ? `translateY(${16 * (1 - amountP)}px)` : "none",
               }}
             >
               <span
@@ -169,8 +172,8 @@ export default function ImpactSection() {
                 marginTop: isMobile ? 16 : 40,
                 marginBottom: isMobile ? 16 : 40,
                 fontFamily: "'Inter',sans-serif",
-                opacity: text2P,
-                transform: isMobile ? "none" : `translateY(${lerp(16, 0, text2P)}px)`,
+                opacity: isMobile ? text2P : 1,
+                transform: isMobile ? `translateY(${16 * (1 - text2P)}px)` : "none",
               }}
             >
               truck robbery involving smartphones, apparel, and perfumes
@@ -186,7 +189,7 @@ export default function ImpactSection() {
                 fontFamily: "'Inter',sans-serif",
                 fontStyle: "italic",
                 margin: 0,
-                opacity: sourceP,
+                opacity: isMobile ? sourceP : 1,
                 position: "relative",
                 zIndex: 2,
               }}

@@ -20,47 +20,22 @@ function CountUp({ target, duration = 1800, trigger }) {
   return <>{val}</>;
 }
 
-// ── Reliable visibility hook ──────────────────────────────────────────────────
-// Uses IntersectionObserver with a very low threshold (1px sentinel) so it
-// fires as soon as ANY part of the element enters the viewport.
-// Falls back to a scroll-position check for browsers / scroll contexts where
-// IntersectionObserver may not fire (e.g. some WebViews).
-function useVisible() {
+// ── Visibility hook ───────────────────────────────────────────────────────────
+// Always becomes true after a short delay so content is never permanently
+// hidden — regardless of scroll position, DevTools resize, or WebView quirks.
+// Re-runs when layoutKey (isMobile) changes so the animation replays cleanly
+// after a mobile ↔ desktop switch.
+function useVisible(layoutKey) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const show = () => setVisible(true);
-
-    // Scroll-based fallback — fires on every scroll; cheap because we
-    // stop listening once visible.
-    const checkScroll = () => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) show();
-    };
-
-    // IntersectionObserver — threshold 0 means "any pixel visible"
-    let io;
-    if (typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) show(); },
-        { threshold: 0, rootMargin: "0px 0px -10% 0px" }
-      );
-      io.observe(el);
-    }
-
-    window.addEventListener("scroll", checkScroll, { passive: true });
-    // Run once immediately in case element is already in view on mount
-    checkScroll();
-
-    return () => {
-      if (io) io.disconnect();
-      window.removeEventListener("scroll", checkScroll);
-    };
-  }, []);
+    setVisible(false);
+    // 250 ms is enough for the browser to paint the new layout branch;
+    // the fade-in transition then plays naturally from that point.
+    const t = setTimeout(() => setVisible(true), 250);
+    return () => clearTimeout(t);
+  }, [layoutKey]);
 
   return [ref, visible];
 }
@@ -107,24 +82,34 @@ function TimelineCard({ item, entrance, isMobile, index }) {
         border: "2px solid #D7D7D7",
         overflow: "hidden",
         boxShadow: "0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06)",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%", // Make card take full height of its container
       }}>
-        <div style={{ padding: isMobile ? "12px 14px 8px" : "18px 20px 12px" }}>
-          <div style={{
-            display: "inline-block", color: "#CE1010",
-            fontSize: isMobile ? 18 : 22,
-            fontWeight: 800,
-            fontFamily: "'Inter',sans-serif", letterSpacing: -0.5, marginBottom: 6,
-          }}>{item.year}</div>
-          <p style={{
-            fontSize: isMobile ? 12 : 13,
-            color: "#444", lineHeight: 1.55,
-            fontFamily: "'Inter',sans-serif", margin: 0,
-          }}>{item.desc}</p>
-        </div>
+        {/* Content area with minimum height */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <div style={{ padding: isMobile ? "12px 14px 8px" : "18px 20px 12px" }}>
+            <div style={{
+              display: "inline-block", color: "#CE1010",
+              fontSize: isMobile ? 18 : 22,
+              fontWeight: 800,
+              fontFamily: "'Inter',sans-serif", letterSpacing: -0.5, marginBottom: 6,
+            }}>{item.year}</div>
+            <p style={{
+              fontSize: isMobile ? 12 : 13,
+              color: "#444", lineHeight: 1.55,
+              fontFamily: "'Inter',sans-serif", margin: 0,
+            }}>{item.desc}</p>
+          </div>
 
-        <div style={{ padding: isMobile ? "6px 14px 10px" : "8px 20px 12px" }}>
-          <p style={{ fontSize: isMobile ? 13 : 16, fontWeight: 800, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", marginBottom: 2 }}>{item.title}</p>
-          <p style={{ fontSize: isMobile ? 10 : 12, color: "#888", fontFamily: "'Inter',sans-serif", lineHeight: 1.4, margin: 0 }}>{item.sub}</p>
+          {/* This div will expand to fill space */}
+          <div style={{ 
+            padding: isMobile ? "6px 14px 10px" : "8px 20px 12px",
+            flex: 1,
+          }}>
+            <p style={{ fontSize: isMobile ? 13 : 16, fontWeight: 800, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", marginBottom: 2 }}>{item.title}</p>
+            <p style={{ fontSize: isMobile ? 10 : 12, color: "#888", fontFamily: "'Inter',sans-serif", lineHeight: 1.4, margin: 0 }}>{item.sub}</p>
+          </div>
         </div>
 
         <div style={{ margin: isMobile ? "0 10px 10px" : "0 14px 14px", borderRadius: 12, overflow: "hidden", height: imgHeight, background: "#f5f5f5" }}>
@@ -140,11 +125,17 @@ function TimelineCard({ item, entrance, isMobile, index }) {
 }
 
 export default function WhyReportSection() {
-  // ── Replaced useInView(0.2) with the reliable hook above ──
-  const [ref, visible] = useVisible();
+  // Initialise synchronously so the first render already matches the viewport
+  // (must be declared BEFORE useVisible which consumes isMobile)
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 768
+  );
+  const [vw, setVw] = useState(
+    () => (typeof window !== "undefined" ? window.innerWidth : 1440)
+  );
 
-  const [isMobile, setIsMobile] = useState(false);
-  const [vw, setVw] = useState(1440);
+  // Pass isMobile so the hook re-runs whenever the layout branch switches
+  const [ref, visible] = useVisible(isMobile);
   const sectionRef = useRef(null);
   const [progress, setProgress] = useState(0);
 
@@ -171,15 +162,29 @@ export default function WhyReportSection() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const railShift = ease(clamp((progress - 0.05) / 0.85, 0, 1));
+  // ── Animation timing ──────────────────────────────────────────────────────
+  // Start as soon as the section enters the viewport (progress ~0) rather
+  // than waiting for deep scroll. Smaller per-card stagger keeps the sequence
+  // snappy instead of drawn-out.
+  const railShift = ease(clamp(progress / 0.90, 0, 1));
   const cardEntrance = (i) => {
-    const start = 0.05 + i * 0.12;
-    const end = start + 0.25;
+    // Card 0 is always fully visible — no delay, no fade-in
+    if (i === 0) return 1;
+    const start = i * 0.04;
+    const end   = start + 0.12;
     return ease(clamp((progress - start) / (end - start), 0, 1));
   };
 
-  const mobileTranslateX = vw * 0.92 - railShift * TOTAL_MOBILE_RAIL_W;
-  const desktopTranslateX = `calc(100% - ${railShift * 110}% + ${railShift * 20}px)`;
+  // Mobile: card 0 starts at the right edge of the viewport, sweeps left on scroll.
+  // mobileInitial ≈ vw*0.35 places card 0's right edge flush with the viewport right.
+  // mobileEnd shows the last card fully in view.
+  const mobileInitial = vw * 0.35;
+  const mobileEnd = -(TOTAL_MOBILE_RAIL_W - vw + 32);
+  const mobileTranslateX = mobileInitial * (1 - railShift) + mobileEnd * railShift;
+
+  // Desktop: 82% pushes card 0 to the right edge of the viewport on load.
+  // End position stays at -110% + 20px (same as original).
+  const desktopTranslateX = `calc(${93 - railShift * 203}% + ${railShift * 20}px)`;
 
   return (
     <>
@@ -418,12 +423,12 @@ export default function WhyReportSection() {
       {/* ── Workforce Timeline Section (unchanged) ── */}
       <div className="rounded-xl" ref={sectionRef} style={{ height: "450vh", position: "relative", marginTop: 0 }}>
         <div style={{
-          position: "sticky", top: 0, height: isMobile ? "100vh" : "120vh",
+          position: "sticky", top: 0, height: isMobile ? "100vh" : "110vh",
           overflow: "hidden",
           display: "flex", flexDirection: "column",
           background: "#fff",
           justifyContent: "center",
-          paddingBottom: isMobile ? "40px" : "80px",
+          paddingBottom: isMobile ? "40px" : "60px",
         }}>
           <div style={{ padding: "0", textAlign: "center", marginBottom: isMobile ? 28 : 52 }}>
             <h2
@@ -496,7 +501,7 @@ export default function WhyReportSection() {
             </div>
           </div>
 
-          <div style={{ height: isMobile ? "40px" : "80px" }} />
+          {/* <div style={{ height: isMobile ? "40px" : "80px" }} /> */}
         </div>
       </div>
     </>

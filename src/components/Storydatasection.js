@@ -37,20 +37,11 @@ const INSIGHTS = [
 export default function StoryDataSection() {
   const sectionRef = useRef(null);
   const [progress, setProgress] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
   const [animating, setAnimating] = useState(false);
 
+  // Desktop scroll
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  // Web scroll handler
-  useEffect(() => {
-    if (isMobile) return;
     const onScroll = () => {
       const el = sectionRef.current;
       if (!el) return;
@@ -61,15 +52,11 @@ export default function StoryDataSection() {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isMobile]);
+  }, []);
 
-  const webActiveIdx = Math.min(
-    Math.floor(progress * INSIGHTS.length),
-    INSIGHTS.length - 1
-  );
+  const webActiveIdx = Math.min(Math.floor(progress * INSIGHTS.length), INSIGHTS.length - 1);
   const webNextIdx = (webActiveIdx + 1) % INSIGHTS.length;
 
-  // Mobile: tap to advance
   const handleMobileTap = () => {
     if (animating) return;
     setAnimating(true);
@@ -79,44 +66,45 @@ export default function StoryDataSection() {
     }, 300);
   };
 
-  // ── MOBILE VIEW ──
-  if (isMobile) {
-    return (
-      <div style={{
+  return (
+    <>
+      <style>{`
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeSlideOut {
+          from { opacity: 1; transform: translateY(0); }
+          to   { opacity: 0; transform: translateY(-16px); }
+        }
+
+        /* MOBILE block: visible only below 768px */
+        .story-mobile {
+          display: none;
+        }
+        @media (max-width: 767px) {
+          .story-mobile { display: block; }
+          .story-desktop { display: none !important; }
+        }
+      `}</style>
+
+      {/* ── MOBILE ── plain div, no height, no sticky, no scroll container */}
+      <div className="story-mobile" style={{
         background: "radial-gradient(ellipse at 20% 50%, #14080a 0%, #0d0d0d 50%, #080a14 100%)",
-        padding: "32px 20px 40px",
+        padding: "32px 20px 32px",
         fontFamily: "'Inter', sans-serif",
       }}>
-        <style>{`
-          @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
-          }
-          @keyframes fadeSlideOut {
-            from { opacity: 1; transform: translateY(0); }
-            to   { opacity: 0; transform: translateY(-16px); }
-          }
-        `}</style>
-
-        {/* Title */}
         <h2 style={{
-          fontWeight: 700,
-          color: "white",
-          fontSize: "40px",
-          lineHeight: 1.1,
-          textAlign: "center",
-          marginBottom: "10px",
+          fontWeight: 700, color: "white",
+          fontSize: "40px", lineHeight: 1.1,
+          textAlign: "center", margin: "0 0 10px",
         }}>
-          The Story Behind <br/> the Data
+          The Story Behind <br /> the Data
         </h2>
 
-        {/* Subtitle */}
         <p style={{
-          fontSize: "13px",
-          color: "rgba(255,255,255,0.55)",
-          lineHeight: 1.75,
-          textAlign: "center",
-          marginBottom: "20px",
+          fontSize: "13px", color: "rgba(255,255,255,0.55)",
+          lineHeight: 1.75, textAlign: "center", margin: "0 0 20px",
         }}>
           After analyzing all the numbers, we identified a few observations
           across the segments of truck drivers, delivery partners, and dark
@@ -124,219 +112,136 @@ export default function StoryDataSection() {
         </p>
 
         {/* Dot indicators */}
-<div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: "16px" }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
           {INSIGHTS.map((_, i) => (
             <div key={i} style={{
-              width: activeIdx === i ? 28 : 8,
-              height: 8,
-              borderRadius: 4,
+              width: activeIdx === i ? 28 : 8, height: 8, borderRadius: 4,
               background: activeIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
               transition: "all 0.4s ease",
             }} />
           ))}
         </div>
 
-        {/* Active insight card */}
-        <div
-          onClick={handleMobileTap}
-          style={{
-            animation: animating ? "fadeSlideOut 0.3s ease forwards" : "fadeSlideIn 0.45s ease forwards",
-            cursor: "pointer",
-          }}
-        >
+        {/* Active card */}
+        <div onClick={handleMobileTap} style={{
+          animation: animating ? "fadeSlideOut 0.3s ease forwards" : "fadeSlideIn 0.45s ease forwards",
+          cursor: "pointer",
+        }}>
           <div style={{
-            borderLeft: "3px solid #e53e3e",
-            paddingLeft: 20,
-            marginBottom: 12,
             background: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(255,255,255,0.08)",
+            borderLeft: "3px solid #e53e3e",
             borderRadius: 12,
             padding: "20px 18px 20px 20px",
-            borderLeft: "3px solid #e53e3e",
+            marginBottom: 12,
           }}>
-            <h3 style={{
-              fontSize: "15px",
-              fontWeight: 700,
-              color: "white",
-              margin: "0 0 10px",
-              lineHeight: 1.4,
-            }}>
+            <h3 style={{ fontSize: "15px", fontWeight: 700, color: "white", margin: "0 0 10px", lineHeight: 1.4 }}>
               {INSIGHTS[activeIdx].title}
             </h3>
-            <p style={{
-              fontSize: "13px",
-              color: "rgba(255,255,255,0.55)",
-              lineHeight: 1.75,
-              margin: 0,
-            }}>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", lineHeight: 1.75, margin: 0 }}>
               {INSIGHTS[activeIdx].body}
             </p>
           </div>
 
-          {/* Next preview */}
-          <div style={{
-            paddingLeft: 4,
-            opacity: 0.35,
-          }}>
-            <h3 style={{
-              fontSize: "13px",
-              fontWeight: 700,
-              color: "white",
-              margin: 0,
-              lineHeight: 1.4,
-            }}>
+          <div style={{ paddingLeft: 4, opacity: 0.35 }}>
+            <h3 style={{ fontSize: "13px", fontWeight: 700, color: "white", margin: 0, lineHeight: 1.4 }}>
               {INSIGHTS[(activeIdx + 1) % INSIGHTS.length].title}
             </h3>
           </div>
         </div>
 
-        {/* Tap hint */}
-        <p style={{
-          fontSize: "11px",
-          color: "rgba(255,255,255,0.3)",
-          textAlign: "center",
-          marginTop: 16,
-        }}>
+        <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textAlign: "center", margin: "16px 0 0" }}>
           Tap to see next insight
         </p>
       </div>
-    );
-  }
 
-  // ── WEB VIEW (unchanged) ──
-  return (
-    <div ref={sectionRef} style={{ height: `${100 * (INSIGHTS.length + 1)}vh`, position: "relative" }}>
-      <div style={{
-        position: "sticky",
-        top: 0,
-        height: "70vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "radial-gradient(ellipse at 20% 50%, #14080a 0%, #0d0d0d 50%, #080a14 100%)",
-        overflow: "hidden",
-      }}>
-        <style>{`
-          @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
-          }
-        `}</style>
-
+      {/* ── DESKTOP: tall sticky scroll container, hidden on mobile via CSS ── */}
+      <div
+        className="story-desktop"
+        ref={sectionRef}
+        style={{ height: `${100 * (INSIGHTS.length + 1)}vh`, position: "relative" }}
+      >
         <div style={{
-          width: "100%",
-          maxWidth: 1200,
-          padding: "0 6vw",
-          boxSizing: "border-box",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "stretch",
-          gap: 0,
+          position: "sticky", top: 0, height: "100vh",
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          background: "radial-gradient(ellipse at 20% 50%, #14080a 0%, #0d0d0d 50%, #080a14 100%)",
+          overflow: "hidden",
         }}>
-          {/* Left Panel */}
           <div style={{
-            width: "38%",
-            flexShrink: 0,
-            paddingRight: "5vw",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            paddingTop: 8,
-            paddingBottom: 8,
+            width: "100%", maxWidth: 1200,
+            padding: "0 6vw", boxSizing: "border-box",
+            display: "flex", flexDirection: "row", alignItems: "stretch", gap: 0,
           }}>
-            <div>
-              <h2 style={{
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 700,
-                color: "white",
-                fontSize: "120px",
-                lineHeight: 1.05,
-                margin: "0 0 24px",
-                letterSpacing: "-1.5px",
-              }}>
-                The Story<br />Behind<br />the Data
-              </h2>
-              <p style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "clamp(13px, 1vw, 15px)",
-                color: "rgba(255,255,255,0.65)",
-                lineHeight: 1.75,
-                margin: "0 0 32px",
-              }}>
-                After analyzing all the numbers, we identified a few observations
-                across the segments of truck drivers, delivery partners, and dark
-                store employees.
-              </p>
-            </div>
-
-            {/* Dot indicators */}
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              {INSIGHTS.map((_, i) => (
-                <div key={i} style={{
-                  width: webActiveIdx === i ? 28 : 8,
-                  height: 8,
-                  borderRadius: 4,
-                  background: webActiveIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
-                  transition: "all 0.4s ease",
-                }} />
-              ))}
-            </div>
-          </div>
-
-          {/* Right Panel */}
-          <div style={{
-            flex: 1,
-            paddingLeft: "4vw",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            overflow: "hidden",
-            minHeight: 260,
-          }}>
-            <div key={webActiveIdx} style={{ animation: "fadeSlideIn 0.45s ease forwards" }}>
-              <div style={{
-                borderLeft: "3px solid #e53e3e",
-                paddingLeft: 20,
-                marginBottom: 28,
-              }}>
-                <h3 style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "clamp(14px, 1.15vw, 17px)",
-                  fontWeight: 700,
-                  color: "white",
-                  margin: "0 0 12px",
-                  lineHeight: 1.4,
+            {/* Left Panel */}
+            <div style={{
+              width: "38%", flexShrink: 0, paddingRight: "5vw",
+              display: "flex", flexDirection: "column", justifyContent: "space-between",
+              paddingTop: 8, paddingBottom: 8,
+            }}>
+              <div>
+                <h2 style={{
+                  fontFamily: "'Inter', sans-serif", fontWeight: 700, color: "white",
+                  fontSize: "120px", lineHeight: 1.05, margin: "0 0 24px", letterSpacing: "-1.5px",
                 }}>
-                  {INSIGHTS[webActiveIdx].title}
-                </h3>
+                  The Story<br />Behind<br />the Data
+                </h2>
                 <p style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "clamp(13px, 0.95vw, 15px)",
-                  color: "rgba(255,255,255,0.55)",
-                  lineHeight: 1.75,
-                  margin: 0,
+                  fontFamily: "'Inter', sans-serif", fontSize: "clamp(13px, 1vw, 15px)",
+                  color: "rgba(255,255,255,0.65)", lineHeight: 1.75, margin: "0 0 32px",
                 }}>
-                  {INSIGHTS[webActiveIdx].body}
+                  After analyzing all the numbers, we identified a few observations
+                  across the segments of truck drivers, delivery partners, and dark
+                  store employees.
                 </p>
               </div>
 
-              <div style={{ paddingLeft: 23 }}>
-                <h3 style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "clamp(13px, 1vw, 16px)",
-                  fontWeight: 700,
-                  color: "rgba(255,255,255,0.28)",
-                  margin: 0,
-                  lineHeight: 1.4,
-                }}>
-                  {INSIGHTS[webNextIdx].title}
-                </h3>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                {INSIGHTS.map((_, i) => (
+                  <div key={i} style={{
+                    width: webActiveIdx === i ? 28 : 8, height: 8, borderRadius: 4,
+                    background: webActiveIdx === i ? "#e53e3e" : "rgba(255,255,255,0.2)",
+                    transition: "all 0.4s ease",
+                  }} />
+                ))}
+              </div>
+            </div>
+
+            {/* Right Panel */}
+            <div style={{
+              flex: 1, paddingLeft: "4vw",
+              display: "flex", flexDirection: "column", justifyContent: "center",
+              overflow: "hidden", minHeight: 260,
+            }}>
+              <div key={webActiveIdx} style={{ animation: "fadeSlideIn 0.45s ease forwards" }}>
+                <div style={{ borderLeft: "3px solid #e53e3e", paddingLeft: 20, marginBottom: 28 }}>
+                  <h3 style={{
+                    fontFamily: "'Inter', sans-serif", fontSize: "clamp(14px, 1.15vw, 17px)",
+                    fontWeight: 700, color: "white", margin: "0 0 12px", lineHeight: 1.4,
+                  }}>
+                    {INSIGHTS[webActiveIdx].title}
+                  </h3>
+                  <p style={{
+                    fontFamily: "'Inter', sans-serif", fontSize: "clamp(13px, 0.95vw, 15px)",
+                    color: "rgba(255,255,255,0.55)", lineHeight: 1.75, margin: 0,
+                  }}>
+                    {INSIGHTS[webActiveIdx].body}
+                  </p>
+                </div>
+
+                <div style={{ paddingLeft: 23 }}>
+                  <h3 style={{
+                    fontFamily: "'Inter', sans-serif", fontSize: "clamp(13px, 1vw, 16px)",
+                    fontWeight: 700, color: "rgba(255,255,255,0.28)", margin: 0, lineHeight: 1.4,
+                  }}>
+                    {INSIGHTS[webNextIdx].title}
+                  </h3>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -35,7 +35,7 @@ export default function FraudImpact() {
 
   return (
     <section style={{
-      padding: "100px 6vw 120px",
+      padding: isMobile ? "70px 6w 60px" : "100px 6vw 64px",
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
       textAlign: "center",
       position: "relative",

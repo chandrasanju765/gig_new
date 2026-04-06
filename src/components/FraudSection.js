@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { lerp, clamp, ease } from "./helpers";
 
 export default function FraudSection() {
-  const [progress, setProgress] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef(null);
 
@@ -12,22 +10,6 @@ export default function FraudSection() {
     window.addEventListener("resize", check, { passive: true });
     return () => window.removeEventListener("resize", check);
   }, []);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const p = clamp(-rect.top / (el.offsetHeight - window.innerHeight), 0, 1);
-      setProgress(p);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const chartP  = isMobile ? 1 : ease(clamp((progress - 0.02) / 0.06, 0, 1));
-  const footerP = isMobile ? 1 : ease(clamp((progress - 0.06) / 0.05, 0, 1));
 
   const headingStyle = {
     fontFamily: "'Inter', sans-serif",
@@ -41,7 +23,7 @@ export default function FraudSection() {
   };
 
   return (
-    <div ref={sectionRef} style={{ height: isMobile ? "auto" : "110vh", position: "relative", overflowX: "hidden" }}>
+    <div ref={sectionRef} style={{ height: isMobile ? "auto" : "100vh", position: "relative", overflowX: "hidden" }}>
       <div
         style={{
           position: isMobile ? "relative" : "sticky",
@@ -116,8 +98,8 @@ export default function FraudSection() {
           style={{
             width: "100%",
             maxWidth: isMobile ? "100%" : 880,
-            opacity: chartP,
-            transform: isMobile ? "none" : `translateY(${lerp(14, 0, chartP)}px)`,
+            opacity: 1,
+            transform: "none",
             zIndex: 1,
           }}
         >
@@ -126,7 +108,7 @@ export default function FraudSection() {
             alt="Gig workforce growth chart"
             style={{ width: "100%", display: "block", borderRadius: 4 }}
           />
-          <div style={{ textAlign: "center", marginTop: 6, marginBottom: 4, opacity: footerP }}>
+          <div style={{ textAlign: "center", marginTop: 6, marginBottom: 4, opacity: 1 }}>
             <span style={{ color: "rgba(255,255,255,0.38)", fontSize: isMobile ? 10 : 13, fontFamily: "'Inter', sans-serif" }}>
               Source:{" "}
               <a href="https://www.niti.gov.in/sites/default/files/2023-06/Policy_Brief_India%27s_Booming_Gig_and_Platform_Economy_27062022.pdf" target="_blank" rel="noreferrer" style={{ color: "rgba(255,255,255,0.58)", textDecoration: "underline" }}>
@@ -150,7 +132,7 @@ export default function FraudSection() {
             margin: isMobile ? "8px 0 20px" : "8px 0 40px",
             maxWidth: 700,
             zIndex: 1,
-            opacity: footerP,
+            opacity: 1,
             lineHeight: "36px",
           }}
         >

@@ -16,7 +16,7 @@ export default function WayForwardSection() {
     <section className="flex justify-center" style={{
       background: "black",
       position: "relative",
-      padding: isMobile ? "60px 5vw 70px" : "90px 5vw 100px",
+      padding: isMobile ? "30px 5vw 50px" : "90px 5vw 100px",
       color: "white",
       fontFamily: "'Inter', sans-serif",
       maxWidth: "100%",

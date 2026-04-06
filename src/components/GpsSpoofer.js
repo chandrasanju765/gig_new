@@ -16,7 +16,7 @@ export default function CaseFilesSection() {
     <section className="flex justify-center" style={{
       background: "black",
       position: "relative",
-      padding: isMobile ? "60px 20px 80px" : "90px 5vw 100px",
+      padding: isMobile ? "0px 20px 23px" : "90px 5vw 100px",
       color: "white",
       fontFamily: "'Inter', sans-serif",
     }}>
