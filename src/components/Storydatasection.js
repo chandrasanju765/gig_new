@@ -84,7 +84,7 @@ export default function StoryDataSection() {
     return (
       <div style={{
         background: "radial-gradient(ellipse at 20% 50%, #14080a 0%, #0d0d0d 50%, #080a14 100%)",
-        padding: "60px 20px 80px",
+        padding: "32px 20px 40px",
         fontFamily: "'Inter', sans-serif",
       }}>
         <style>{`
@@ -105,7 +105,7 @@ export default function StoryDataSection() {
           fontSize: "40px",
           lineHeight: 1.1,
           textAlign: "center",
-          marginBottom: "16px",
+          marginBottom: "10px",
         }}>
           The Story Behind <br/> the Data
         </h2>
@@ -116,7 +116,7 @@ export default function StoryDataSection() {
           color: "rgba(255,255,255,0.55)",
           lineHeight: 1.75,
           textAlign: "center",
-          marginBottom: "40px",
+          marginBottom: "20px",
         }}>
           After analyzing all the numbers, we identified a few observations
           across the segments of truck drivers, delivery partners, and dark
@@ -124,7 +124,7 @@ export default function StoryDataSection() {
         </p>
 
         {/* Dot indicators */}
-        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: "32px" }}>
+<div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: "16px" }}>
           {INSIGHTS.map((_, i) => (
             <div key={i} style={{
               width: activeIdx === i ? 28 : 8,
@@ -147,7 +147,7 @@ export default function StoryDataSection() {
           <div style={{
             borderLeft: "3px solid #e53e3e",
             paddingLeft: 20,
-            marginBottom: 24,
+            marginBottom: 12,
             background: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(255,255,255,0.08)",
             borderRadius: 12,
@@ -195,7 +195,7 @@ export default function StoryDataSection() {
           fontSize: "11px",
           color: "rgba(255,255,255,0.3)",
           textAlign: "center",
-          marginTop: 28,
+          marginTop: 16,
         }}>
           Tap to see next insight
         </p>

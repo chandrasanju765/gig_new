@@ -27,19 +27,19 @@ export default function ImpactSection() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const titleP = ease(clamp(progress / 0.2, 0, 1));
-  const text1P = ease(clamp((progress - 0.15) / 0.2, 0, 1));
-  const amountP = ease(clamp((progress - 0.3) / 0.2, 0, 1));
-  const text2P = ease(clamp((progress - 0.45) / 0.2, 0, 1));
-  const sourceP = ease(clamp((progress - 0.6) / 0.2, 0, 1));
+  const titleP = isMobile ? 1 : ease(clamp(progress / 0.2, 0, 1));
+  const text1P = isMobile ? 1 : ease(clamp((progress - 0.15) / 0.2, 0, 1));
+  const amountP = isMobile ? 1 : ease(clamp((progress - 0.3) / 0.2, 0, 1));
+  const text2P = isMobile ? 1 : ease(clamp((progress - 0.45) / 0.2, 0, 1));
+  const sourceP = isMobile ? 1 : ease(clamp((progress - 0.6) / 0.2, 0, 1));
 
   return (
-    <div ref={sectionRef} style={{ height: "350vh", position: "relative" }}>
+    <div ref={sectionRef} style={{ height: isMobile ? "auto" : "350vh", position: "relative" }}>
       <div
         style={{
-          position: "sticky",
+          position: isMobile ? "relative" : "sticky",
           top: 0,
-          height: "100vh",
+          height: isMobile ? "auto" : "100vh",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
@@ -54,28 +54,15 @@ export default function ImpactSection() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "flex-end",
-            padding: isMobile ? "40px 24px 200px" : "72px 80px 300px",
+            padding: isMobile ? "40px 13px 40px" : "72px 80px 300px",
             textAlign: "center",
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              right: -450,
-              zIndex: 0,
-            }}
-          >
-            <img
-              src="/assets/Ellipse.png"
-              alt="ellipse"
-              style={{
-                width: "900px",
-                height: "900px",
-                opacity: 1,
-              }}
-            />
-          </div>
+          {!isMobile && (
+            <div style={{ position: "absolute", top: 0, right: -450, zIndex: 0 }}>
+              <img src="/assets/Ellipse.png" alt="ellipse" style={{ width: "900px", height: "900px", opacity: 1 }} />
+            </div>
+          )}
 
           {/* Faint grid */}
           <div
@@ -109,7 +96,7 @@ export default function ImpactSection() {
                 margin: isMobile ? "0 0 20px" : "0 0 36px",
                 lineHeight: isMobile ? 1.2 : "115%",
                 opacity: titleP,
-                transform: `translateY(${lerp(20, 0, titleP)}px)`,
+                transform: isMobile ? "none" : `translateY(${lerp(20, 0, titleP)}px)`,
               }}
             >
               The Impact of the fraud We Caught
@@ -125,7 +112,7 @@ export default function ImpactSection() {
                 maxWidth: 990,
                 fontFamily: "'Inter',sans-serif",
                 opacity: text1P,
-                transform: `translateY(${lerp(16, 0, text1P)}px)`,
+                transform: isMobile ? "none" : `translateY(${lerp(16, 0, text1P)}px)`,
               }}
             >
               Even one missed red flag in any of these segments can increase the
@@ -144,7 +131,7 @@ export default function ImpactSection() {
                 justifyContent: "center",
                 gap: 4,
                 opacity: amountP,
-                transform: `translateY(${lerp(16, 0, amountP)}px)`,
+                transform: isMobile ? "none" : `translateY(${lerp(16, 0, amountP)}px)`,
               }}
             >
               <span
@@ -183,7 +170,7 @@ export default function ImpactSection() {
                 marginBottom: isMobile ? 16 : 40,
                 fontFamily: "'Inter',sans-serif",
                 opacity: text2P,
-                transform: `translateY(${lerp(16, 0, text2P)}px)`,
+                transform: isMobile ? "none" : `translateY(${lerp(16, 0, text2P)}px)`,
               }}
             >
               truck robbery involving smartphones, apparel, and perfumes

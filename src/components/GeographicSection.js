@@ -62,7 +62,7 @@ export default function GeographicSection() {
         style={{
           position: "sticky",
           top: 0,
-          height: "135vh",
+          height: "120vh",
           overflow: "hidden",
           background: "black",
           display: "flex",
@@ -80,8 +80,7 @@ export default function GeographicSection() {
           style={{
             textAlign: "center",
             marginBottom: 8,
-            opacity: titleP,
-            transform: `none`,
+            opacity: 1,
             position: "relative",
             zIndex: 1,
           }}

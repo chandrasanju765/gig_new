@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { clamp, ease } from "./helpers";
-import { useInView } from "./helpers";
 
 function CountUp({ target, duration = 1800, trigger }) {
   const [val, setVal] = useState(0);
@@ -20,6 +19,52 @@ function CountUp({ target, duration = 1800, trigger }) {
   }, [trigger, target, duration]);
   return <>{val}</>;
 }
+
+// ── Reliable visibility hook ──────────────────────────────────────────────────
+// Uses IntersectionObserver with a very low threshold (1px sentinel) so it
+// fires as soon as ANY part of the element enters the viewport.
+// Falls back to a scroll-position check for browsers / scroll contexts where
+// IntersectionObserver may not fire (e.g. some WebViews).
+function useVisible() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const show = () => setVisible(true);
+
+    // Scroll-based fallback — fires on every scroll; cheap because we
+    // stop listening once visible.
+    const checkScroll = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) show();
+    };
+
+    // IntersectionObserver — threshold 0 means "any pixel visible"
+    let io;
+    if (typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) show(); },
+        { threshold: 0, rootMargin: "0px 0px -10% 0px" }
+      );
+      io.observe(el);
+    }
+
+    window.addEventListener("scroll", checkScroll, { passive: true });
+    // Run once immediately in case element is already in view on mount
+    checkScroll();
+
+    return () => {
+      if (io) io.disconnect();
+      window.removeEventListener("scroll", checkScroll);
+    };
+  }, []);
+
+  return [ref, visible];
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 const AIMS = [
   "Understanding the fraud-prone segments of the gig economy workforce",
@@ -63,21 +108,21 @@ function TimelineCard({ item, entrance, isMobile, index }) {
         overflow: "hidden",
         boxShadow: "0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06)",
       }}>
-        <div style={{ padding: isMobile ? "12px 14px 8px" : "18px 20px 12px" }}>   {/* ← reduced padding */}
+        <div style={{ padding: isMobile ? "12px 14px 8px" : "18px 20px 12px" }}>
           <div style={{
             display: "inline-block", color: "#CE1010",
-            fontSize: isMobile ? 18 : 22,                  // was 20/26
+            fontSize: isMobile ? 18 : 22,
             fontWeight: 800,
             fontFamily: "'Inter',sans-serif", letterSpacing: -0.5, marginBottom: 6,
           }}>{item.year}</div>
           <p style={{
-            fontSize: isMobile ? 12 : 13,                  // was 13/15
+            fontSize: isMobile ? 12 : 13,
             color: "#444", lineHeight: 1.55,
             fontFamily: "'Inter',sans-serif", margin: 0,
           }}>{item.desc}</p>
         </div>
 
-        <div style={{ padding: isMobile ? "6px 14px 10px" : "8px 20px 12px" }}>    {/* ← reduced padding */}
+        <div style={{ padding: isMobile ? "6px 14px 10px" : "8px 20px 12px" }}>
           <p style={{ fontSize: isMobile ? 13 : 16, fontWeight: 800, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", marginBottom: 2 }}>{item.title}</p>
           <p style={{ fontSize: isMobile ? 10 : 12, color: "#888", fontFamily: "'Inter',sans-serif", lineHeight: 1.4, margin: 0 }}>{item.sub}</p>
         </div>
@@ -92,11 +137,12 @@ function TimelineCard({ item, entrance, isMobile, index }) {
       </div>
     </div>
   );
-
 }
 
 export default function WhyReportSection() {
-  const [ref, visible] = useInView(0.2);
+  // ── Replaced useInView(0.2) with the reliable hook above ──
+  const [ref, visible] = useVisible();
+
   const [isMobile, setIsMobile] = useState(false);
   const [vw, setVw] = useState(1440);
   const sectionRef = useRef(null);
@@ -140,7 +186,7 @@ export default function WhyReportSection() {
       {/* ── Why Report Section ── */}
       <section style={{
         background: "#fff",
-        padding: isMobile ? "48px 5vw 48px" : "80px 8vw 100px",   // ← more padding
+        padding: isMobile ? "48px 5vw 48px" : "80px 8vw 100px",
         fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
       }}>
         <h2
@@ -150,7 +196,7 @@ export default function WhyReportSection() {
             color: "#343434",
             textAlign: "center",
             fontSize: isMobile ? "22px" : "60px",
-            marginBottom: isMobile ? 36 : 72,               // ← more gap below heading
+            marginBottom: isMobile ? 36 : 72,
             letterSpacing: "-0.02em",
           }}
         >
@@ -161,7 +207,6 @@ export default function WhyReportSection() {
         {isMobile ? (
           <div ref={ref} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 24 }}>
 
-            {/* Mobile stat — inline: "We analyzed over 4.9M Background Verifications" */}
             <div style={{
               textAlign: "center",
               opacity: visible ? 1 : 0,
@@ -177,7 +222,6 @@ export default function WhyReportSection() {
               }}>
                 We analyzed over
               </p>
-              {/* Big stat inline with label */}
               <p style={{
                 fontSize: 16,
                 color: "#343434",
@@ -256,7 +300,7 @@ export default function WhyReportSection() {
             <div style={{
               display: "grid",
               gridTemplateColumns: "0.55fr 1.45fr",
-              gap: "120px",                                  // ← was 80px, more spacing
+              gap: "120px",
               width: "100%",
               maxWidth: 1100,
               alignItems: "start",
@@ -298,7 +342,7 @@ export default function WhyReportSection() {
                   <p style={{
                     fontSize: "clamp(24px, 6vw, 50px)",
                     fontWeight: 700, color: "#343434", lineHeight: 1.2,
-                    margin: "16px 0 24px",                   // ← more gap
+                    margin: "16px 0 24px",
                     opacity: visible ? 1 : 0,
                     transform: visible ? "translateY(0)" : "translateY(20px)",
                     transition: "opacity 0.5s 0.1s, transform 0.5s 0.1s",
@@ -326,7 +370,7 @@ export default function WhyReportSection() {
                 <div style={{
                   background: "#EEEEEE",
                   borderRadius: 28,
-                  padding: "44px 48px",                      // ← more internal padding
+                  padding: "44px 48px",
                   border: "1px solid #e8e8e8",
                   opacity: visible ? 1 : 0,
                   transform: visible ? "translateX(0)" : "translateX(24px)",
@@ -334,7 +378,7 @@ export default function WhyReportSection() {
                 }}>
                   <p style={{
                     fontSize: 16, color: "#343434",
-                    fontWeight: 700, marginBottom: 28,        // ← more gap after label
+                    fontWeight: 700, marginBottom: 28,
                     letterSpacing: "0.5px",
                   }}>
                     with the aim of
@@ -342,7 +386,7 @@ export default function WhyReportSection() {
                   <ul style={{
                     listStyle: "none", padding: 0, margin: 0,
                     display: "flex", flexDirection: "column",
-                    gap: 20,                                  // ← was 11, more breathing room
+                    gap: 20,
                   }}>
                     {AIMS.map((aim, i) => (
                       <li key={i} style={{
@@ -371,8 +415,6 @@ export default function WhyReportSection() {
         )}
       </section>
 
-      {/* <div style={{ height: isMobile ? "0px" : "100px", background: "#fff" }} /> */}
-
       {/* ── Workforce Timeline Section (unchanged) ── */}
       <div className="rounded-xl" ref={sectionRef} style={{ height: "450vh", position: "relative", marginTop: 0 }}>
         <div style={{
@@ -396,13 +438,13 @@ export default function WhyReportSection() {
               The Workforce<br />Behind Every Order
             </h2>
             <p style={{
-              fontSize: "30px",                // ← was "16px"
-              lineHeight: isMobile ? "20px" : "40px",              // ← was 1.75
+              fontSize: "30px",
+              lineHeight: isMobile ? "20px" : "40px",
               color: "#343434",
-              maxWidth: 1100,                  // ← was 780, matches Figma width
+              maxWidth: 1100,
               margin: "0 auto 10px",
               padding: isMobile ? "0 16px" : 0,
-              fontWeight: 300,                 // ← Light weight like Figma
+              fontWeight: 300,
               textAlign: "center",
             }}>
               India's doorstep economy operates at the intersection of logistics,

@@ -25,10 +25,10 @@ useEffect(() => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const title1P  = ease(clamp(progress / 0.15, 0, 1));
-  const cards1P  = ease(clamp((progress - 0.08) / 0.20, 0, 1));
-  const title2P  = ease(clamp((progress - 0.35) / 0.15, 0, 1));
-  const cards2P  = ease(clamp((progress - 0.42) / 0.20, 0, 1));
+  // On mobile: skip all scroll animations — show everything immediately
+  const cards1P  = isMobile ? 1 : ease(clamp(progress / 0.20, 0, 1));
+  const title2P  = isMobile ? 1 : ease(clamp((progress - 0.35) / 0.15, 0, 1));
+  const cards2P  = isMobile ? 1 : ease(clamp((progress - 0.42) / 0.20, 0, 1));
 
   const questions = [
     { img: "/assets/question1.png", text: "Which segments are the most risk-prone?" },
@@ -43,32 +43,34 @@ useEffect(() => {
   ];
 
   return (
-    <div  ref={sectionRef} style={{ height: "400vh", position: "relative" }}>
+    <div  ref={sectionRef} style={{ height: isMobile ? "auto" : "250vh", position: "relative" }}>
        
-      <div className="sm:h-[125vh] h-[204vh]" style={{
-        position: "sticky", top: 0,  overflow: "hidden",
+      <div style={{
+        position: isMobile ? "relative" : "sticky",
+        top: 0,
+        height: isMobile ? "auto" : "120vh",
+        overflow: "hidden",
         background: `black`,
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-         padding: isMobile ? "48px 20px" : "48px 64px",
-        gap: 40,
+        padding: isMobile ? "80px 20px 48px" : "48px 64px",
+        gap: isMobile ? 24 : 40,
       }}>
-       <div style={{
-  position: "absolute",
-  top: 0,
-  right: -430,
-  zIndex: 0
-}}>
-  <img
-    src="/assets/Ellipse.png"
-    alt="ellipse"
-    style={{
-      width: "900px",
-      height:"900px",   // adjust size
-      opacity: 1      // optional
-    }}
-  />
-</div>
+       {!isMobile && (
+         <div style={{
+           position: "absolute",
+           top: 0,
+           right: -430,
+           zIndex: 0,
+           pointerEvents: "none",
+         }}>
+           <img
+             src="/assets/Ellipse.png"
+             alt="ellipse"
+             style={{ width: "900px", height: "900px", opacity: 1 }}
+           />
+         </div>
+       )}
 
         {/* ── Section 1: Questions ── */}
         <div style={{ width: "100%", maxWidth: 1300 }}>
@@ -76,10 +78,10 @@ useEffect(() => {
             fontFamily: "'Inter','Helvetica Neue',sans-serif",
             fontWeight: 700, color: "white",
             margin: "0 0 32px", textAlign: "center", lineHeight: 1.08,
-            opacity: title1P, transform: `translateY(${lerp(200, 0, title1P)}px)`,
+            opacity: 1, transform: `none`,
           }}>
             This section{" "} 
-            <p style={{ fontWeight: 700 }}>answers questions like</p>
+            <p className="sm:text-[120px] text-[30px]" style={{ fontWeight: 700  }}>answers questions like</p>
           </h2>
 
          <div style={{
@@ -89,16 +91,16 @@ useEffect(() => {
   width: "100%",
 }}>
             {questions.map((q, i) => {
-              const cp = ease(clamp((cards1P * 1 - i * 0.15), 0, 1));
+              const cp = isMobile ? 1 : ease(clamp((cards1P - i * 0.15), 0, 1));
               return (
                 <div key={i} style={{
                   backgroundImage : "linear-gradient(#1d1d1d,#212121)",
                   border: "1px solid white",
                   borderRadius: 16, padding: "18px 20px",
                   display: "flex", alignItems: "center", gap: 20,
-                  minHeight: 110,
+                  minHeight: isMobile ? 80 : 110,
                   opacity: cp,
-                  transform: `translateY(${lerp(30, 0, cp)}px) scale(${lerp(0.96, 1, cp)})`,
+                  transform: isMobile ? 'none' : `translateY(${lerp(30, 0, cp)}px) scale(${lerp(0.96, 1, cp)})`,
                 }}>
                   <div style={{
                     width: 78, height: 78, flexShrink: 0,
@@ -109,7 +111,7 @@ useEffect(() => {
                     <img src={q.img} alt="" style={{ width: 150, height: 100, objectFit: "contain" }} />
                   </div>
                   <p style={{
-                    color: "white", fontSize: "clamp(13px,1.05vw,17px)",
+                    color: "white", fontSize: isMobile ? "14px" : "clamp(13px,1.05vw,17px)",
                     fontWeight: 500, margin: 0, lineHeight: 1.5,
                     fontFamily: "'Inter',sans-serif",
                   }}>{q.text}</p>
@@ -123,7 +125,7 @@ useEffect(() => {
         <div style={{
           width: "100%", maxWidth: 1300,
           height: 1, background: "rgba(255,255,255,0.08)",
-          opacity: title2P,
+          opacity: isMobile ? 1 : title2P,
         }} />
 
         {/* ── Section 2: People ── */}
@@ -137,7 +139,7 @@ useEffect(() => {
     textAlign: "center",
     lineHeight: 1.05,
     opacity: title2P,
-    transform: `translateY(${lerp(24, 0, title2P)}px)`,
+    transform: isMobile ? 'none' : `translateY(${lerp(24, 0, title2P)}px)`,
   }}
 >
   People in focus
@@ -150,18 +152,18 @@ useEffect(() => {
   width: "100%",
 }}>
             {people.map((p, i) => {
-              const cp = ease(clamp((cards2P * 1 - i * 0.15), 0, 1));
+              const cp = isMobile ? 1 : ease(clamp((cards2P - i * 0.15), 0, 1));
               return (
                 <div key={i} style={{
                   background: "rgba(255,255,255,0.06)",
                   border: "1px solid rgba(255,255,255,0.1)",
                   borderRadius: 16,
-                  padding: "28px 28px 0",
+                  padding: isMobile ? "20px 20px 0" : "28px 28px 0",
                   display: "flex", flexDirection: "column",
                   position: "relative", overflow: "hidden",
-                  minHeight: 280,
+                  minHeight: isMobile ? 200 : 280,
                   opacity: cp,
-                  transform: `translateY(${lerp(30, 0, cp)}px)`,
+                  transform: isMobile ? 'none' : `translateY(${lerp(30, 0, cp)}px)`,
                 }}>
                   <div style={{
                     color: "#CE1010", fontSize: "18px",
@@ -170,7 +172,7 @@ useEffect(() => {
                   }}>{p.label}</div>
 
                   <div style={{
-                    color: "white", marginTop:"12px", fontSize: "clamp(26px,2.8vw,42px)",
+                    color: "white", marginTop:"12px", fontSize: isMobile ? "36px" : "clamp(26px,2.8vw,42px)",
                     fontWeight: 700, lineHeight: 1, fontFamily: "'Inter',sans-serif",
                   }}>{p.riskRate}</div>
                   <div style={{
@@ -180,7 +182,7 @@ useEffect(() => {
 
                   <div style={{ color: "white", fontSize: 18, marginBottom: 19, marginTop:5 }}>Mean Age</div>
                   <div style={{
-                    color: "white", fontSize: "clamp(26px,2.8vw,42px)",
+                    color: "white", fontSize: isMobile ? "36px" : "clamp(26px,2.8vw,42px)",
                     fontWeight: 700, lineHeight: 1, fontFamily: "'Inter',sans-serif",
                   }}>{p.meanAge}</div>
                   <div style={{ color: "white", fontSize: 18, marginTop: 8,marginBottom:20}}>years</div>

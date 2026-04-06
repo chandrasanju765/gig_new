@@ -52,7 +52,7 @@ export default function StatsSection() {
 
   const renderCard = (m, i, isHighlight) => {
     const cp = ease(clamp((progress - 0.28 - i * 0.022) / 0.18, 0, 1));
-    const cardId = isHighlight ? "calender-highlight" : "calender-img";
+    const imgSrc = isHighlight ? "/assets/highlight-card.png" : "/assets/calender.png";
 
     return (
       <div
@@ -63,40 +63,46 @@ export default function StatsSection() {
           transform: `translateY(${lerp(20, 0, cp)}px) scale(${lerp(0.95, 1, cp)})`,
         }}
       >
-        <div id={cardId} style={{ display: "block", padding: 0, margin: 0 }} />
+        {/* Card background — img fills full width, height scales naturally */}
+        <img
+          src={imgSrc}
+          alt=""
+          style={{ width: "100%", display: "block", pointerEvents: "none", aspectRatio: "248/266" }}
+        />
 
+        {/* Text overlay — positioned relative to card image */}
         <div
           style={{
             position: "absolute",
-            top: "22%",
-            bottom: "8%",
+            top: "28%",
+            bottom: "6%",
             left: 0,
             right: 0,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: isMobile ? 2 : 8,
+            gap: "6%",
             pointerEvents: "none",
           }}
         >
-          {/* Month name — increased from 14px/9px to 18px/11px (matches Figma: 30px Medium) */}
           <div style={{
             color: "white",
-            fontSize: isMobile ? "11px" : "30px",
+            fontSize: "clamp(9px, 2.2vw, 30px)",
             fontFamily: "'Inter', sans-serif",
             letterSpacing: 0.3,
             fontWeight: 500,
+            textAlign: "center",
           }}>
             {m.month}
           </div>
-          {/* Percentage — increased from 20px/11px to match Figma: 65px Bold */}
           <div style={{
             color: "white",
-            fontSize: isMobile ? "16px" : "clamp(28px, 3.2vw, 65px)",
+            fontSize: "clamp(12px, 3.2vw, 65px)",
             fontWeight: 700,
             fontFamily: "'Inter', sans-serif",
             lineHeight: 1,
+            textAlign: "center",
           }}>
             {m.pct}
           </div>
@@ -152,7 +158,7 @@ export default function StatsSection() {
 
   return (
     <div ref={sectionRef} style={{ height: "520vh", position: "relative" }}>
-      <div className="sm:h-[199vh] " style={{
+      <div className="h-auto sm:h-[210vh]" style={{
         position: "sticky", top: 0, overflow: "hidden",
         background: "black",
         display: "flex", flexDirection: "column",
@@ -243,9 +249,9 @@ export default function StatsSection() {
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
-          gap: isMobile ? 6 : 30,
+          gap: "clamp(4px, 1.5vw, 30px)",
           width: "100%",
-          maxWidth: isMobile ? "100%" : 1200,
+          maxWidth: "min(100%, 1200px)",
           padding: isMobile ? "0 4px" : 0,
           boxSizing: "border-box",
         }}>

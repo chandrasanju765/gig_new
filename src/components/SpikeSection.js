@@ -171,7 +171,7 @@ export default function SpikesSection() {
           fontSize: isMobile ? "11px" : "30px",
           fontWeight: 300,
           color: "rgba(255,255,255,1)",
-          lineHeight: "38px", maxWidth: 1100,
+          lineHeight: isMobile ? "14px" : "38px", maxWidth: 1100,
           opacity: spikesVisible ? 1 : 0,
           transform: spikesVisible ? "translateY(0)" : "translateY(16px)",
           transition: "opacity 0.55s 0.38s, transform 0.55s 0.38s",
